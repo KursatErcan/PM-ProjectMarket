@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "880308660327",
+    "project_id": "pm-projectmarket",
+    "storage_bucket": "pm-projectmarket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880308660327:android:6b8ef44ad69c2a5a1accc2",
+        "android_client_info": {
+          "package_name": "com.kursat.pm_projectmarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880308660327-g5k3jqbnaplct71ej3mqkfpgq2qc8apf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATKSVpAo1ULYvIEbeBwjuAFfqn-yh1LL0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880308660327-g5k3jqbnaplct71ej3mqkfpgq2qc8apf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
