@@ -43,8 +43,7 @@ public class FeedFragment extends Fragment {
     ArrayList<String> profileImageList_db;
     ArrayList<String> postImageList_db;
     ArrayList<String> priceList_db;
-    //String userName;
-    //String profileImageDownloadUrl;
+
     public FeedFragment() {
         // Required empty public constructor
     }
@@ -79,9 +78,7 @@ public class FeedFragment extends Fragment {
     }
 
     public void getDataFromDB(){
-        //ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        //progressDialog.setMessage("Uploading..");
-        //progressDialog.show();
+
         db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -103,35 +100,22 @@ public class FeedFragment extends Fragment {
                                             String profileUrl = (String) document.get("profileImageUrl");
                                             userNameList_db.add(name);
                                             profileImageList_db.add(profileUrl);
-                                            //System.out.println("Feed fragment (in onComplete):: userName[0] => " + userName[0]);
-                                            //System.out.println("Feed fragment (in onComplete):: profileImageDownloadUrl[0] => " + profileImageDownloadUrl[0]);
                                             String title = (String) data.get("title");
                                             String postImageDownloadUrl = (String) data.get("postImageUrl");
                                             String price = (String) data.get("price") + " TL";
 
-                                            //userNameList_db.add(name);
-                                            //profileImageList_db.add(Url);
                                             titleList_db.add(title);
                                             postImageList_db.add(postImageDownloadUrl);
                                             priceList_db.add(price);
 
 
                                             postRecyclerAdapter.notifyDataSetChanged();
-
                                         }
                                     }
                                 });
-
                     }
                 }
             }
         });
-
     }
-    /*public void buttonClick(View view) {
-        Intent intent = new Intent(getActivity(), postDetail.class );
-        intent.putExtra("postId",postId);
-        startActivity(intent);
-    }*/
-
 }
