@@ -44,24 +44,30 @@ public class LoginActivity extends AppCompatActivity {
         }else if(password.length()<6){
             Toast.makeText(LoginActivity.this,"Password must be longer than 5 characters!",Toast.LENGTH_LONG).show();
         }else{
-            firebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(LoginActivity.this,"User not found!",Toast.LENGTH_LONG).show();
-                }
-            });
+            loginUser(email,password);
         }
     }
     public void signUpClicked(View view){
         Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void loginUser(String email, String password){
+
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(LoginActivity.this,"Opps! Something went wrong.",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 }

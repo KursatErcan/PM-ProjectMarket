@@ -3,6 +3,7 @@ package com.kursat.pm_projectmarket;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     EditText userNameText,emailText,passwordText;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         emailText = findViewById(R.id.editText_email);
         passwordText = findViewById(R.id.editText_password);
 
+        progressDialog = new ProgressDialog(this);
     }
     public void backToSignIn(View view){
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -53,21 +55,26 @@ public class RegisterActivity extends AppCompatActivity {
         }else if(password.length()<6){
             Toast.makeText(RegisterActivity.this,"Password must be longer than 5 characters!",Toast.LENGTH_LONG).show();
         }else {
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                @Override
-                public void onSuccess(AuthResult authResult) {
-                    Toast.makeText(RegisterActivity.this, "User Created", Toast.LENGTH_LONG).show();
-                    createUser(userName, email);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(RegisterActivity.this, e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+            registerUser(userName, email, password);
         }
     }
-
+    private void registerUser(String userName, String email, String password){
+        progressDialog.setMessage("Please Wait!");
+        progressDialog.show();
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(RegisterActivity.this, "User Created", Toast.LENGTH_LONG).show();
+                createUser(userName, email);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(RegisterActivity.this, e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
     private void createUser(final String userName, final String email){
         String userId = (String) firebaseAuth.getCurrentUser().getUid();
         Map<String, Object> user = new HashMap<>();
@@ -80,6 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                progressDialog.dismiss();
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -88,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(RegisterActivity.this,e.getLocalizedMessage().toString(),Toast.LENGTH_LONG).show();
             }
         });
