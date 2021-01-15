@@ -6,37 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.ProfileFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/profileFrame"
-        android:background="?android:attr/windowBackground"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_profileFrame"
-            android:background="?android:attr/windowBackground"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/options_fragmentProfile"
-                    android:src="@drawable/ic_options"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="15dp"/>
-
-            </RelativeLayout>
-
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
     <ScrollView
-        android:layout_below="@+id/profileFrame"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="NotSibling">
@@ -44,26 +15,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/bar1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="138dp"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageView_profileImage_profileFragment"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
                     android:layout_gravity="center"
-                    android:src="@mipmap/ic_launcher" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
+                    android:src="@mipmap/ic_launcher" />
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:orientation="vertical">
 
@@ -71,17 +44,19 @@
                         android:id="@+id/text_userName_profileFragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:text="User Name"
-                        android:textSize="20sp"
+                        android:textSize="25sp"
                         android:textStyle="bold" />
+
                     <RatingBar
                         android:id="@+id/ratingBar_profileFragment"
+                        style="?android:attr/ratingBarStyleIndicator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:numStars="5"
-                        android:stepSize="1.0"/>
+                        android:stepSize="1.0" />
+
 
                 </LinearLayout>
 
