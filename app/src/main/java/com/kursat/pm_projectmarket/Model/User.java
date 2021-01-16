@@ -1,8 +1,8 @@
 package com.kursat.pm_projectmarket.Model;
 
 public class User {
-    private  String id;
-    private  String Name;
+
+    private  String userName;
     private  String email;
     private  String profileImageUrl;
     private  String bio;
@@ -11,28 +11,20 @@ public class User {
     public User() {
     }
 
-    public User(String id, String name, String email, String profileImageUrl, String bio) {
-        this.id = id;
-        Name = name;
+    public User(String userName, String email, String profileImageUrl, String bio) {
+
+        this.userName = userName;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
         this.bio = bio;
     }
 
-    public String getId() {
-        return id;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {
