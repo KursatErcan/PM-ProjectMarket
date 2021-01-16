@@ -59,7 +59,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
     @Override
     public int getItemCount() { return titleList.size(); }
 
-    class PostHolder extends RecyclerView.ViewHolder{
+    static class PostHolder extends RecyclerView.ViewHolder{
 
         TextView text_userName;
         TextView text_title;
@@ -74,7 +74,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             text_title = itemView.findViewById(R.id.text_postTitle_postElement);
             imageView_profileImage = itemView.findViewById(R.id.imageView_profileImage_postElement);
             imageView_postImage = itemView.findViewById(R.id.imageView_postImage_postElement);
-            text_price = itemView.findViewById(R.id.text_price_postElement);;
+            text_price = itemView.findViewById(R.id.text_price_postElement);
 
 
         }

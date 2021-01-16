@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,16 +16,10 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.storage.FirebaseStorage;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 
 public class ProfileFragment extends Fragment {
@@ -69,21 +61,18 @@ public class ProfileFragment extends Fragment {
     private void userInfo(){
         DocumentReference reference = db.collection("Users").document(profileId);
 
-        reference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if(error == null){
-                    if(getContext() == null){ return; }
-                    if(value != null){
-                        User user = value.toObject(User.class);
-                        Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
-                        textView_UserName.setText(user.getUserName());
+        reference.addSnapshotListener((value, error) -> {
+            if(error == null){
+                if(getContext() == null){ return; }
+                if(value != null){
+                    User user = value.toObject(User.class);
+                    Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
+                    textView_UserName.setText(user.getUserName());
 
-                        System.out.println("userName => " + user.getUserName());
-                        System.out.println("profilImageUrl => " + user.getProfileImageUrl());
-                    }
-
+                    System.out.println("userName => " + user.getUserName());
+                    System.out.println("profilImageUrl => " + user.getProfileImageUrl());
                 }
+
             }
         });
     }

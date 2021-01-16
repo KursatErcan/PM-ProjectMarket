@@ -22,15 +22,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -115,53 +111,33 @@ public class PostActivity extends AppCompatActivity {
             UUID postId = UUID.randomUUID();
             String imageName = "postImages/" + postId + ".jpg";
 
-            storageReference.child(imageName).putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            storageReference.child(imageName).putFile(imageData).addOnSuccessListener(taskSnapshot -> { //image'i firebase'e yükleme basarılı
+                StorageReference newReference = FirebaseStorage.getInstance().getReference("Images/"+imageName);
+                newReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String downloadUrl = uri.toString();
 
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) { //image'i firebase'e yükleme basarılı
-                    StorageReference newReference = FirebaseStorage.getInstance().getReference("Images/"+imageName);
-                    newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String downloadUrl = uri.toString();
+                    String userId = firebaseAuth.getCurrentUser().getUid();
+                    String titleText = title.getText().toString();
+                    String price = priceText.getText().toString();
+                    HashMap<String,Object> postData = new HashMap<>();
+                    postData.put("postId",postId.toString());
+                    postData.put("userId",userId);
+                    postData.put("postImageUrl",downloadUrl);
+                    postData.put("title",titleText);
+                    postData.put("price",price);
+                    postData.put("date", FieldValue.serverTimestamp());
 
-                            String userId = firebaseAuth.getCurrentUser().getUid();
-                            String titleText = title.getText().toString();
-                            String price = priceText.getText().toString();
-                            HashMap<String,Object> postData = new HashMap<>();
-                            postData.put("postId",postId.toString());
-                            postData.put("userId",userId);
-                            postData.put("postImageUrl",downloadUrl);
-                            postData.put("title",titleText);
-                            postData.put("price",price);
-                            postData.put("date", FieldValue.serverTimestamp());
+                    db.collection("Posts").add(postData).addOnSuccessListener(documentReference -> {
+                        progressDialog.dismiss();
+                        Intent intent = new Intent(PostActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
 
-                            db.collection("Posts").add(postData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    progressDialog.dismiss();
-                                    Intent intent = new Intent(PostActivity.this, MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    startActivity(intent);
-                                    finish();
+                    }).addOnFailureListener(e -> Toast.makeText(PostActivity.this,e.getLocalizedMessage(),Toast.LENGTH_LONG).show());
 
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(PostActivity.this,e.getLocalizedMessage().toString(),Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-                        }
-                    });
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PostActivity.this,e.getLocalizedMessage().toString(),Toast.LENGTH_LONG).show();
-                }
-            });
+                });
+            }).addOnFailureListener(e -> Toast.makeText(PostActivity.this,e.getLocalizedMessage(),Toast.LENGTH_LONG).show());
 
         }
     }

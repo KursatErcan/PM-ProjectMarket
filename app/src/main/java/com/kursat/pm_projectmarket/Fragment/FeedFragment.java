@@ -2,8 +2,6 @@ package com.kursat.pm_projectmarket.Fragment;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,19 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kursat.pm_projectmarket.Adapter.PostRecyclerAdapter;
+import com.kursat.pm_projectmarket.Model.Post;
+import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,41 +76,25 @@ public class FeedFragment extends Fragment {
 
     public void getDataFromDB(){
 
-        db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if(value != null){
-                    for(DocumentSnapshot doc : value.getDocuments()){
+        db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((EventListener<QuerySnapshot>) (value, error) -> {
+            if(value != null){
+                for(DocumentSnapshot doc : value.getDocuments()){
+                    Post post = doc.toObject(Post.class);
 
-                        Map<String,Object> data = doc.getData();
-                        //String id = (String) data.get("userId");
+                    db.collection("Users").document(post.getUserId()).get()
+                            .addOnCompleteListener((OnCompleteListener<DocumentSnapshot>) task -> {
+                                if (task.isSuccessful()){
+                                    User user = task.getResult().toObject(User.class);
 
-                        db.collection("Users").document(data.get("userId").toString()).get()
-                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()){
+                                    userNameList_db.add((String) user.getUserName());
+                                    profileImageList_db.add(user.getProfileImageUrl());
+                                    titleList_db.add(post.getTitle());
+                                    postImageList_db.add(post.getPostImageUrl());
+                                    priceList_db.add(post.getPrice());
 
-                                            DocumentSnapshot document = task.getResult();
-
-                                            String name = (String) document.get("userName");
-                                            String profileUrl = (String) document.get("profileImageUrl");
-                                            userNameList_db.add(name);
-                                            profileImageList_db.add(profileUrl);
-                                            String title = (String) data.get("title");
-                                            String postImageDownloadUrl = (String) data.get("postImageUrl");
-                                            String price = (String) data.get("price") + " TL";
-
-                                            titleList_db.add(title);
-                                            postImageList_db.add(postImageDownloadUrl);
-                                            priceList_db.add(price);
-
-
-                                            postRecyclerAdapter.notifyDataSetChanged();
-                                        }
-                                    }
-                                });
-                    }
+                                    postRecyclerAdapter.notifyDataSetChanged();
+                                }
+                            });
                 }
             }
         });

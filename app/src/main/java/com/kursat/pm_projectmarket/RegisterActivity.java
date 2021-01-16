@@ -1,6 +1,5 @@
 package com.kursat.pm_projectmarket;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -11,9 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -60,18 +56,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser(String userName, String email, String password){
         progressDialog.setMessage("Please Wait!");
         progressDialog.show();
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                Toast.makeText(RegisterActivity.this, "Welcome..", Toast.LENGTH_LONG).show();
-                createUser(userName, email);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(RegisterActivity.this, e.getLocalizedMessage().toString(), Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-            }
+        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+            Toast.makeText(RegisterActivity.this, "Welcome..", Toast.LENGTH_LONG).show();
+            createUser(userName, email);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(RegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            progressDialog.dismiss();
         });
     }
     private void createUser(final String userName, final String email){
@@ -83,22 +73,16 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("bio", "");
         user.put("profileImageUrl","https://firebasestorage.googleapis.com/v0/b/pm-projectmarket.appspot.com/o/placeHolder.jpg?alt=media&token=d5510906-ad33-49e0-9be4-ad6446bd21e6");
         db.collection("Users").document(userId).set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                progressDialog.dismiss();
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this,e.getLocalizedMessage().toString(),Toast.LENGTH_LONG).show();
-            }
-        });
+                .addOnSuccessListener(aVoid -> {
+                    progressDialog.dismiss();
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }).addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(RegisterActivity.this,e.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                });
 
     }
 }

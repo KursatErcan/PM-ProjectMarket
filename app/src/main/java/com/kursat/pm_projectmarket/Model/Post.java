@@ -4,18 +4,18 @@ public class Post {
     private String userId;
     private String price;
     private String title;
-    private String postImage;
+    private String postImageUrl;
 
     public Post(){
 
     }
 
-    public Post(String postId, String userId, String price, String title, String postImage) {
+    public Post(String postId, String userId, String price, String title, String postImageUrl) {
         this.postId = postId;
         this.userId = userId;
         this.price = price;
         this.title = title;
-        this.postImage = postImage;
+        this.postImageUrl = postImageUrl;
     }
 
     public String getPostId() {
@@ -50,11 +50,11 @@ public class Post {
         this.title = title;
     }
 
-    public String getPostImage() {
-        return postImage;
+    public String getPostImageUrl() {
+        return postImageUrl;
     }
 
-    public void setPostImage(String postImage) {
-        this.postImage = postImage;
+    public void setPostImageUrl(String postImageUrl) {
+        this.postImageUrl = postImageUrl;
     }
 }

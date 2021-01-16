@@ -1,6 +1,5 @@
 package com.kursat.pm_projectmarket;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,11 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
@@ -55,19 +50,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String email, String password){
 
-        firebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this,"Opps! Something went wrong.",Toast.LENGTH_LONG).show();
-            }
-        });
+        firebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(authResult -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this,"Opps! Something went wrong.",Toast.LENGTH_LONG).show());
 
     }
 }
