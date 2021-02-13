@@ -1,7 +1,6 @@
 package com.kursat.pm_projectmarket;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new FeedFragment()).commit();
 
     }
+
     @SuppressLint("NonConstantResourceId")
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectListener =
             item -> {
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.profile_menu_item,menu);
-        MenuItem item =menu.findItem(R.id.settings);
+
         if(id != R.id.nav_profile){
             closeOptionsMenu();
         }
