@@ -51,11 +51,11 @@
                     <RatingBar
                         android:id="@+id/ratingBar_profileFragment"
                         style="?android:attr/ratingBarStyleIndicator"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:numStars="5"
-                        android:stepSize="1.0" />
+                        android:stepSize="1.0"
+                        android:isIndicator="false"/>
 
 
                 </LinearLayout>
@@ -77,7 +77,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/ic_posts"
-                    style="?android:attr/buttonBarButtonStyle"/>
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:contentDescription="TODO" />
                 <ImageButton
                     android:id="@+id/comments_profileFragment"
                     android:layout_width="0dp"
@@ -98,18 +99,8 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"/>
 
-
         </LinearLayout>
-
 
     </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/chatFAB_profileFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end|right"
-            android:elevation="6dp"
-            android:src="@drawable/ic_chat"
-            android:visibility="gone" />
 </RelativeLayout>
