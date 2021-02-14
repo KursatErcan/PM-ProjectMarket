@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.kursat.pm_projectmarket.Fragment.FeedFragment;
 import com.kursat.pm_projectmarket.Fragment.MessageFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfileFragment;
+import com.kursat.pm_projectmarket.Fragment.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.settings){
-            Toast.makeText(this,"islem tamam",Toast.LENGTH_SHORT).show();
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new SettingsFragment()).commit();
         }
         return super.onOptionsItemSelected(item);
     }

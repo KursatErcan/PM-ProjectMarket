@@ -27,6 +27,8 @@
                     android:id="@+id/profileImage_profileFragment"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="@color/imageBorderColor"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:src="@mipmap/ic_launcher" />
