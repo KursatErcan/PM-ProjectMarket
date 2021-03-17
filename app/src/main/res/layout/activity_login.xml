@@ -18,35 +18,52 @@
         android:scaleType="centerCrop"
         android:src="@drawable/pm_logo" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/editText_email"
-        android:layout_width="290dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginRight="55dp"
-        android:ems="10"
-        android:hint="Email "
-        android:inputType="textEmailAddress"
+        android:layout_marginTop="40dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         app:layout_constraintBottom_toTopOf="@+id/editText_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:hint="Email "
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/cardview_shadow_end_color"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/editText_password"
-        android:layout_width="290dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="55dp"
-        android:layout_marginLeft="55dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
+        app:passwordToggleEnabled="true"
+        android:layout_marginTop="12dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_email" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_email">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/cardview_shadow_end_color"/>
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_singIn"

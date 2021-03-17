@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,16 +26,21 @@ import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ProfileFragment extends Fragment {
 
     ImageView imageView_profileImage;
-    ImageButton imageView_postsButton,imageView_commentsButton;
+    //ImageButton imageView_postsButton,imageView_commentsButton;
     TextView textView_UserName;
-
+    private TabLayout tabs;
+    private ViewPager viewPager;
     private FirebaseFirestore db;
     FirebaseUser currentUser;
     String profileId;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -40,7 +50,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile1, container, false);
 
         db = FirebaseFirestore.getInstance();
 
@@ -49,10 +59,15 @@ public class ProfileFragment extends Fragment {
         profileId = prefs.getString("profileId","none");
 
         imageView_profileImage = view.findViewById(R.id.profileImage_profileFragment);
-        imageView_postsButton = view.findViewById(R.id.posts_profileFragment);
-        imageView_commentsButton = view.findViewById(R.id.comments_profileFragment);
+        //imageView_postsButton = view.findViewById(R.id.posts_profileFragment);
+        //imageView_commentsButton = view.findViewById(R.id.comments_profileFragment);
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
 
+        tabs = view.findViewById(R.id.tabs);
+        viewPager = view.findViewById(R.id.viewPager);
+
+        tabs.setupWithViewPager(viewPager);
+        setupWithViewPager(viewPager);
 
         userInfo();
         return view;
@@ -66,8 +81,8 @@ public class ProfileFragment extends Fragment {
                 if(getContext() == null){ return; }
                 if(value != null){
                     User user = value.toObject(User.class);
-                    Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
-                    textView_UserName.setText(user.getUserName());
+                    //Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
+                    //textView_UserName.setText(user.getUserName());
 
                     System.out.println("userName => " + user.getUserName());
                     System.out.println("profilImageUrl => " + user.getProfileImageUrl());
@@ -75,5 +90,43 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    private void setupWithViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+        adapter.addFrag(new ProfilePostFragment(), "Posts");
+        adapter.addFrag(new ProfileCommentFragment(), "Comments");
+        viewPager.setAdapter(adapter);
+    }
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> fragmentList = new ArrayList<>();
+        private List<String> titleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return fragmentList.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        public void addFrag(Fragment name, String title) {
+            fragmentList.add(name);
+            titleList.add(title);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titleList.get(position);
+        }
     }
 }

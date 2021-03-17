@@ -10,12 +10,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kursat.pm_projectmarket.Fragment.FeedFragment;
 import com.kursat.pm_projectmarket.Fragment.MessageFragment;
+import com.kursat.pm_projectmarket.Fragment.PostFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfileFragment;
 import com.kursat.pm_projectmarket.Fragment.SettingsFragment;
 
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new FeedFragment();
                         break;
                     case R.id.nav_post:
+                        //selectedFragment = new PostFragment();
                         selectedFragment = null;
                         Intent intent = new Intent(MainActivity.this,PostActivity.class);
                         startActivity(intent);
