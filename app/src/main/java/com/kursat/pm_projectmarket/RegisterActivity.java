@@ -1,5 +1,6 @@
 package com.kursat.pm_projectmarket;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -10,9 +11,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,7 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setMessage("Please Wait!");
         progressDialog.show();
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
-            Toast.makeText(RegisterActivity.this, "Welcome..", Toast.LENGTH_LONG).show();
             createUser(userName, email);
         }).addOnFailureListener(e -> {
             Toast.makeText(RegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
@@ -74,8 +78,18 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("profileImageUrl","https://firebasestorage.googleapis.com/v0/b/pm-projectmarket.appspot.com/o/placeHolder.jpg?alt=media&token=d5510906-ad33-49e0-9be4-ad6446bd21e6");
         db.collection("Users").document(userId).set(user)
                 .addOnSuccessListener(aVoid -> {
+                    /* Email Verification */
+                    /*firebaseAuth.getCurrentUser().sendEmailVerification()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(RegisterActivity.this,"Verify your email address! (Don't forget to check your spam folder!)",Toast.LENGTH_LONG).show();
+                                }
+                            }).addOnFailureListener(e-> Toast.makeText(RegisterActivity.this,"Verify your email address! (Don't forget to check your spam folder!)",Toast.LENGTH_LONG).show());
+                    */
+
                     progressDialog.dismiss();
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();

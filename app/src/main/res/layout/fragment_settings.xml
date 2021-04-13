@@ -30,6 +30,7 @@
         <TextView
             style="@style/viewParent.headerText.settingsTextIcon"
             android:drawableLeft="@drawable/ic_edit_profile"
+            android:onClick="editProfileClicked"
             android:text="Edit Profile" />
 
         <TextView
@@ -58,6 +59,7 @@
             android:text="Language" />
 
         <TextView
+            android:id="@+id/logout"
             style="@style/viewParent.headerText.settingsTextIcon"
             android:drawableLeft="@drawable/ic_logout"
             android:text="Logout" />

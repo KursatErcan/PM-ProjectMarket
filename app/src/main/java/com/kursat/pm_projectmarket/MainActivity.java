@@ -69,22 +69,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             };
 
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu_item,menu);
 
-        if(id != R.id.nav_profile){
-            closeOptionsMenu();
-        }
-        else openOptionsMenu();
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.settings){
-            getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new SettingsFragment()).commit();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

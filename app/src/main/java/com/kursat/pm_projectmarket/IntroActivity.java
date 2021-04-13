@@ -79,36 +79,11 @@ public class IntroActivity extends AppCompatActivity {
             public void run() {
 
                 firebaseAuth = FirebaseAuth.getInstance();
+
                 if (firebaseAuth.getCurrentUser() != null) {
                     Intent n = new Intent(IntroActivity.this, MainActivity.class);
                     startActivity(n);
                     finish();
-
-                    // <---- E MAİL VERIFICATION ---->
-                    /*if (firebaseAuth.getCurrentUser().isEmailVerified()) {
-                        Intent n = new Intent(IntroActivity.this, MainActivity.class);
-                        startActivity(n);
-                        finish();
-                    } else {
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(IntroActivity.this);
-                        builder.setMessage("Check whether you have verified your Email, Otherwise please verify");
-                        builder.setCancelable(false);
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                dialog.dismiss();
-                                Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                finish();
-
-                            }
-                        });
-                        AlertDialog alert = builder.create();
-                        alert.show();
-                        firebaseAuth.signOut();
-                    }*/
                 } else {
                     Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
                     startActivity(intent);

@@ -24,8 +24,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.hide();
 
         firebaseAuth = FirebaseAuth.getInstance();
         emailText = findViewById(R.id.editText_email);
@@ -118,9 +118,23 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(String email, String password){
 
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnSuccessListener(authResult -> {
+
+            /* Email Verification */
+            /*if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                Toast.makeText(LoginActivity.this,"Welcome!",Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else{
+                Toast.makeText(LoginActivity.this,"You haven't verified your email yet!",Toast.LENGTH_LONG).show();
+            }*/
+
+            Toast.makeText(LoginActivity.this,"Welcome!",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
+
         }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this,"Opps! Something went wrong.",Toast.LENGTH_LONG).show());
 
     }
