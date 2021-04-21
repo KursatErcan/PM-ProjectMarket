@@ -11,8 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-        <activity android:name=".SettingsActivity"></activity>
-        <!-- android:theme="@style/Theme.PMProjectMarket" -->
+        <activity android:name=".Model.EditProfileActivity"></activity>
+        <activity android:name=".SettingsActivity" /> <!-- android:theme="@style/Theme.PMProjectMarket" -->
         <activity android:name=".PostActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />

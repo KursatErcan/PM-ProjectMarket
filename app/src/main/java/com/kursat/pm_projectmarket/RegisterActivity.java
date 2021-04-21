@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,7 +16,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.sql.SQLOutput;
 import java.util.HashMap;
@@ -26,12 +30,18 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     EditText userNameText,emailText,passwordText;
     ProgressDialog progressDialog;
+    String placeHolderUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        StorageReference newReference = FirebaseStorage.getInstance().getReference().child("Images/placeHolder.jpg");
+        newReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    placeHolderUrl = uri.toString();
+                });
 
         userNameText = findViewById(R.id.editText_userName);
         emailText = findViewById(R.id.editText_email);
@@ -70,12 +80,24 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void createUser(final String userName, final String email){
         String userId = (String) firebaseAuth.getCurrentUser().getUid();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(userName)
+                .setPhotoUri(Uri.parse(placeHolderUrl))
+                .build();
+
+        firebaseAuth.getCurrentUser().updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                System.out.println("kayıt tamam");
+            }
+        });
+
         Map<String, Object> user = new HashMap<>();
         //user.put("userId",userId);
         user.put("userName", userName);
         user.put("email", email);
         user.put("bio", "");
-        user.put("profileImageUrl","https://firebasestorage.googleapis.com/v0/b/pm-projectmarket.appspot.com/o/placeHolder.jpg?alt=media&token=d5510906-ad33-49e0-9be4-ad6446bd21e6");
+        user.put("profileImageUrl",placeHolderUrl);
         db.collection("Users").document(userId).set(user)
                 .addOnSuccessListener(aVoid -> {
                     /* Email Verification */

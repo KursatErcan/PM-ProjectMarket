@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Model.EditProfileActivity"
+    android:background="@color/contentBodyColor"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+
+
+    <TextView
+        style="@style/viewParent.headerText"
+        android:layout_marginTop="35dp"
+        android:text="@string/edit_profile" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage_editProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+
+                android:onClick="uploadImage"
+                android:src="@drawable/profile"
+                app:civ_border_color="@color/imageBorderColor"
+                app:civ_border_width="2dp"
+                tools:ignore="MissingConstraints"
+                android:layout_gravity=""/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_plus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/profileImage_editProfile"
+                android:layout_alignRight="@+id/profileImage_editProfile"
+                android:src="@drawable/ic_plus"/>
+
+
+
+    </RelativeLayout>
+
+        <TextView
+            style="@style/viewParent.headerText.settingsTextIcon"
+            android:layout_marginTop="40dp"
+            android:text="@string/your_name"
+            app:drawableStartCompat="@drawable/ic_user" />
+
+        <EditText
+            android:id="@+id/editText_userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            android:background="@drawable/edittext_backround"
+            android:ems="10" />
+
+        <TextView
+            style="@style/viewParent.headerText.settingsTextIcon"
+            android:layout_marginTop="40dp"
+            android:text="@string/mail_address"
+            app:drawableStartCompat="@drawable/ic_mail" />
+
+        <EditText
+            android:id="@+id/editText_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            android:background="@drawable/edittext_backround"
+            android:ems="10" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="190dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="75dp"
+            android:background="@drawable/button_backround"
+            android:text="@string/update_profile"
+            android:onClick="updateProfile"/>
+
+
+
+</LinearLayout>

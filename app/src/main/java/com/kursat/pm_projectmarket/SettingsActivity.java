@@ -16,19 +16,20 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.kursat.pm_projectmarket.Fragment.FeedFragment;
+import com.kursat.pm_projectmarket.Model.EditProfileActivity;
 
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences mode;
     SharedPreferences.Editor editor;
     boolean isNightModeOn;
-    TextView logout;
+    TextView logout, editProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         logout = (TextView) findViewById(R.id.logout);
-
+        editProfile = findViewById(R.id.editProfile);
         //function for enabling dark mode
         //mode = getActivity().getSharedPreferences("modePref",Context.MODE_PRIVATE);
         mode = getSharedPreferences(SettingsActivity.this.getPackageName(), MODE_PRIVATE);
@@ -69,6 +70,13 @@ public class SettingsActivity extends AppCompatActivity {
                     .show();
         });
 
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void editProfileClicked(View view){

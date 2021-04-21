@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PM-ProjectMarket</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -11,4 +11,20 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="settings">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="notifications" tools:ignore="DuplicateDefinition">Notifications</string>
+    <string name="change_profile_photo">Click for change to profile photo!</string>
+    <string name="your_name">Your Name</string>
+    <string name="mail_address">Mail Address</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="gallery_requestPermission">You must allow access to the gallery!</string>
+
+    <string name="regional">Regional</string>
+    <string name="language">Language</string>
+    <string name="logout">Logout</string>
+    <string name="app_ver_1_0">App ver 1.0</string>
 </resources>

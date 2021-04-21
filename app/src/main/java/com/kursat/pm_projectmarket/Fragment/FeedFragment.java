@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class FeedFragment extends Fragment {
-    private FirebaseAuth firebaseAuth;
+    //private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     String postId;
     PostRecyclerAdapter postRecyclerAdapter;
@@ -53,7 +53,7 @@ public class FeedFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        //firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         userNameList_db = new ArrayList<>();
@@ -76,7 +76,7 @@ public class FeedFragment extends Fragment {
 
     public void getDataFromDB(){
 
-        db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((EventListener<QuerySnapshot>) (value, error) -> {
+        db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
             if(value != null){
                 for(DocumentSnapshot doc : value.getDocuments()){
                     Post post = doc.toObject(Post.class);

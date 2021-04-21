@@ -1,72 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SettingsActivity"
     android:background="@color/contentBodyColor">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="30dp">
 
         <TextView
             style="@style/viewParent.headerText"
-            android:text="Settings"
+            android:text="@string/settings"
             android:layout_marginTop="35dp"/>
 
         <Switch
             android:id="@+id/darkModeSwitch"
             style="@style/settingsText"
-            android:drawableLeft="@drawable/ic_dark_mode"
-            android:text="Dark Mode" />
+            android:drawableStart="@drawable/ic_dark_mode"
+            android:text="@string/dark_mode"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
             style="@style/viewParent.headerText.settingsMiniTitle"
-            android:text="Profile"/>
+            android:text="@string/profile"/>
 
         <TextView
             style="@style/viewParent.headerText.settingsTextIcon"
-            android:drawableLeft="@drawable/ic_edit_profile"
-            android:onClick="editProfileClicked"
-            android:text="Edit Profile" />
+            android:text="@string/edit_profile"
+            android:id="@+id/editProfile"
+            app:drawableStartCompat="@drawable/ic_edit_profile" />
 
         <TextView
             style="@style/viewParent.headerText.settingsTextIcon"
-            android:drawableLeft="@drawable/ic_edit_password"
             android:layout_marginTop="10dp"
-            android:text="Change Password" />
+            android:text="@string/change_password"
+            app:drawableStartCompat="@drawable/ic_edit_password" />
 
         <TextView
             style="@style/viewParent.headerText.settingsMiniTitle"
-            android:text="Notifications"/>
+            android:text="@string/notifications"/>
 
         <Switch
             style="@style/settingsText"
             android:checked="false"
-            android:drawableLeft="@drawable/ic_notifications"
-            android:text="Notifications" />
+            android:drawableStart="@drawable/ic_notifications"
+            android:text="@string/notifications"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
             style="@style/viewParent.headerText.settingsMiniTitle"
-            android:text="Regional"/>
+            android:text="@string/regional"/>
 
         <TextView
             style="@style/viewParent.headerText.settingsTextIcon"
-            android:drawableLeft="@drawable/ic_languages"
-            android:text="Language" />
+            android:text="@string/language"
+            app:drawableStartCompat="@drawable/ic_languages" />
 
         <TextView
             android:id="@+id/logout"
             style="@style/viewParent.headerText.settingsTextIcon"
-            android:drawableLeft="@drawable/ic_logout"
-            android:text="Logout" />
+            android:text="@string/logout"
+            app:drawableStartCompat="@drawable/ic_logout" />
         <TextView
             style="@style/viewParent.headerText.settingsMiniTitle"
-            android:text="App ver 1.0"
+            android:text="@string/app_ver_1_0"
             android:textAlignment="center"/>
 
     </LinearLayout>
