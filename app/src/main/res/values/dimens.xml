@@ -3,4 +3,18 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="headerTextSize">25sp</dimen>
 
+    <!-- Dashboard -->
+
+    <dimen name="horizontal_dashboard">32dp</dimen>
+
+    <!-- Category Elementi için -->
+    <dimen name="card_radius">14dp</dimen>
+    <dimen name="img_card_height">120dp</dimen>
+    <dimen name="normalPadding">20dp</dimen>
+    <dimen name="top_text_card">7dp</dimen>
+    <dimen name="top_text_subtitle_card">4dp</dimen>
+    <dimen name="vertical_search">10dp</dimen>
+    <dimen name="drawable_left">5dp</dimen>
+    <dimen name="horizontal_card">8dp</dimen>
+    <color name="back_courses">#f8fafb</color>
 </resources>

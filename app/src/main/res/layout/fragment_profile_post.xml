@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.ProfilePostFragment"
-    android:background="@color/design_default_color_primary">
-
+    android:background="#f34000">
+    <!--
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerView_posts"/>
 
-    <!--
-        <TextView
+    -->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="hello_profile_post_fragment" />
-    -->
+
 
 
 </RelativeLayout>

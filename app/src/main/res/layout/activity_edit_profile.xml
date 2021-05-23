@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Model.EditProfileActivity"
+    tools:context=".EditProfileActivity"
     android:background="@color/contentBodyColor"
     android:orientation="vertical"
     android:padding="30dp">
@@ -43,7 +43,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/profileImage_editProfile"
-                android:layout_alignRight="@+id/profileImage_editProfile"
+                android:layout_alignEnd="@+id/profileImage_editProfile"
                 android:src="@drawable/ic_plus"/>
 
 

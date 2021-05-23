@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kursat.pm_projectmarket.Fragment.CategoriesFragment;
 import com.kursat.pm_projectmarket.Fragment.FeedFragment;
 import com.kursat.pm_projectmarket.Fragment.MessageFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfileFragment;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectListener);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new FeedFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment,new CategoriesFragment()).commit();
 
     }
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 id=item.getItemId();
                 switch(id){
                     case R.id.nav_home:
-                        selectedFragment = new FeedFragment();
+                        //selectedFragment = new FeedFragment();
+                        selectedFragment = new CategoriesFragment();
                         break;
                     case R.id.nav_post:
                         //selectedFragment = new PostFragment();

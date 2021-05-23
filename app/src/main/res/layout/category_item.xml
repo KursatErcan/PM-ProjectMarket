@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/card_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:clickable="true"
+    android:focusable="true"
+
+    android:foreground="?selectableItemBackground"
+    app:cardBackgroundColor="@android:color/white"
+
+    app:cardCornerRadius="@dimen/card_radius"
+    app:cardElevation=".15dp"
+    app:cardPreventCornerOverlap="true"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/category_item">
+
+        <ImageView
+            android:id="@+id/card_view_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/img_card_height"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:cropToPadding="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/course_design_thinking" />
+
+        <TextView
+            android:id="@+id/category_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/normalPadding"
+            android:layout_marginTop="@dimen/top_text_card"
+
+            android:layout_marginRight="@dimen/normalPadding"
+
+
+            android:fontFamily="@font/bariol_bold"
+            android:text="@string/title_topic_course"
+            android:textColor="@color/darkTextColor"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="5dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_category_type"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="8dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView_categoryName_categoryElement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="#4D000000"
+            android:elevation="7dp"
+            android:outlineProvider="none"
+            android:padding="16dp"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/imageView_categoryImage_categoryElement"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+-->

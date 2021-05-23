@@ -23,8 +23,20 @@
     <string name="update_profile">Update Profile</string>
     <string name="gallery_requestPermission">You must allow access to the gallery!</string>
 
+
+    <string name="title_topic_course">Design Thinking</string>
+    <string name="search_here">Search Here</string>
+
+
+
+
     <string name="regional">Regional</string>
     <string name="language">Language</string>
     <string name="logout">Logout</string>
     <string name="app_ver_1_0">App ver 1.0</string>
+    <string name="share">SHARE</string>
+    <string name="postSentence">I can ... for you. (in a sentence)</string>
+    <string name="price">Price..</string>
+
+
 </resources>

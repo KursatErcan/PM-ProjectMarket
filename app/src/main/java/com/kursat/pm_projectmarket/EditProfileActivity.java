@@ -1,4 +1,4 @@
-package com.kursat.pm_projectmarket.Model;
+package com.kursat.pm_projectmarket;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,31 +16,21 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.kursat.pm_projectmarket.MainActivity;
-import com.kursat.pm_projectmarket.PostActivity;
-import com.kursat.pm_projectmarket.R;
-import com.kursat.pm_projectmarket.SettingsActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
 
 public class EditProfileActivity extends AppCompatActivity {
     ImageView imageView_profilePhoto;

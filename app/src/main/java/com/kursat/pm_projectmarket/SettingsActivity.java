@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,8 +13,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.kursat.pm_projectmarket.Fragment.FeedFragment;
-import com.kursat.pm_projectmarket.Model.EditProfileActivity;
 
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences mode;
@@ -28,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        logout = (TextView) findViewById(R.id.logout);
+        logout = findViewById(R.id.logout);
         editProfile = findViewById(R.id.editProfile);
         //function for enabling dark mode
         //mode = getActivity().getSharedPreferences("modePref",Context.MODE_PRIVATE);
@@ -56,31 +52,22 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        logout.setOnClickListener((v) -> {
-            new AlertDialog.Builder(this)
-                    .setMessage("Are you sure you want to Logout?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes",(dialog, which) ->{
-                        FirebaseAuth.getInstance().signOut();
-                        Intent intent = new Intent(SettingsActivity.this, IntroActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        });
+        logout.setOnClickListener((v) -> new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to Logout?")
+                .setCancelable(false)
+                .setPositiveButton("Yes",(dialog, which) ->{
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(SettingsActivity.this, IntroActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                })
+                .setNegativeButton("No", null)
+                .show());
 
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
-                startActivity(intent);
-            }
+        editProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
+            startActivity(intent);
         });
     }
 
-    private void editProfileClicked(View view){
-        //getFragmentManager().beginTransaction().replace(R.id.mainFragment,new FeedFragment()).commit();
-
-    }
 }
