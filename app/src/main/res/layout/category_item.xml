@@ -32,7 +32,7 @@
             android:contentDescription="@string/app_name"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/course_design_thinking" />
+            android:src="@drawable/button_backround" />
 
         <TextView
             android:id="@+id/category_name"
@@ -44,7 +44,7 @@
             android:layout_marginRight="@dimen/normalPadding"
 
 
-            android:fontFamily="@font/bariol_bold"
+            android:fontFamily=""
             android:text="@string/title_topic_course"
             android:textColor="@color/darkTextColor"
             android:textSize="15sp" />

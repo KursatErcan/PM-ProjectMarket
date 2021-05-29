@@ -1,21 +1,41 @@
 package com.kursat.pm_projectmarket.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.kursat.pm_projectmarket.Adapter.MessageBoxAdapter;
+import com.kursat.pm_projectmarket.MessagesActivity;
+import com.kursat.pm_projectmarket.Model.MessageBox;
 import com.kursat.pm_projectmarket.R;
+
+import java.util.ArrayList;
+
+import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MessageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MessageFragment extends Fragment {
+public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMessageListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,12 +75,83 @@ public class MessageFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-    }
 
+    }
+    RecyclerView recView;
+    ArrayList<MessageBox> MessageBox;
+    FirebaseFirestore db;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    MessageBoxAdapter Adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        // Buradan devam
+        View view = inflater.inflate(R.layout.fragment_messagebox, container, false);
+        recView=(RecyclerView) view.findViewById(R.id.messagebox_recycleview);
+        recView.setLayoutManager(new LinearLayoutManager(getContext()));
+        MessageBox= new ArrayList<>();
+        Adapter=new MessageBoxAdapter(MessageBox,this);
+        recView.setAdapter(Adapter);
+
+        if(user!=null) {
+            db = FirebaseFirestore.getInstance();
+            db.collection("Messages")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value,
+                                            @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                Log.w(TAG, "Listen failed.", e);
+                                return;
+                            }
+
+
+                            for (QueryDocumentSnapshot doc1 : value) {
+
+                                System.out.println(user.getUid());
+                                if(doc1.get("message_received").equals(user.getUid()) || doc1.get("message_posted").equals(user.getUid())){
+                                    db.collection("Messages/"+doc1.getId()+"/Message_details")
+                                            .orderBy("message_date", Query.Direction.DESCENDING)
+                                            .limit(1)
+                                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable QuerySnapshot value,
+                                                                    @Nullable FirebaseFirestoreException e) {
+                                                    if (e != null) {
+                                                        Log.w(TAG, "Listen failed.", e);
+                                                        return;
+                                                    }
+
+                                                    for (QueryDocumentSnapshot doc : value) {
+
+                                                        MessageBox.add(new MessageBox(doc.get("message_date").toString(), doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
+                                                    }
+                                                    Adapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                }
+                            }
+                            Adapter.notifyDataSetChanged();
+                        }
+
+                    });
+
+
+
+        }
+        else{
+            //No one is signed in
+
+        }
+
+
+
+        return view;
+    }
+    public void onMessageClick(int position) {
+        Intent intent=new Intent(getActivity(), MessagesActivity.class);
+        intent.putExtra("token",MessageBox.get(position).getToken());
+        startActivity(intent);
+
     }
 }

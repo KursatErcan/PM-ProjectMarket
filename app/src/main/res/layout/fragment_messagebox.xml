@@ -5,11 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.MessageFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messagebox_recycleview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="50sp"
-        android:text="Message Fragment" />
-
+        android:layout_height="match_parent" />
 </FrameLayout>

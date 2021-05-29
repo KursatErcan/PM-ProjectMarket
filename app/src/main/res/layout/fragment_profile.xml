@@ -31,7 +31,7 @@
                     app:civ_border_color="@color/imageBorderColor"
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/profile" />
+                    android:src="@drawable/button_backround" />
 
                 <LinearLayout
 

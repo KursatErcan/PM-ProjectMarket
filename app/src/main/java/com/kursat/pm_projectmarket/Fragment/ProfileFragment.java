@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
 
         tabs = view.findViewById(R.id.tabs);
-        viewPager = view.findViewById(R.id.viewPager);
+        //viewPager = view.findViewById(R.id.viewPager);
 
         tabs.setupWithViewPager(viewPager);
         setupWithViewPager(viewPager);
