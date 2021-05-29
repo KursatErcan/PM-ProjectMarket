@@ -2,24 +2,24 @@ package com.kursat.pm_projectmarket.Model;
 
 public class CategoryCard {
 
-    private int Id;
+    private String categoryId;
     private String imageUrl;
     private String categoryName;
 
     public CategoryCard(){}
 
-    public CategoryCard(int id, String imageUrl, String categoryName) {
-        Id = id;
+    public CategoryCard(String categoryId, String imageUrl, String categoryName) {
+        this.categoryId = categoryId;
         this.imageUrl = imageUrl;
         this.categoryName = categoryName;
     }
 
-    public int getId() {
-        return Id;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setId(int id) {
-        Id = id;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getImageUrl() {
@@ -39,7 +39,6 @@ public class CategoryCard {
     }
 
 
-
     @Override()
     public boolean equals(Object other) {
         // This is unavoidable, since equals() must accept an Object and not something more derived
@@ -48,41 +47,9 @@ public class CategoryCard {
             // Using equals() here allows the Model class to implement it's own version of equality, rather than
             // us always checking for referential equality.
             CategoryCard categoryCard = (CategoryCard) other;
-            return categoryCard.getId()==(this.getId());
+            return categoryCard.getCategoryId().equals(this.getCategoryId());
         }
 
         return false;
     }
 }
-
-
-
-/*
-public class CategoryType {
-    private String categoryName;
-    private String categoryImageUrl;
-
-    public CategoryType(String category, String categoryImageUrl) {
-        this.categoryName = category;
-        this.categoryImageUrl = categoryImageUrl;
-    }
-    public CategoryType(){}
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public CategoryType setCategoryName(String category) {
-        this.categoryName = category;
-        return this;
-    }
-
-    public String getCategoryImageUrl() {
-        return categoryImageUrl;
-    }
-
-    public CategoryType setCategoryImageUrl(String categoryImageUrl) {
-        this.categoryImageUrl = categoryImageUrl;
-        return this;
-    }
-}
-*/

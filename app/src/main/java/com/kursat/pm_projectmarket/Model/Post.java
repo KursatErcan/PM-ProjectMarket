@@ -5,17 +5,19 @@ public class Post {
     private String price;
     private String title;
     private String postImageUrl;
+    private String categoryId;
 
     public Post(){
 
     }
 
-    public Post(String postId, String userId, String price, String title, String postImageUrl) {
+    public Post(String postId, String userId, String price, String title, String postImageUrl, String categoryId) {
         this.postId = postId;
         this.userId = userId;
         this.price = price;
         this.title = title;
         this.postImageUrl = postImageUrl;
+        this.categoryId = categoryId;
     }
 
     public String getPostId() {
@@ -57,4 +59,8 @@ public class Post {
     public void setPostImageUrl(String postImageUrl) {
         this.postImageUrl = postImageUrl;
     }
+
+    public String  getCategoryId() {return categoryId; }
+
+    public void setCategoryId(String categoryId) {this.categoryId = categoryId; }
 }

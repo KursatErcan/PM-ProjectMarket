@@ -27,13 +27,32 @@
     <string name="title_topic_course">Design Thinking</string>
     <string name="search_here">Search Here</string>
 
+    <string name="programmingAndTeach">Programming &amp; Tech</string>
+    <string name="writingAndTranslation">Writing &amp; Translation</string>
+    <string name="videoAndAudio">Video &amp; Audio</string>
+    <string name="data">Data</string>
+    <string name="digitalMarketing">Digital Marketing</string>
+    <string name="graphicsAndDesign">Graphics &amp; Design</string>
+
+
+
+    <string-array name="categories_array">
+        <item>@string/programmingAndTeach</item>
+        <item>@string/writingAndTranslation</item>
+        <item>@string/videoAndAudio</item>
+        <item>@string/data</item>
+        <item>@string/digitalMarketing</item>
+        <item>@string/graphicsAndDesign</item>
+    </string-array>
+
+
 
     <string name="regional">Regional</string>
     <string name="language">Language</string>
     <string name="logout">Logout</string>
     <string name="app_ver_1_0">App ver 1.0</string>
     <string name="share">SHARE</string>
-    <string name="postSentence">I can ... for you. (in a sentence)</string>
+    <string name="postSentence">I can … for you. (in a sentence)</string>
     <string name="price">Price..</string>
 
 
