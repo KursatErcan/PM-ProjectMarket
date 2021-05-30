@@ -105,7 +105,7 @@ public class MessagesActivity extends AppCompatActivity {
                                     message.put("message_sended",document.get("userName").toString());
                                     message.put("message_sended_id",user.getUid().toString());
                                     cfr.add(message);
-
+                                    msgDetail.setText("");
                                 } else {
                                     Log.d(TAG, "No such document");
                                 }

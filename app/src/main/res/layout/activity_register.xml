@@ -7,7 +7,8 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".RegisterActivity">
+    tools:context=".RegisterActivity"
+    android:backgroundTint="@color/contentBodyColor">
 
     <ImageView
         android:layout_width="240dp"

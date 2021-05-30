@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
 
     >
-
+<!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,5 +16,38 @@
         android:id="@+id/show_message"
         android:textSize="20sp"
         />
+-->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <!--
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        -->
+        <!--app:cardBackgroundColor="#774df2"-->
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/messageLeft"
+            android:layout_gravity="left|center_vertical"
+            tools:ignore="RtlHardcoded">
+
+            <TextView
+                android:id="@+id/show_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/contentTextColor"
+                android:text="@string/message"
+
+                android:textSize="20sp"
+                android:fontFamily="@font/bariol_regular"
+                />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

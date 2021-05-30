@@ -21,4 +21,10 @@
     <color name="darkTextColor">#020000</color>
     <color name="frutorial_title">#4c4c4c</color>
     <color name="colorPrimaryDark">#2A2E43</color>
+
+    <!-- Messaging -->
+    <color name="messageLeft">#FFC75F</color>
+    <color name="messageRight">#FF9671</color>
+
+
 </resources>

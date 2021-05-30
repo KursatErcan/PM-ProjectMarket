@@ -54,6 +54,9 @@
     <string name="share">SHARE</string>
     <string name="postSentence">I can … for you. (in a sentence)</string>
     <string name="price">Price..</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
+    <string name="enter_message">Enter Message</string>
 
 
 </resources>
