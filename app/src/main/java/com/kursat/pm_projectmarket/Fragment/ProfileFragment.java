@@ -33,7 +33,7 @@ public class ProfileFragment extends Fragment {
     private TabLayout tabs;
     private ViewPager viewPager;
     private FirebaseFirestore db;
-    FirebaseUser currentUser;
+    //FirebaseUser currentUser;
     String profileId;
 
     public ProfileFragment() {
@@ -49,10 +49,12 @@ public class ProfileFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        //currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
         profileId = prefs.getString("profileId","none");
-        System.out.println("profileId: " + profileId);
+        //System.out.println("profileId: " + profileId);
+
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
         imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
         //imageView_postsButton = view.findViewById(R.id.posts_profileFragment);
@@ -84,11 +86,7 @@ public class ProfileFragment extends Fragment {
                     User user = value.toObject(User.class);
                     Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
                     textView_UserName.setText(user.getUserName());
-
-                    //System.out.println("userName => " + user.getUserName());
-                    //System.out.println("profilImageUrl => " + user.getProfileImageUrl());
                 }
-
             }
         });
     }

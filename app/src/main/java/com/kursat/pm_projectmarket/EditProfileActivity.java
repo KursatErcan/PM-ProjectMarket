@@ -25,12 +25,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kursat.pm_projectmarket.Model.User;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+
+import static java.security.AccessController.getContext;
 
 public class EditProfileActivity extends AppCompatActivity {
     ImageView imageView_profilePhoto;
@@ -41,6 +45,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     private StorageReference storageReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+
 
         storageReference = FirebaseStorage.getInstance().getReference("Images");
 
@@ -57,11 +62,36 @@ public class EditProfileActivity extends AppCompatActivity {
         editText_name = findViewById(R.id.editText_userName);
         editText_mailAddress = findViewById(R.id.editText_mail);
 
-        Picasso.get().load(user.getPhotoUrl()).into(imageView_profilePhoto);
-        editText_name.setText(user.getDisplayName());
-        editText_mailAddress.setText(user.getEmail());
+
+        userInfo();
+        //Picasso.get().load(user.getPhotoUrl()).into(imageView_profilePhoto);
+        //editText_name.setText(user.getDisplayName());
+        //editText_mailAddress.setText(user.getEmail());
 
     }
+
+    private void userInfo(){
+
+        DocumentReference reference = db.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
+
+        reference.addSnapshotListener((value, error) -> {
+            if(error == null){
+                if(getContext() == null){ return; }
+                if(value != null){
+                    User user = value.toObject(User.class);
+                    Picasso.get().load(user.getProfileImageUrl()).into(imageView_profilePhoto);
+                    editText_name.setText(user.getUserName());
+                    editText_mailAddress.setText(user.getEmail());
+
+                    //System.out.println("userName => " + user.getUserName());
+                    //System.out.println("profilImageUrl => " + user.getProfileImageUrl());
+                }
+
+            }
+        });
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
