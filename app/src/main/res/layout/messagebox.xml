@@ -10,8 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:padding="8dp"
-        android:clickable="true">
+        android:padding="8dp">
 
         <!-- pp eklenebilir  -->
         <TextView
