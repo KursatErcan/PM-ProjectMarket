@@ -1,4 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragment.ProfileFragment"
+    android:background="@color/contentBodyColor"
+    >
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout">
+
+            <ImageView
+                android:id="@+id/header_cover_image"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:background="#0074B7"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/settings"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:clickable="true"
+
+                android:src="@drawable/ic_settings"
+                tools:ignore="OnClick" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:clickable="true"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/imageBorderColor"
+
+                android:id="@+id/imageView_profilePhoto"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_below="@+id/header_cover_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-75dp"
+                android:elevation="5dp"
+
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile"
+                android:focusable="true" />
+
+            <RelativeLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/header_cover_image"
+                android:background="#60A3D9"
+                android:elevation="4dp"
+                android:paddingBottom="24dp">
+
+
+                <TextView
+                    android:id="@+id/text_userName_profileFragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="60dp"
+                    android:text="User Name"
+                    android:textColor="@color/contentTextColor"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/bariol_regular"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingBar_profileFragment"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_userName_profileFragment"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:isIndicator="false"
+                    android:numStars="5"
+                    android:scrollbarSize="1dp"
+                    android:stepSize="1.0"
+                    android:progressTint="#BFD7ED"/>
+
+            </RelativeLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_margin="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+
+                >
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="13dp"
+        app:rippleColor="#E91E63"
+        app:srcCompat="@android:drawable/ic_dialog_email"
+        android:backgroundTint="@color/mainColor"/>
+</RelativeLayout>
+
+
+<!--
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -68,10 +207,10 @@
                 android:elevation="4dp"
                 tools:ignore="UnusedAttribute" />
 
-            <!--
+
            app:tabIndicatorColor="@color/colorPrimary"
            app:tabSelectedTextColor="@color/colorPrimary"
-          -->
+
             <androidx.viewpager.widget.ViewPager
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -109,3 +248,6 @@
         app:srcCompat="@android:drawable/ic_dialog_email"
         android:backgroundTint="@color/mainColor"/>
 </RelativeLayout>
+
+-->
+

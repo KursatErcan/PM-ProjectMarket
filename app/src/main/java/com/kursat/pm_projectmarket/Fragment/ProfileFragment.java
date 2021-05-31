@@ -1,21 +1,17 @@
 package com.kursat.pm_projectmarket.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,10 +20,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
+import com.kursat.pm_projectmarket.SettingsActivity;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ProfileFragment extends Fragment {
@@ -35,10 +29,11 @@ public class ProfileFragment extends Fragment {
     ImageView imageView_profileImage;
     //ImageButton imageView_postsButton,imageView_commentsButton;
     TextView textView_UserName;
+    ImageView settings;
     private TabLayout tabs;
     private ViewPager viewPager;
     private FirebaseFirestore db;
-    FirebaseUser currentUser;
+    //FirebaseUser currentUser;
     String profileId;
 
     public ProfileFragment() {
@@ -54,20 +49,28 @@ public class ProfileFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        //currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
         profileId = prefs.getString("profileId","none");
+        //System.out.println("profileId: " + profileId);
 
-        imageView_profileImage = view.findViewById(R.id.profileImage_profileFragment);
+        textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
+        imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
         //imageView_postsButton = view.findViewById(R.id.posts_profileFragment);
         //imageView_commentsButton = view.findViewById(R.id.comments_profileFragment);
-        textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
+        settings=view.findViewById(R.id.settings);
 
-        tabs = view.findViewById(R.id.tabs);
+        //tabs = view.findViewById(R.id.tabs);
         //viewPager = view.findViewById(R.id.viewPager);
 
-        tabs.setupWithViewPager(viewPager);
-        setupWithViewPager(viewPager);
+        //tabs.setupWithViewPager(viewPager);
+        //setupWithViewPager(viewPager);
+
+        settings.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), SettingsActivity.class);
+            startActivity(intent);
+        });
 
         userInfo();
         return view;
@@ -81,17 +84,15 @@ public class ProfileFragment extends Fragment {
                 if(getContext() == null){ return; }
                 if(value != null){
                     User user = value.toObject(User.class);
-                    //Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
-                    //textView_UserName.setText(user.getUserName());
-
-                    System.out.println("userName => " + user.getUserName());
-                    System.out.println("profilImageUrl => " + user.getProfileImageUrl());
+                    Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
+                    textView_UserName.setText(user.getUserName());
                 }
-
             }
         });
     }
 
+
+/*
     private void setupWithViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFrag(new ProfilePostFragment(), "Posts");
@@ -129,4 +130,6 @@ public class ProfileFragment extends Fragment {
             return titleList.get(position);
         }
     }
+
+ */
 }
