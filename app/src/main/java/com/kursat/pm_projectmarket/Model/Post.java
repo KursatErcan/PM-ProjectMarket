@@ -1,66 +1,46 @@
 package com.kursat.pm_projectmarket.Model;
 public class Post {
-    private String postId;
+    private String userName;
     private String userId;
     private String price;
     private String title;
     private String postImageUrl;
-    private String categoryId;
+    private String token;
 
-    public Post(){
 
-    }
-
-    public Post(String postId, String userId, String price, String title, String postImageUrl, String categoryId) {
-        this.postId = postId;
+    public Post(String userId,String userName, String price, String title, String postImageUrl,String token) {
+        this.userName = userName;
         this.userId = userId;
         this.price = price;
         this.title = title;
         this.postImageUrl = postImageUrl;
-        this.categoryId = categoryId;
+        this.token=token;
+    }
+    Post(){
+
     }
 
-    public String getPostId() {
-        return postId;
-    }
-
-    public void setPostId(String postId) {
-        this.postId = postId;
+    public String getUserName() {
+        return userName;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getPrice() {
         return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getPostImageUrl() {
         return postImageUrl;
     }
 
-    public void setPostImageUrl(String postImageUrl) {
-        this.postImageUrl = postImageUrl;
+    public String getToken() {
+        return token;
     }
-
-    public String  getCategoryId() {return categoryId; }
-
-    public void setCategoryId(String categoryId) {this.categoryId = categoryId; }
 }

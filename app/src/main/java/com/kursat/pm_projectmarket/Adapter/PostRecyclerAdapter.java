@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kursat.pm_projectmarket.Model.MessageSend;
+import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
 
@@ -16,23 +18,13 @@ import java.util.ArrayList;
 
 public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapter.PostHolder>{
 
-    private ArrayList<String> userNameList;
-    private ArrayList<String> titleList;
-    private ArrayList<String> profileImageList;
-    private ArrayList<String> postImageList;
-    private ArrayList<String> priceList;
+    public ArrayList<Post> post;
+    private OnMessageListener msgListener;
 
+    public PostRecyclerAdapter(ArrayList<Post> post, OnMessageListener msgListener) {
+        this.post=post;
+        this.msgListener=msgListener;
 
-    public PostRecyclerAdapter(ArrayList<String> userNameList,
-                               ArrayList<String> titleList,
-                               ArrayList<String> profileImageList,
-                               ArrayList<String> postImageList,
-                               ArrayList<String> priceList) {
-        this.userNameList = userNameList;
-        this.titleList = titleList;
-        this.profileImageList = profileImageList;
-        this.postImageList = postImageList;
-        this.priceList = priceList;
     }
 
     @NonNull
@@ -41,43 +33,56 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.post_item,parent,false);
 
-        return new PostHolder(view);
+        return new PostHolder(view,msgListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostRecyclerAdapter.PostHolder holder, int position) {
-        holder.text_userName.setText(userNameList.get(position));
-        holder.text_title.setText(titleList.get(position));
-        holder.text_price.setText(priceList.get(position));
-        Picasso.get().load(profileImageList.get(position)).into(holder.imageView_profileImage);
-        Picasso.get().load(postImageList.get(position)).into(holder.imageView_postImage);
+        Post currentItem = post.get(position);
+        holder.text_userName.setText(currentItem.getUserName());
+        holder.text_title.setText(currentItem.getTitle());
+        holder.text_price.setText(currentItem.getPrice());
+        Picasso.get().load(currentItem.getPostImageUrl()).into(holder.imageView_profileImage);
+        Picasso.get().load(currentItem.getPostImageUrl()).into(holder.imageView_postImage);
         //System.out.println("PostRcyclerAdapter :: UserName => " + userNameList.get(position));
         //System.out.println("PostRcyclerAdapter :: Title => " + titleList.get(position));
 
     }
 
     @Override
-    public int getItemCount() { return titleList.size(); }
+    public int getItemCount() { return post.size(); }
 
-    static class PostHolder extends RecyclerView.ViewHolder{
+    static class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView text_userName;
         TextView text_title;
         ImageView imageView_profileImage;
         ImageView imageView_postImage;
         TextView text_price;
+        OnMessageListener msgListener;
 
-        public PostHolder(@NonNull View itemView) {
+        public PostHolder(@NonNull View itemView , OnMessageListener msgListener) {
             super(itemView);
 
+            this.msgListener=msgListener;
             text_userName = itemView.findViewById(R.id.text_userName_postElement);
             text_title = itemView.findViewById(R.id.text_postTitle_postElement);
             imageView_profileImage = itemView.findViewById(R.id.imageView_profileImage_postElement);
             imageView_postImage = itemView.findViewById(R.id.imageView_postImage_postElement);
             text_price = itemView.findViewById(R.id.text_price_postElement);
+            itemView.setOnClickListener(this);
 
 
         }
+
+        @Override
+        public void onClick(View v) {
+            msgListener.onMessageClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnMessageListener{
+        void onMessageClick(int position);
     }
 
 }

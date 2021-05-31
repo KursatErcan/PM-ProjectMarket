@@ -30,7 +30,10 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.kursat.pm_projectmarket.Adapter.MessageBoxAdapter;
+import com.kursat.pm_projectmarket.Adapter.PostRecyclerAdapter;
 import com.kursat.pm_projectmarket.MainActivity;
+import com.kursat.pm_projectmarket.MessagesActivity;
 import com.kursat.pm_projectmarket.PostActivity;
 import com.kursat.pm_projectmarket.R;
 
@@ -41,7 +44,7 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 
 
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment{
 
     ImageView imageClose,postImage;
     EditText title,priceText;
@@ -147,11 +150,7 @@ public class PostFragment extends Fragment {
                     postData.put("date", FieldValue.serverTimestamp());
 
                     db.collection("Posts").add(postData).addOnSuccessListener(documentReference -> {
-                        /*progressDialog.dismiss();
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();*/
+
 
                     }).addOnFailureListener(e -> Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show());
 
@@ -159,5 +158,13 @@ public class PostFragment extends Fragment {
             }).addOnFailureListener(e -> Toast.makeText(getContext(),e.getLocalizedMessage(),Toast.LENGTH_LONG).show());
 
         }
+    }
+
+    public void onMessageClick(int position) {
+        System.out.println("Tiklandi---->");
+        //Intent intent=new Intent(getActivity(), MessagesActivity.class);
+        //intent.putExtra("token",MessageBox.get(position).getToken());
+        //startActivity(intent);
+
     }
 }

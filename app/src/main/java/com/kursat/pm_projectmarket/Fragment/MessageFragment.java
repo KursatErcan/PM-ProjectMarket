@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -82,6 +83,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     FirebaseFirestore db;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     MessageBoxAdapter Adapter;
+    TextView MsgTw;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
         MessageBox= new ArrayList<>();
         Adapter=new MessageBoxAdapter(MessageBox,this);
         recView.setAdapter(Adapter);
+        MsgTw = view.findViewById(R.id.MessageBoxTw);
 
         if(user!=null) {
             db = FirebaseFirestore.getInstance();
@@ -118,7 +121,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                 public void onEvent(@Nullable QuerySnapshot value,
                                                                     @Nullable FirebaseFirestoreException e) {
                                                     if (e != null) {
-                                                        Log.w(TAG, "Listen failed.", e);
+                                                        MsgTw.setText("Mesaj kutunuz boş.");
                                                         return;
                                                     }
 

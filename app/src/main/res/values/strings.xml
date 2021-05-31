@@ -35,7 +35,6 @@
     <string name="graphicsAndDesign">Graphics &amp; Design</string>
 
 
-
     <string-array name="categories_array">
         <item>@string/programmingAndTeach</item>
         <item>@string/writingAndTranslation</item>
@@ -44,7 +43,6 @@
         <item>@string/digitalMarketing</item>
         <item>@string/graphicsAndDesign</item>
     </string-array>
-
 
 
     <string name="regional">Regional</string>

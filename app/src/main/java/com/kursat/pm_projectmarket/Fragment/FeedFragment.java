@@ -1,5 +1,6 @@
 package com.kursat.pm_projectmarket.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.Query;
 import com.kursat.pm_projectmarket.Adapter.PostRecyclerAdapter;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.Model.User;
+import com.kursat.pm_projectmarket.PostDetails;
 import com.kursat.pm_projectmarket.R;
 
 import java.util.ArrayList;
@@ -25,17 +27,14 @@ import java.util.Objects;
  * Use the {@link FeedFragment} factory method to
  * create an instance of this fragment.
  */
-public class FeedFragment extends Fragment {
+public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMessageListener{
 
     private FirebaseFirestore db;
 
     PostRecyclerAdapter postRecyclerAdapter;
 
-    ArrayList<String> userNameList_db;
-    ArrayList<String> titleList_db;
-    ArrayList<String> profileImageList_db;
-    ArrayList<String> postImageList_db;
-    ArrayList<String> priceList_db;
+    ArrayList<Post> ppost;
+
 
     public FeedFragment() {
         // Required empty public constructor
@@ -51,11 +50,7 @@ public class FeedFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        userNameList_db = new ArrayList<>();
-        titleList_db = new ArrayList<>();
-        profileImageList_db = new ArrayList<>();
-        postImageList_db = new ArrayList<>();
-        priceList_db = new ArrayList<>();
+        ppost = new ArrayList<>();
 
         String filterNum = "0";
 
@@ -69,8 +64,7 @@ public class FeedFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_feedFragment);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        postRecyclerAdapter = new PostRecyclerAdapter(userNameList_db, titleList_db,
-                profileImageList_db, postImageList_db, priceList_db);
+        postRecyclerAdapter = new PostRecyclerAdapter(ppost,this);
         recyclerView.setAdapter(postRecyclerAdapter);
 
 
@@ -78,33 +72,21 @@ public class FeedFragment extends Fragment {
     }
 
     public void getDataFromDB(String filterNum){
-        if(filterNum.equals("0")){
+
             db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
                 if(value != null){
                     for(DocumentSnapshot doc : value.getDocuments()){
                         Post post = doc.toObject(Post.class);
+                        System.out.println(post.getUserName());
+                        //String userId,String userName, String price, String title, String postImageUrl
+                        ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),doc.getId()));
+                        postRecyclerAdapter.notifyDataSetChanged();
 
-                        assert post != null;
-                        db.collection("Users").document(post.getUserId()).get()
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()){
-                                        User user = Objects.requireNonNull(task.getResult()).toObject(User.class);
-
-                                        assert user != null;
-                                        userNameList_db.add(user.getUserName());
-                                        profileImageList_db.add(user.getProfileImageUrl());
-                                        titleList_db.add(post.getTitle());
-                                        postImageList_db.add(post.getPostImageUrl());
-                                        priceList_db.add(post.getPrice());
-
-                                        postRecyclerAdapter.notifyDataSetChanged();
-                                    }
-                                });
                     }
                 }
             });
-        }
-        else{
+
+        /*else{
             db.collection("Posts").whereEqualTo("categoryId",filterNum).orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
                 if(value != null){
                     for(DocumentSnapshot doc : value.getDocuments()){
@@ -129,6 +111,14 @@ public class FeedFragment extends Fragment {
                     }
                 }
             });
-        }
+        }*/
+    }
+
+    public void onMessageClick(int position) {
+
+        Intent intent=new Intent(getActivity(), PostDetails.class);
+        intent.putExtra("token",ppost.get(position).getToken());
+        startActivity(intent);
+
     }
 }
