@@ -48,7 +48,7 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -70,11 +70,59 @@
             android:hint="I can ... for you. (in a sentence)"
             android:maxLines="2"
             android:layout_marginTop="15dp"/>
-        <Spinner
-            android:layout_width="match_parent"
+        <CheckBox
+            android:id="@+id/chkData"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/category_spinner"
-            android:layout_marginTop="15dp"/>
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Data"
+            android:onClick="onCheckboxClicked"/>
+        <CheckBox
+            android:id="@+id/chkDigitalMarket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Digital Marketing"
+            android:onClick="onCheckboxClicked"/>
+        <CheckBox
+            android:id="@+id/chkGraphics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Graphics and Design"
+            android:onClick="onCheckboxClicked"/>
+        <CheckBox
+            android:id="@+id/chkVideo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Video and Audio"
+            android:onClick="onCheckboxClicked"/>
+        <CheckBox
+            android:id="@+id/chkWriting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Writing and Translation"
+            android:onClick="onCheckboxClicked"/>
+        <CheckBox
+            android:id="@+id/chkProgramming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Programming and Tech"
+            android:onClick="onCheckboxClicked"/>
+
+
         <EditText
             android:id="@+id/text_price"
             android:layout_width="wrap_content"
@@ -83,6 +131,3 @@
             android:maxLines="1"
             android:layout_marginTop="15dp"/>
     </LinearLayout>
-
-
-</LinearLayout>

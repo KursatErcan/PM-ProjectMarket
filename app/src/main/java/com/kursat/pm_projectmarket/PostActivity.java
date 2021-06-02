@@ -45,6 +45,7 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
@@ -171,6 +172,13 @@ public class PostActivity extends AppCompatActivity {
         }else {
             Toast.makeText(PostActivity.this,"Olmadi !",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public ArrayList<String> onCheckboxClicked(View view){
+        ArrayList<String> array = new ArrayList<>();
+        //selected list of category
+
+        return array;
     }
 
 }
