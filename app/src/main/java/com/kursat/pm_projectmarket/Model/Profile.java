@@ -8,6 +8,8 @@ public class Profile {
     private String postImageUrl;
     private ArrayList<String> userComments;
 
-    
+
+
+
 
 }

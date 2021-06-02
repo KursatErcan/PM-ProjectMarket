@@ -48,7 +48,6 @@ public class PostDetails extends AppCompatActivity {
                         Post post = document.toObject(Post.class);
 
                         ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getUserId()));
-
                         //Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
                         Log.d(TAG, "No such document");
@@ -58,29 +57,6 @@ public class PostDetails extends AppCompatActivity {
                 }
             }
         });
-        /*db.collection("Posts/"+token)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-
-                        ppost.clear();
-                        for (QueryDocumentSnapshot doc1 : value) {
-                            Post post = doc1.toObject(Post.class);
-                            //tring userId,String userName, String price, String title, String postImageUrl,String token
-                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getUserId()));
-
-
-                        }
-
-                    }
-
-                });*/
-
-
 
     }
 }
