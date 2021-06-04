@@ -16,6 +16,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -61,6 +62,13 @@ public class PostActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private StorageReference storageReference;
     CollectionReference cfr;
+    CheckBox chkDigitalData;
+    CheckBox chkDigitalMarket;
+    CheckBox chkGraphics;
+    CheckBox chkVideo;
+    CheckBox chkWriting;
+    CheckBox chkProgramming;
+    HashMap<String,String> array;
     Picasso picasso;
     private Spinner spinner;
     final String[] categoryId = new String[1];
@@ -70,7 +78,13 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-
+        chkDigitalData=findViewById(R.id.chkData);
+        chkGraphics=findViewById(R.id.chkGraphics);
+        chkVideo=findViewById(R.id.chkVideo);
+        chkWriting=findViewById(R.id.chkWriting);
+        chkProgramming=findViewById(R.id.chkProgramming);
+        chkDigitalMarket=findViewById(R.id.chkDigitalMarket);
+        array = new HashMap<>();
         postImage = findViewById(R.id.post_image);
         title = findViewById(R.id.text_title);
         priceText = findViewById(R.id.text_price);
@@ -144,9 +158,12 @@ public class PostActivity extends AppCompatActivity {
                             postData.put("title",title.getText().toString());
                             postData.put("userId",user.getUid().toString());
                             postData.put("userName",userName);
+                            postData.put("postCategory",array);
                             //add the data into the Posts
                             cfr=db.collection("Posts");
                             cfr.add(postData);
+
+
 
 
                         });
@@ -174,9 +191,47 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> onCheckboxClicked(View view){
-        ArrayList<String> array = new ArrayList<>();
+    public HashMap<String,String> onCheckboxClicked(View view){
         //selected list of category
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.chkData:
+                if (checked)
+                    array.put("chkData",((CheckBox) view).getText().toString());
+                else
+                    array.remove("chkData");
+                break;
+            case R.id.chkDigitalMarket:
+                if (checked)
+                    array.put("chkDigitalMarket",((CheckBox) view).getText().toString());
+                else
+                    array.remove("chkDigitalMarket");
+                break;
+            case R.id.chkGraphics:
+                if (checked)
+                    array.put("chkGraphics",((CheckBox) view).getText().toString());
+                else
+                    array.remove("chkGraphics");
+                    break;
+            case R.id.chkVideo:
+                if (checked)
+                    array.put("chkVideo",((CheckBox) view).getText().toString());
+                else
+                    array.remove("chkVideo");
+                    break;
+            case R.id.chkWriting:
+                if (checked)
+                    array.put("chkWriting",((CheckBox) view).getText().toString());
+                else
+                    array.remove("chkWriting");
+                    break;
+            case R.id.chkProgramming:
+                if (checked)
+                    array.put("chkProgramming",((CheckBox) view).getText().toString());
+                else
+                    array.remove("chkProgramming");
+                    break;
+        }
 
         return array;
     }
