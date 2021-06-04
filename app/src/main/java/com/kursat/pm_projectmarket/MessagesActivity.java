@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -89,31 +91,19 @@ public class MessagesActivity extends AppCompatActivity {
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Map<String, String> message = new HashMap<>();
+                    SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
+                    String userName = sharedPreferences.getString("userName", "");
+                    Map<String, Object> message = new HashMap<>();
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     Date date = new Date();
                     cfr=db.collection("Messages/"+token+"/Message_details");
-                    DocumentReference docRef = db.collection("Users").document(user.getUid());
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    message.put("message_date",formatter.format(date).toString());
+
+                                    message.put("message_date",new Timestamp(new Date()));
                                     message.put("message_detail",msgDetail.getText().toString());
-                                    message.put("message_sended",document.get("userName").toString());
+                                    message.put("message_sended",userName);
                                     message.put("message_sended_id",user.getUid().toString());
                                     cfr.add(message);
                                     msgDetail.setText("");
-                                } else {
-                                    Log.d(TAG, "No such document");
-                                }
-                            } else {
-                                Log.d(TAG, "get failed with ", task.getException());
-                            }
-                        }
-                    });
 
                 }
             });
