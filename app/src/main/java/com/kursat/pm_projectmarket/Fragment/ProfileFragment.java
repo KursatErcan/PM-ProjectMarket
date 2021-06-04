@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kursat.pm_projectmarket.Model.User;
@@ -26,15 +24,15 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment {
 
-    ImageView imageView_profileImage;
+    private ImageView imageView_profileImage;
     //ImageButton imageView_postsButton,imageView_commentsButton;
-    TextView textView_UserName;
-    ImageView settings;
+    private TextView textView_UserName;
+    private ImageView settings;
     private TabLayout tabs;
     private ViewPager viewPager;
     private FirebaseFirestore db;
     //FirebaseUser currentUser;
-    String profileId;
+    private String profileId;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -51,8 +49,14 @@ public class ProfileFragment extends Fragment {
 
         //currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
-        profileId = prefs.getString("profileId","none");
+        Bundle bundle= this.getArguments();
+        if(bundle==null) {
+            SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
+            profileId = prefs.getString("profileId", "none");
+        }else{
+            profileId = bundle.getString("userId");
+        }
+
         //System.out.println("profileId: " + profileId);
 
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
@@ -84,6 +88,7 @@ public class ProfileFragment extends Fragment {
                 if(getContext() == null){ return; }
                 if(value != null){
                     User user = value.toObject(User.class);
+                    assert user != null;
                     Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
                     textView_UserName.setText(user.getUserName());
                 }
