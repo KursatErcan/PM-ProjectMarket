@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new MessageFragment();
                         break;
                     case R.id.nav_profile:
-                        SharedPreferences.Editor editor = getSharedPreferences("PREFS",MODE_PRIVATE).edit();
+                        /*SharedPreferences.Editor editor = getSharedPreferences("PREFS",MODE_PRIVATE).edit();
                         editor.putString("profileId", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-                        editor.apply();
+                        editor.apply();*/
                         selectedFragment = new ProfileFragment();
                         break;
                     default:

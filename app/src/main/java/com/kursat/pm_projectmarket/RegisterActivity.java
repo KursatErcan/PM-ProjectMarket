@@ -1,8 +1,5 @@
 package com.kursat.pm_projectmarket;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,16 +9,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     EditText userNameText,emailText,passwordText;
     ProgressDialog progressDialog;
-    String placeHolderUrl;
+    //Uri placeHolderUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +32,18 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        /*
         StorageReference newReference = FirebaseStorage.getInstance().getReference().child("Images/placeHolder.jpg");
-        newReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                    placeHolderUrl = uri.toString();
-                });
+        newReference.getDownloadUrl().addOnCompleteListener(this, new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if(task.isSuccessful()){
+                    placeHolderUrl = task.getResult();
+                }
+            }
+        });
+
+         */
 
         userNameText = findViewById(R.id.editText_userName);
         emailText = findViewById(R.id.editText_email);
@@ -71,18 +73,22 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser(String userName, String email, String password){
         progressDialog.setMessage("Please Wait!");
         progressDialog.show();
+
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
             createUser(userName, email);
         }).addOnFailureListener(e -> {
             Toast.makeText(RegisterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             progressDialog.dismiss();
         });
+
+
     }
     private void createUser(final String userName, final String email){
+        String placeHolder = "https://firebasestorage.googleapis.com/v0/b/pm-projectmarket.appspot.com/o/placeHolder.jpg?alt=media&token=d5510906-ad33-49e0-9be4-ad6446bd21e6";
         String userId = (String) firebaseAuth.getCurrentUser().getUid();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(userName)
-                .setPhotoUri(Uri.parse(placeHolderUrl))
+                .setPhotoUri(Uri.parse(placeHolder))
                 .build();
 
         firebaseAuth.getCurrentUser().updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -97,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("userName", userName);
         user.put("email", email);
         user.put("bio", "");
-        user.put("profileImageUrl",placeHolderUrl);
+        user.put("profileImageUrl",placeHolder);
         db.collection("Users").document(userId).set(user)
                 .addOnSuccessListener(aVoid -> {
                     /* Email Verification */

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kursat.pm_projectmarket.Model.User;
@@ -49,13 +50,21 @@ public class ProfileFragment extends Fragment {
 
         //currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+
+        //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
+        //profileId = prefs.getString("profileId", "none");
+
+        profileId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Bundle bundle= this.getArguments();
-        if(bundle==null) {
-            SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
-            profileId = prefs.getString("profileId", "none");
-        }else{
+        if(bundle!=null) {
             profileId = bundle.getString("userId");
         }
+
+
+
+
+
+
 
         //System.out.println("profileId: " + profileId);
 
@@ -88,9 +97,14 @@ public class ProfileFragment extends Fragment {
                 if(getContext() == null){ return; }
                 if(value != null){
                     User user = value.toObject(User.class);
-                    assert user != null;
-                    Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
-                    textView_UserName.setText(user.getUserName());
+                    //assert user != null;
+
+                    try {
+                        Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
+                        textView_UserName.setText(user.getUserName());
+                    }catch (Exception e){
+                        System.out.println("Exception : " + e);
+                    };
                 }
             }
         });
