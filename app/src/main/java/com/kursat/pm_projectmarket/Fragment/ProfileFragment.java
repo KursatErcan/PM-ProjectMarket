@@ -13,10 +13,13 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.kursat.pm_projectmarket.MessagesActivity;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 import com.kursat.pm_projectmarket.SettingsActivity;
@@ -34,6 +37,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseFirestore db;
     //FirebaseUser currentUser;
     private String profileId;
+    private String profileName;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -54,10 +58,25 @@ public class ProfileFragment extends Fragment {
         //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
         //profileId = prefs.getString("profileId", "none");
 
-        profileId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Bundle bundle= this.getArguments();
         if(bundle!=null) {
             profileId = bundle.getString("userId");
+            profileName = bundle.getString("userName");
+            System.out.println("ProfileFragment ++++++"+profileId);
+
+            FloatingActionButton flbtn= view.findViewById(R.id.fab);
+
+            flbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(getActivity(), MessagesActivity.class);
+                    intent.putExtra("userId",profileId);
+                    intent.putExtra("userName",profileName);
+                    startActivity(intent);
+                    Snackbar.make(view, "Mesajınızı yazabilirsiniz...", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
         }
 
 

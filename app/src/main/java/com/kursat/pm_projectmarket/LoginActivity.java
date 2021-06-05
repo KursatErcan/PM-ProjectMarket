@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
             //Where the userName get from
 
 
-            /*
+
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             DocumentReference docRef = db.collection("Users").document(user.getUid());
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
             });
 
 
-             */
+
 
             Toast.makeText(LoginActivity.this,"Welcome!",Toast.LENGTH_LONG).show();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

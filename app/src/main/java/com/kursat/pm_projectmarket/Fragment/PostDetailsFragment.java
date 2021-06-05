@@ -57,37 +57,37 @@ public class PostDetailsFragment extends DialogFragment {
         token = args.getString("token");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         ppost= new ArrayList<>();
-        final Post[] post = new Post[1];
         DocumentReference docRef = db.collection("Posts").document(token);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 assert document != null;
                 if (document.exists()) {
-                    post[0] = document.toObject(Post.class);
+                    Post post = document.toObject(Post.class);
+                    assert post != null;
+                    title.setText(post.getTitle());
+                    userName.setText(post.getUserName());
+                    price.setText(post.getPrice()+price.getText());
+                    Picasso.get().load(post.getPostImageUrl()).into(postImage);
 
-                    assert post[0] != null;
-                    title.setText(post[0].getTitle());
-                    userName.setText(post[0].getUserName());
-                    price.setText(post[0].getPrice()+price.getText());
-                    Picasso.get().load(post[0].getPostImageUrl()).into(postImage);
+                    profileClick.setOnClickListener(v -> {
+                        dismiss();
+                        Bundle args1 = new Bundle();
+                        args1.putString("userId", post.getUserId());
+                        args1.putString("userName", post.getUserName());
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        profileFragment.setArguments(args1);
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction ft = fragmentManager.beginTransaction();
+                        ft.replace(R.id.mainFragment, profileFragment, "tag");
+                        ft.addToBackStack(null).commit();
+                    });
+
 
                 }
             }
         });
 
-        profileClick.setOnClickListener(v -> {
-            dismiss();
-            Bundle args1 = new Bundle();
-            args1.putString("userId", post[0].getUserId());
-
-            ProfileFragment profileFragment = new ProfileFragment();
-            profileFragment.setArguments(args1);
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.mainFragment, profileFragment, "tag");
-            ft.addToBackStack(null).commit();
-        });
 
 
         return  view;

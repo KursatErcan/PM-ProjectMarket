@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,10 +52,14 @@ public class MessagesActivity extends AppCompatActivity {
     Button btnSend;
     EditText msgDetail;
     CollectionReference cfr;
+    String receiverName;
+    String receiverId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages2);
+        receiverName=getIntent().getStringExtra("userName");
+        receiverId=getIntent().getStringExtra("userId");
         token=getIntent().getStringExtra("token");
         recView=(RecyclerView) findViewById(R.id.MessageSend);
         recView.setLayoutManager(new LinearLayoutManager(this));
@@ -64,30 +70,36 @@ public class MessagesActivity extends AppCompatActivity {
         btnSend=(Button) findViewById(R.id.SendMessage);
 
 
+
+
+
         if(user!=null) {
+            if(receiverId!=null)
+                getMessages();
             db = FirebaseFirestore.getInstance();
-            db.collection("Messages/"+token+"/Message_details")
-                    .orderBy("message_date", Query.Direction.ASCENDING)
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                Log.w(TAG, "Listen failed.", e);
-                                return;
+            if(token!=null){
+                db.collection("Messages/"+token+"/Message_details")
+                        .orderBy("message_date", Query.Direction.ASCENDING)
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Log.w(TAG, "Listen failed.", e);
+                                    return;
+                                }
+
+                                MessageSend.clear();
+                                for (QueryDocumentSnapshot doc1 : value) {
+                                    //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
+                                    MessageSend.add(new MessageSend(doc1.get("message_detail").toString(),doc1.get("message_sended_id").toString()));
+
+
+                                }
+                                Adapter.notifyDataSetChanged();
                             }
 
-                            MessageSend.clear();
-                            for (QueryDocumentSnapshot doc1 : value) {
-                                //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
-                                MessageSend.add(new MessageSend(doc1.get("message_detail").toString(),doc1.get("message_sended_id").toString()));
-
-
-                            }
-                            Adapter.notifyDataSetChanged();
-                        }
-
-                    });
-
+                        });
+            }
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,14 +108,48 @@ public class MessagesActivity extends AppCompatActivity {
                     Map<String, Object> message = new HashMap<>();
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     Date date = new Date();
-                    cfr=db.collection("Messages/"+token+"/Message_details");
+                    if(token!=null){
+                        cfr=db.collection("Messages/"+token+"/Message_details");
 
-                                    message.put("message_date",new Timestamp(new Date()));
-                                    message.put("message_detail",msgDetail.getText().toString());
-                                    message.put("message_sended",userName);
-                                    message.put("message_sended_id",user.getUid().toString());
-                                    cfr.add(message);
-                                    msgDetail.setText("");
+                                        message.put("message_date",new Timestamp(new Date()));
+                                        message.put("message_detail",msgDetail.getText().toString());
+                                        message.put("message_sended",userName);
+                                        message.put("message_sended_id",user.getUid().toString());
+                                        cfr.add(message);
+                                        msgDetail.setText("");
+                    }else {
+
+                        Map<String, Object> messageSend = new HashMap<>();
+                        messageSend.put("message_posted",user.getUid());
+                        messageSend.put("message_posted_name",userName);
+                        messageSend.put("message_received",receiverId);
+                        messageSend.put("message_received_name",receiverName);
+                        db.collection("Messages")
+                                .add(messageSend)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        token=documentReference.getId();
+                                        cfr=db.collection("Messages/"+token+"/Message_details");
+
+                                        message.put("message_date",new Timestamp(new Date()));
+                                        message.put("message_detail",msgDetail.getText().toString());
+                                        message.put("message_sended",userName);
+                                        message.put("message_sended_id",user.getUid().toString());
+                                        cfr.add(message);
+                                        msgDetail.setText("");
+
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });
+
+                    }
 
                 }
             });
@@ -114,5 +160,43 @@ public class MessagesActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void getMessages(){
+        db = FirebaseFirestore.getInstance();
+        db.collection("Messages")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot doc1 : value) {
+                            System.out.println(user.getUid());
+                            if((doc1.get("message_received").equals(receiverId) && doc1.get("message_posted").equals(user.getUid())) ||
+                                    doc1.get("message_received").equals(user.getUid()) && doc1.get("message_posted").equals(receiverId)){
+                                db.collection("Messages/"+doc1.getId()+"/Message_details")
+                                        .orderBy("message_date", Query.Direction.ASCENDING)
+                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable QuerySnapshot value,
+                                                                @Nullable FirebaseFirestoreException e) {
+                                                MessageSend.clear();
+                                                for (QueryDocumentSnapshot doc : value) {
+
+                                                    MessageSend.add(new MessageSend(doc.get("message_detail").toString(),doc.get("message_sended_id").toString()));
+                                                }
+                                                Adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                            }
+                        }
+                        Adapter.notifyDataSetChanged();
+                    }
+
+                });
     }
 }
