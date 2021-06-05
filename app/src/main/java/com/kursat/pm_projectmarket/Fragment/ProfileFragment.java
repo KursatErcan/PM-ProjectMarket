@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kursat.pm_projectmarket.MessagesActivity;
@@ -38,7 +39,7 @@ public class ProfileFragment extends Fragment {
     //FirebaseUser currentUser;
     private String profileId;
     private String profileName;
-
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -53,18 +54,14 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         //currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-
-        //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
-        //profileId = prefs.getString("profileId", "none");
+        FloatingActionButton flbtn= view.findViewById(R.id.fab);
 
         Bundle bundle= this.getArguments();
         if(bundle!=null) {
             profileId = bundle.getString("userId");
             profileName = bundle.getString("userName");
-            System.out.println("ProfileFragment ++++++"+profileId);
 
-            FloatingActionButton flbtn= view.findViewById(R.id.fab);
+
 
             flbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,6 +74,9 @@ public class ProfileFragment extends Fragment {
                             .setAction("Action", null).show();
                 }
             });
+        }else{
+            flbtn.setVisibility(View.INVISIBLE);
+            profileId=user.getUid();
         }
 
 
