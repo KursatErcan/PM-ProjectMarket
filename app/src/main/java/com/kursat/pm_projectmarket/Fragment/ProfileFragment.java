@@ -83,7 +83,6 @@ public class ProfileFragment extends Fragment {
 
         if(bundle==null){
             flbtn.hide();
-
         }
         if(bundle!=null) {
             settings.setVisibility(View.GONE);
@@ -159,8 +158,6 @@ public class ProfileFragment extends Fragment {
 
 
                     Toast.makeText(getContext(),"You can write your message..",Toast.LENGTH_LONG).show();
-                    //Snackbar.make(getView(), "Mesajınızı yazabilirsiniz...", Snackbar.LENGTH_LONG)
-                    //        .setAction("Action", null).show();
                 }
             });
         }

@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -108,7 +109,10 @@ public class PostActivity extends AppCompatActivity {
             if (data.getData() != null) {
                 imageData = data.getData();
 
-                postImage.setImageURI(imageData);
+                Picasso.get().load(imageData)
+                        .resize(postImage.getWidth(),postImage.getHeight())
+                        .into(postImage);
+                //postImage.setImageURI(imageData);
 
             }
         }
