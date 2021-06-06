@@ -43,10 +43,9 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         holder.text_title.setText(currentItem.getTitle());
         holder.text_price.setText(currentItem.getPrice());
         Picasso.get().load(currentItem.getPostImageUrl()).into(holder.imageView_profileImage);
-        Picasso.get().load(currentItem.getPostImageUrl()).into(holder.imageView_postImage);
-        //System.out.println("PostRcyclerAdapter :: UserName => " + userNameList.get(position));
-        //System.out.println("PostRcyclerAdapter :: Title => " + titleList.get(position));
-
+        Picasso.get().load(currentItem.getPostImageUrl())
+                .resize(240,150)
+                .into(holder.imageView_postImage);
     }
 
     @Override

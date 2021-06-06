@@ -64,7 +64,9 @@ public class PostDetailsFragment extends DialogFragment {
                     title.setText(post.getTitle());
                     userName.setText(post.getUserName());
                     price.setText(post.getPrice()+price.getText());
-                    Picasso.get().load(post.getPostImageUrl()).into(postImage);
+                    Picasso.get().load(post.getPostImageUrl())
+                            .resize(postImage.getWidth(),postImage.getHeight())
+                            .into(postImage);
 
                     profileClick.setOnClickListener(v -> {
                         dismiss();
