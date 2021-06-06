@@ -111,44 +111,43 @@ public class ProfileFragment extends Fragment {
                                                 intent.putExtra("userId",profileId);
                                                 intent.putExtra("userName",profileName);
                                                 intent.putExtra("token",doc1.getId());
+                                                System.out.println("Buraya girdim !!!!!!!!!!!!!!!!!!!!");
                                                 startActivity(intent);
 
+                                                return;
                                             }
-                                            else{
-                                                //String token=documentReference.getId();
-                                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
-                                                String userName = sharedPreferences.getString("userName", "");
-                                                Map<String, Object> messageSend = new HashMap<>();
-                                                messageSend.put("message_posted",user.getUid());
-                                                messageSend.put("message_posted_name",userName);
-                                                messageSend.put("message_received",profileId);
-                                                messageSend.put("message_received_name",profileName);
-                                                db.collection("Messages")
-                                                        .add(messageSend)
-                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                            @Override
-                                                            public void onSuccess(DocumentReference documentReference) {
-                                                                token=documentReference.getId();
-                                                                cfr=db.collection("Messages/"+token+"/Message_details");
-                                                                Intent intent=new Intent(getActivity(), MessagesActivity.class);
-                                                                intent.putExtra("userId",profileId);
-                                                                intent.putExtra("userName",profileName);
-                                                                intent.putExtra("token",token);
-                                                                startActivity(intent);
 
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Log.w(TAG, "Error adding document", e);
-                                                            }
-                                                        });
-
-                                                System.out.println("YOH !!!");
-                                            }
-                                            Log.d(TAG, doc1.getId() + " => " + doc1.getData());
                                         }
+
+                                            //String token=documentReference.getId();
+                                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                                            String userName = sharedPreferences.getString("userName", "");
+                                            Map<String, Object> messageSend = new HashMap<>();
+                                            messageSend.put("message_posted",user.getUid());
+                                            messageSend.put("message_posted_name",userName);
+                                            messageSend.put("message_received",profileId);
+                                            messageSend.put("message_received_name",profileName);
+                                            db.collection("Messages")
+                                                    .add(messageSend)
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference documentReference) {
+                                                            token=documentReference.getId();
+                                                            Intent intent=new Intent(getActivity(), MessagesActivity.class);
+                                                            intent.putExtra("userId",profileId);
+                                                            intent.putExtra("userName",profileName);
+                                                            intent.putExtra("token",token);
+                                                            System.out.println("Buraya daaaaaaaaaaaa girdim !!!!!!!!!!!!!!!!!!!!");
+                                                            startActivity(intent);
+                                                            return;
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.w(TAG, "Error adding document", e);
+                                                        }
+                                                    });
                                     } else {
                                         Log.d(TAG, "Error getting documents: ", task.getException());
                                     }

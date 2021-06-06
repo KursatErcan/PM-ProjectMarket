@@ -70,12 +70,6 @@ public class MessagesActivity extends AppCompatActivity {
         btnSend=(Button) findViewById(R.id.SendMessage);
 
 
-
-
-        //mesaj olup olmadığına bak
-        //yoksa yeni oluştur token yap
-
-
         if(user!=null && token != null) {
 
             db = FirebaseFirestore.getInstance();
@@ -127,5 +121,5 @@ public class MessagesActivity extends AppCompatActivity {
         }
 
     }
-    
+
 }
