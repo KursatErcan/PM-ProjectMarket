@@ -28,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
         editProfile = findViewById(R.id.editProfile);
         //function for enabling dark mode
         //mode = getActivity().getSharedPreferences("modePref",Context.MODE_PRIVATE);
+        /*
         mode = getSharedPreferences(SettingsActivity.this.getPackageName(), MODE_PRIVATE);
         editor = mode.edit();
         isNightModeOn = mode.getBoolean("NightMode",false);
@@ -51,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
-
+        */
         logout.setOnClickListener((v) -> new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to Logout?")
                 .setCancelable(false)

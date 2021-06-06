@@ -1,14 +1,13 @@
 package com.kursat.pm_projectmarket.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -35,7 +34,6 @@ public class ProfileFragment extends Fragment {
     private TabLayout tabs;
     private ViewPager viewPager;
     private FirebaseFirestore db;
-    //FirebaseUser currentUser;
     private String profileId;
     private String profileName;
 
@@ -51,20 +49,30 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile1, container, false);
 
         db = FirebaseFirestore.getInstance();
-
-        //currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
+        FloatingActionButton flbtn= view.findViewById(R.id.fab);
+        settings=view.findViewById(R.id.settings);
 
         //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
         //profileId = prefs.getString("profileId", "none");
 
+        profileId=FirebaseAuth.getInstance().getCurrentUser().getUid();
         Bundle bundle= this.getArguments();
+
+        if(bundle==null){
+            flbtn.hide();
+
+        }
         if(bundle!=null) {
+            settings.setVisibility(View.GONE);
+            if(profileId.equals(bundle.getString("userId"))){
+                flbtn.hide();
+                settings.setVisibility(View.VISIBLE);
+            }
+
             profileId = bundle.getString("userId");
             profileName = bundle.getString("userName");
             System.out.println("ProfileFragment ++++++"+profileId);
 
-            FloatingActionButton flbtn= view.findViewById(R.id.fab);
 
             flbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,25 +81,20 @@ public class ProfileFragment extends Fragment {
                     intent.putExtra("userId",profileId);
                     intent.putExtra("userName",profileName);
                     startActivity(intent);
-                    Snackbar.make(view, "Mesajınızı yazabilirsiniz...", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+
+                    Toast.makeText(getContext(),"You can write your message..",Toast.LENGTH_LONG).show();
+                    //Snackbar.make(getView(), "Mesajınızı yazabilirsiniz...", Snackbar.LENGTH_LONG)
+                    //        .setAction("Action", null).show();
                 }
             });
         }
 
 
-
-
-
-
-
-        //System.out.println("profileId: " + profileId);
-
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
         imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
         //imageView_postsButton = view.findViewById(R.id.posts_profileFragment);
         //imageView_commentsButton = view.findViewById(R.id.comments_profileFragment);
-        settings=view.findViewById(R.id.settings);
+
 
         //tabs = view.findViewById(R.id.tabs);
         //viewPager = view.findViewById(R.id.viewPager);
@@ -119,11 +122,12 @@ public class ProfileFragment extends Fragment {
                     //assert user != null;
 
                     try {
+                        assert user != null;
                         Picasso.get().load(user.getProfileImageUrl()).into(imageView_profileImage);
                         textView_UserName.setText(user.getUserName());
                     }catch (Exception e){
                         System.out.println("Exception : " + e);
-                    };
+                    }
                 }
             }
         });

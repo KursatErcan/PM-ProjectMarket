@@ -32,7 +32,8 @@
             android:contentDescription="@string/app_name"
             android:cropToPadding="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/button_backround" />
+            android:src="@drawable/button_backround"
+            android:background="@color/black"/>
 
         <TextView
             android:id="@+id/category_name"

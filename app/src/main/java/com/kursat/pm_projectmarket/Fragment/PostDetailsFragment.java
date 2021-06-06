@@ -23,11 +23,8 @@ import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 public class PostDetailsFragment extends DialogFragment {
     String token;
-    ArrayList<Post> ppost;
     ImageView postImage,profileClick;
     TextView title,userName,price;
     EditText commentText;
@@ -56,7 +53,6 @@ public class PostDetailsFragment extends DialogFragment {
         assert args != null;
         token = args.getString("token");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        ppost= new ArrayList<>();
         DocumentReference docRef = db.collection("Posts").document(token);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
