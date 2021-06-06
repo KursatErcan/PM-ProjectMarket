@@ -72,10 +72,12 @@ public class MessagesActivity extends AppCompatActivity {
 
 
 
+        //mesaj olup olmadığına bak
+        //yoksa yeni oluştur token yap
 
-        if(user!=null) {
-            if(receiverId!=null)
-                getMessages();
+
+        if(user!=null && token != null) {
+
             db = FirebaseFirestore.getInstance();
             if(token!=null){
                 db.collection("Messages/"+token+"/Message_details")
@@ -106,32 +108,7 @@ public class MessagesActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
                     String userName = sharedPreferences.getString("userName", "");
                     Map<String, Object> message = new HashMap<>();
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                    Date date = new Date();
-                    if(token!=null){
                         cfr=db.collection("Messages/"+token+"/Message_details");
-
-                                        message.put("message_date",new Timestamp(new Date()));
-                                        message.put("message_detail",msgDetail.getText().toString());
-                                        message.put("message_sended",userName);
-                                        message.put("message_sended_id",user.getUid().toString());
-                                        cfr.add(message);
-                                        msgDetail.setText("");
-                    }else {
-
-                        Map<String, Object> messageSend = new HashMap<>();
-                        messageSend.put("message_posted",user.getUid());
-                        messageSend.put("message_posted_name",userName);
-                        messageSend.put("message_received",receiverId);
-                        messageSend.put("message_received_name",receiverName);
-                        db.collection("Messages")
-                                .add(messageSend)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        token=documentReference.getId();
-                                        cfr=db.collection("Messages/"+token+"/Message_details");
-
                                         message.put("message_date",new Timestamp(new Date()));
                                         message.put("message_detail",msgDetail.getText().toString());
                                         message.put("message_sended",userName);
@@ -139,17 +116,6 @@ public class MessagesActivity extends AppCompatActivity {
                                         cfr.add(message);
                                         msgDetail.setText("");
 
-
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error adding document", e);
-                                    }
-                                });
-
-                    }
 
                 }
             });
@@ -192,7 +158,50 @@ public class MessagesActivity extends AppCompatActivity {
                                                 Adapter.notifyDataSetChanged();
                                             }
                                         });
-                            }
+                            }else if(!doc1.exists()) {
+                            btnSend.setOnClickListener(new View.OnClickListener() {
+                               @Override
+                               public void onClick(View v) {
+
+                                   SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
+                                   String userName = sharedPreferences.getString("userName", "");
+
+                                    Map<String, Object> messageSend = new HashMap<>();
+                                    messageSend.put("message_posted",user.getUid());
+                                    messageSend.put("message_posted_name",userName);
+                                    messageSend.put("message_received",receiverId);
+                                    messageSend.put("message_received_name",receiverName);
+                                    db.collection("Messages")
+                                            .add(messageSend)
+                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference documentReference) {
+                                                    token=documentReference.getId();
+                                                    cfr=db.collection("Messages/"+token+"/Message_details");
+
+                                                    messageSend.put("message_date",new Timestamp(new Date()));
+                                                    messageSend.put("message_detail",msgDetail.getText().toString());
+                                                    messageSend.put("message_sended",userName);
+                                                    messageSend.put("message_sended_id",user.getUid().toString());
+                                                    cfr.add(messageSend);
+                                                    msgDetail.setText("");
+
+
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error adding document", e);
+                                                }
+                                            });
+
+                                //
+                                                                   }});
+
+                                }
+
+
                         }
                         Adapter.notifyDataSetChanged();
                     }
