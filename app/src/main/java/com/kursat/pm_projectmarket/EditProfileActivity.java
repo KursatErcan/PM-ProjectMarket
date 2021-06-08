@@ -1,25 +1,14 @@
 package com.kursat.pm_projectmarket;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
 import android.net.Uri;
-import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -28,14 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,7 +40,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 
 import static java.security.AccessController.getContext;
@@ -90,9 +80,60 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void updateProfile(View view){
         UploadFile();
-
     }
 
+    public void deleteProfile(View view){ }
+/*
+    public void deleteProfile(View view){
+        new AlertDialog.Builder(this)
+        .setMessage("Are you sure you want to deleting account?")
+        .setCancelable(false)
+                .setPositiveButton("Yes",(dialog, which) ->{
+                    ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setMessage("We are sorry you left us. We hope you will join us again..");
+                    progressDialog.show();
+
+                    db.collection("Posts").whereEqualTo("userId",user.getUid())
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    db.collection("Posts").document(document.getId()).delete();
+                                }
+                                Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                db.collection("Users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
+                                        FirebaseAuth.getInstance().signOut();
+                                        //Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
+                                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        //startActivity(intent);
+                                    }
+                                });
+                                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()){
+
+                                        }
+                                    }
+                                });
+
+                            }
+                        }
+                    });
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+
+
+    }
+*/
     private void userInfo(){
 
         DocumentReference reference = db.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
@@ -102,18 +143,16 @@ public class EditProfileActivity extends AppCompatActivity {
                 if(getContext() == null){ return; }
                 if(value != null){
                     User user = value.toObject(User.class);
+                    assert user != null;
                     Picasso.get().load(user.getProfileImageUrl()).into(imageView_profilePhoto);
                     editText_name.setText(user.getUserName());
                     editText_mailAddress.setText(user.getEmail());
                     bioTw.setText(user.getBio());
-                    //System.out.println("userName => " + user.getUserName());
-                    //System.out.println("profilImageUrl => " + user.getProfileImageUrl());
                 }
 
             }
         });
     }
-
 
     public void uploadImage(View view){
         Intent intent =new Intent();
@@ -189,12 +228,8 @@ public class EditProfileActivity extends AppCompatActivity {
                                 .set(postData,SetOptions.merge());
                         Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
 
-
                     });
 
-                    //Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
-                    //startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
-                    //finish();
 
                 }).addOnFailureListener(e -> Toast.makeText(EditProfileActivity.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show());
 

@@ -20,7 +20,7 @@
     <string name="change_profile_photo">Click for change to profile photo!</string>
     <string name="your_name">Your Name</string>
     <string name="mail_address">Mail Address</string>
-    <string name="update_profile">Update Profile</string>
+    <string name="update_profile">UPDATE PROFILE</string>
     <string name="gallery_requestPermission">You must allow access to the gallery!</string>
 
 
@@ -58,6 +58,7 @@
     <string name="tl">TL</string>
     <string name="write_comment">Write Comment</string>
     <string name="add">Add</string>
+    <string name="delete_profile">DELETE PROFILE</string>
 
 
 </resources>
