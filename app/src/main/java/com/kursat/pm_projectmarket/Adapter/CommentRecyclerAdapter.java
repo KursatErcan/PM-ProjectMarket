@@ -16,9 +16,11 @@ import java.util.ArrayList;
 public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecyclerAdapter.CommentHolder>{
 
     public ArrayList<Comment> comment;
+    OnMessageListener msgListener;
 
-    public CommentRecyclerAdapter(ArrayList<Comment> comment){
+    public CommentRecyclerAdapter(ArrayList<Comment> comment, OnMessageListener msgListener){
         this.comment=comment;
+        this.msgListener=msgListener;
     }
 
 
@@ -27,7 +29,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     public CommentRecyclerAdapter.CommentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.comment_item,parent,false);
-        return new CommentHolder(view);
+        return new CommentHolder(view,msgListener);
     }
 
     @Override
@@ -39,20 +41,32 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
 
     @Override
     public int getItemCount() {
-        return 0;
+        return comment.size();
     }
-    static class CommentHolder extends RecyclerView.ViewHolder {
+
+    static class CommentHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView text_title;
         TextView text_comment;
+        TextView text_point;
+        OnMessageListener msgListener;
+        public CommentHolder(@NonNull View itemView , OnMessageListener msgListener) {
 
-        public CommentHolder(@NonNull View itemView ) {
             super(itemView);
-
+            this.msgListener=msgListener;
+            text_point=itemView.findViewById(R.id.textView_post_point);
             text_title = itemView.findViewById(R.id.textView_postTitle_commentItem);
-            text_comment = itemView.findViewById(R.id.textView_comment_commnetItem);
+            text_comment = itemView.findViewById(R.id.textView_comment_commentItem);
+
+        }
+        @Override
+        public void onClick(View v) {
+            msgListener.onMessageClick(getAdapterPosition());
 
         }
 
+    }
+    public interface OnMessageListener{
+        void onMessageClick(int position);
     }
 }
