@@ -24,6 +24,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -59,6 +60,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private StorageReference storageReference;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private TextView bioTw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class EditProfileActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference("Images");
 
-
+        bioTw=findViewById(R.id.editText_bio);
         imageView_profilePhoto = findViewById(R.id.profileImage_editProfile);
         editText_name = findViewById(R.id.editText_userName);
         editText_mailAddress = findViewById(R.id.editText_mail);
@@ -99,7 +101,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     Picasso.get().load(user.getProfileImageUrl()).into(imageView_profilePhoto);
                     editText_name.setText(user.getUserName());
                     editText_mailAddress.setText(user.getEmail());
-
+                    bioTw.setText(user.getBio());
                     //System.out.println("userName => " + user.getUserName());
                     //System.out.println("profilImageUrl => " + user.getProfileImageUrl());
                 }
@@ -148,6 +150,7 @@ public class EditProfileActivity extends AppCompatActivity {
             postData.put("userName",editText_name.getText().toString());
             userName = sharedPreferences.getString("userName", editText_name.getText().toString());//this field is also be updated
         }
+        postData.put("bio",bioTw.getText().toString());
         postData.put("email",editText_mailAddress.getText().toString());
         if(imageData !=null){
             StorageReference fileReference= storageReference.child("profileImages/"+System.currentTimeMillis()+"."+getFileExtension(imageData));
