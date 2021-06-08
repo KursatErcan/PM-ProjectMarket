@@ -194,11 +194,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="MissingConstraints" />
-        <!--
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/post_detail_title"
-            -->
 
         <View
             android:background="#2e2e2e"
@@ -233,7 +228,6 @@
                 android:layout_width="300dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center_vertical"
-
                 android:background="@drawable/edittext_backround"
                 android:ems="10"
                 android:hint="@string/write_comment"
@@ -252,17 +246,8 @@
 
                 android:background="@drawable/button_backround"
                 android:text="@string/add"
-
                 />
-
-
         </LinearLayout>
-
-
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

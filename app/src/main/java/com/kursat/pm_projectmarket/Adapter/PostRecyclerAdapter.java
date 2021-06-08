@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kursat.pm_projectmarket.Model.MessageSend;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
@@ -85,76 +84,3 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapter.ViewHolder>{
-
-    public Context context;
-    public List<Post> postList;
-
-    private FirebaseAuth firebaseAuth;
-
-    public PostRecyclerAdapter(Context context, List<Post> postList) {
-        this.context = context;
-        this.postList = postList;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.post_element,parent,false),
-
-        return new PostRecyclerAdapter.ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return postList.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-
-        public ImageView profileImage, postImage;
-        public TextView userName, postTitle, price;
-        
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            profileImage = itemView.findViewById(R.id.imageView_profileImage);
-            postImage = itemView.findViewById(R.id.post_image);
-            userName = itemView.findViewById(R.id.text_userName);
-            postTitle = itemView.findViewById(R.id.text_title);
-            price = itemView.findViewById(R.id.text_price);
-        }
-    }
-
-    private void userInfo(ImageView profileImage, TextView userName, String userId){
-        DatabaseReference databaseReference = FirebaseDa
-    }
-}
-*/

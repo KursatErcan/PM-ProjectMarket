@@ -31,6 +31,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.kursat.pm_projectmarket.Adapter.FragmentPageAdapter;
 import com.kursat.pm_projectmarket.MessagesActivity;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
@@ -47,7 +48,6 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class ProfileFragment extends Fragment {
 
     private ImageView imageView_profileImage;
-    //ImageButton imageView_postsButton,imageView_commentsButton;
     private TextView textView_UserName;
     private ImageView settings;
     private TabLayout tabs;
@@ -74,6 +74,17 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         FloatingActionButton flbtn= view.findViewById(R.id.fab);
         settings=view.findViewById(R.id.settings);
+
+        textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
+        imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
+
+
+        tabs = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.view_pager);
+
+        viewPager.setAdapter(new FragmentPageAdapter(getFragmentManager(),getContext()));
+        tabs.setupWithViewPager(viewPager);
+        //setupWithViewPager(viewPager);
 
         //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
         //profileId = prefs.getString("profileId", "none");
@@ -162,17 +173,7 @@ public class ProfileFragment extends Fragment {
         }
 
 
-        textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
-        imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
-        //imageView_postsButton = view.findViewById(R.id.posts_profileFragment);
-        //imageView_commentsButton = view.findViewById(R.id.comments_profileFragment);
 
-
-        //tabs = view.findViewById(R.id.tabs);
-        //viewPager = view.findViewById(R.id.viewPager);
-
-        //tabs.setupWithViewPager(viewPager);
-        //setupWithViewPager(viewPager);
 
         settings.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), SettingsActivity.class);
@@ -204,46 +205,4 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-
-/*
-    private void setupWithViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFrag(new ProfilePostFragment(), "Posts");
-        adapter.addFrag(new ProfileCommentFragment(), "Comments");
-        viewPager.setAdapter(adapter);
-    }
-
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-
-        private List<Fragment> fragmentList = new ArrayList<>();
-        private List<String> titleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            return fragmentList.get(i);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentList.size();
-        }
-
-        public void addFrag(Fragment name, String title) {
-            fragmentList.add(name);
-            titleList.add(title);
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titleList.get(position);
-        }
-    }
-
- */
 }

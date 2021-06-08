@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.google.android.gms.dynamic.IFragmentWrapper;
+import com.kursat.pm_projectmarket.Fragment.FeedFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfileCommentFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfilePostFragment;
 
 public class FragmentPageAdapter extends FragmentPagerAdapter {
-    private String[] tabTitle = new String[] {"Posts", "Commets"};
+    private final String[] tabTitle = new String[] {"Posts", "Commets"};
     private final int ITEMS = tabTitle.length;
     Context context;
     public FragmentPageAdapter(@NonNull FragmentManager fm, Context context) {
