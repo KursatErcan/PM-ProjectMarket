@@ -8,31 +8,44 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.kursat.pm_projectmarket.Model.User;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 
 import static java.security.AccessController.getContext;
 
@@ -45,6 +58,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     private StorageReference storageReference;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +67,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
-
         storageReference = FirebaseStorage.getInstance().getReference("Images");
 
 
@@ -64,9 +76,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         userInfo();
-        //Picasso.get().load(user.getPhotoUrl()).into(imageView_profilePhoto);
-        //editText_name.setText(user.getDisplayName());
-        //editText_mailAddress.setText(user.getEmail());
+
+
+
+
+    }
+
+    public void updateProfile(View view){
+        UploadFile();
 
     }
 
@@ -92,131 +109,82 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
 
+    public void uploadImage(View view){
+        Intent intent =new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent,1);//get image type files
+    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 1){
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Intent intentToGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intentToGallery,2);
-            }else{
-                String msg = getString(R.string.gallery_requestPermission);
-                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1 && resultCode == RESULT_OK) {
+            assert data != null;
+            if (data.getData() != null) {
+                imageData = data.getData();
+
+                Picasso.get().load(imageData)
+                        .resize(imageView_profilePhoto.getWidth(),imageView_profilePhoto.getHeight())
+                        .into(imageView_profilePhoto);
+                //postImage.setImageURI(imageData);
+
             }
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == 2 && resultCode == RESULT_OK && data != null){
-            imageData = data.getData();
+
+    public String getFileExtension(Uri iUri){
+        ContentResolver contentResolver =getContentResolver();
+        MimeTypeMap mimeTypeMap= MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(iUri));
+    }
+
+    public void UploadFile(){
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
+        String userName = sharedPreferences.getString("userName", "");//this field is also be updated
+        HashMap<String,String> postData = new HashMap<>();
+        if(userName !=editText_name.getText().toString()){
+            postData.put("userName",editText_name.getText().toString());
+            userName = sharedPreferences.getString("userName", editText_name.getText().toString());//this field is also be updated
+        }
+        postData.put("email",editText_mailAddress.getText().toString());
+        if(imageData !=null){
+            StorageReference fileReference= storageReference.child("profileImages/"+System.currentTimeMillis()+"."+getFileExtension(imageData));
             try {
-                if (Build.VERSION.SDK_INT>=28){
-                    ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(),imageData);
-                    selectedImage = ImageDecoder.decodeBitmap(source);
-                }else{
-                    selectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(),imageData);
-                }
-                if (selectedImage == null) {
-                    System.out.println("selected Image NULL");
-                }
-                else {
-                    imageView_profilePhoto.setImageBitmap(selectedImage);
-                }
+                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imageData);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
+                byte[] data = baos.toByteArray();
+                UploadTask uploadTask2 = fileReference.putBytes(data);
+                uploadTask2.addOnSuccessListener(taskSnapshot -> {
+                    fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String downloadUrl = uri.toString();
+                        postData.put("profileImageUrl",downloadUrl);
+                        db.collection("Users").document(user.getUid())
+                                .set(postData,SetOptions.merge());
+                        Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
+
+
+                    });
+
+                    //Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
+                    //startActivity(new Intent(EditProfileActivity.this, MainActivity.class));
+                    //finish();
+
+                }).addOnFailureListener(e -> Toast.makeText(EditProfileActivity.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show());
+
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-    public void uploadImage(View view){
-        if(ContextCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(EditProfileActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-        }else{
-            Intent intentToGallery = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            //intentToGallery.setType("image/*");
-            //startActivityForResult(intentToGallery,2);
-            startActivityForResult(intentToGallery,2);
+            }}else{
+            //image is not selected.
+
+            db.collection("Users").document(user.getUid())
+                    .set(postData, SetOptions.merge());
+            Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
 
         }
-    }
-
-    public void updateProfile(View view){
-        ProgressDialog progressDialog = new ProgressDialog(EditProfileActivity.this);
-        progressDialog.setMessage("Uploading..");
-        progressDialog.show();
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        String name = editText_name.getText().toString();
-        String mailAddress = editText_mailAddress.getText().toString();
-
-        String userId = user.getUid();
-        String imageName = "profileImages/" + userId + ".jpg";
-
-
-        storageReference.child(imageName).putFile(imageData).addOnSuccessListener(taskSnapshot -> { //image'i firebase'e yükleme basarılı
-            StorageReference newReference = FirebaseStorage.getInstance().getReference("Images/"+imageName);
-            newReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                String downloadUrl = uri.toString();
-
-                db.collection("Users").document(userId).update(
-                        "userName", name,
-                        "profileImageUrl",downloadUrl);
-
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-
-                        .setDisplayName(name)
-                        .setPhotoUri(Uri.parse(downloadUrl))
-                        .build();
-
-                user.updateProfile(profileUpdates).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        System.out.println("güncelleme tamam");
-                    }
-                });
-                        /*.addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    //Toast.makeText(this,"Güncelleme Başarılı",Toast.LENGTH_SHORT).show();
-                                    String msg = "Güncelleme Başarılı";
-                                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                */
-
-            progressDialog.dismiss();
-            Intent intent = new Intent(EditProfileActivity.this, SettingsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
-
-            });
-        }).addOnFailureListener(e -> Toast.makeText(EditProfileActivity.this,e.getLocalizedMessage(),Toast.LENGTH_LONG).show());
-
-
-       /* UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .setPhotoUri(Uri.parse())
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                        }
-                    }
-                });
-
-        */
-
-
     }
 
 }

@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.kursat.pm_projectmarket.Adapter.PostRecyclerAdapter;
 import com.kursat.pm_projectmarket.Model.Post;
+import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 
 import java.util.ArrayList;
@@ -45,14 +48,6 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
 
         ppost = new ArrayList<>();
 
-        String filterNum;
-
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            filterNum = bundle.getString("filterNum","0");
-            System.out.println("gelen filterNum : "+filterNum);
-        }
-
         getDataFromDB();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_feedFragment);
         recyclerView.setHasFixedSize(true);
@@ -73,8 +68,15 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                         assert post != null;
                         System.out.println(post.getUserName());
                         //String userId,String userName, String price, String title, String postImageUrl
-                        ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),doc.getId()));
-                        postRecyclerAdapter.notifyDataSetChanged();
+                        DocumentReference docRef = db.collection("Users").document(post.getUserId());
+                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                User user = documentSnapshot.toObject(User.class);
+                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),user.getProfileImageUrl(),doc.getId()));
+                                postRecyclerAdapter.notifyDataSetChanged();
+                            }
+                        });
 
                     }
                 }
