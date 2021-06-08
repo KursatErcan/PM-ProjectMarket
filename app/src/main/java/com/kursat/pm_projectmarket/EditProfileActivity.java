@@ -27,8 +27,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +38,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -149,6 +153,23 @@ public class EditProfileActivity extends AppCompatActivity {
         if(userName !=editText_name.getText().toString()){
             postData.put("userName",editText_name.getText().toString());
             userName = sharedPreferences.getString("userName", editText_name.getText().toString());//this field is also be updated
+            db.collection("Posts").whereEqualTo("userId",user.getUid()).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                HashMap<String,String> user=new HashMap<>();
+                                user.put("userName",editText_name.getText().toString());
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    db.collection("Posts").document(document.getId())
+                                    .set(user,SetOptions.merge());
+                                }
+                            } else {
+                                Log.d("EditProfileActivity", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
         }
         postData.put("bio",bioTw.getText().toString());
         postData.put("email",editText_mailAddress.getText().toString());

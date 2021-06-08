@@ -52,4 +52,8 @@ public class ProfileCommentFragment extends Fragment {
 
         return view;
     }
+
+    void getUserComments(){
+
+    }
 }

@@ -12,7 +12,7 @@ import com.kursat.pm_projectmarket.Fragment.ProfileCommentFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfilePostFragment;
 
 public class FragmentPageAdapter extends FragmentPagerAdapter {
-    private final String[] tabTitle = new String[] {"Posts", "Commets"};
+    private final String[] tabTitle = new String[] {"Posts", "Comments"};
     private final int ITEMS = tabTitle.length;
     Context context;
     public FragmentPageAdapter(@NonNull FragmentManager fm, Context context) {
