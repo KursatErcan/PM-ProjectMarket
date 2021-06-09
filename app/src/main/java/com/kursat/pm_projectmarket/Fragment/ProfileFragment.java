@@ -82,7 +82,7 @@ public class ProfileFragment extends Fragment {
         tabs = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
 
-        viewPager.setAdapter(new FragmentPageAdapter(getFragmentManager(),getContext()));
+        viewPager.setAdapter(new FragmentPageAdapter(getChildFragmentManager(),getContext()));
         tabs.setupWithViewPager(viewPager);
         //setupWithViewPager(viewPager);
 
