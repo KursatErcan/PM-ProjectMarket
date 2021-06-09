@@ -59,6 +59,7 @@
     <string name="write_comment">Write Comment</string>
     <string name="add">Add</string>
     <string name="delete_profile">DELETE PROFILE</string>
+    <string name="get_comments">get comments</string>
 
 
 </resources>

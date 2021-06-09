@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,8 @@ public class PostDetailsFragment extends DialogFragment {
     TextView title,userName,price;
     EditText commentText;
     Button addCommentButton;
+    RatingBar ratingBar_comment;
+    RatingBar ratingBar_post;
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -45,9 +48,11 @@ public class PostDetailsFragment extends DialogFragment {
         profileClick= view.findViewById(R.id.post_detail_goToProfile);
         title = view.findViewById(R.id.post_detail_title);
         userName = view.findViewById(R.id.post_detail_userName);
-        price = view.findViewById(R.id.post_detail_price);
+        //price = view.findViewById(R.id.post_detail_price);
         commentText = view.findViewById(R.id.post_detail_comment);
         addCommentButton = view.findViewById(R.id.post_detail_add_comment_btn);
+        ratingBar_comment=view.findViewById(R.id.post_detail_comment_ratingBar);
+        ratingBar_post=view.findViewById(R.id.post_detail_post_ratingBar);
 
         Bundle args = getArguments();
         assert args != null;
@@ -63,7 +68,8 @@ public class PostDetailsFragment extends DialogFragment {
                     assert post != null;
                     title.setText(post.getTitle());
                     userName.setText(post.getUserName());
-                    price.setText(post.getPrice()+price.getText());
+                    //price.setText(post.getPrice()+price.getText());
+                    ratingBar_post.setRating(3);
                     Picasso.get().load(post.getPostImageUrl())
                             .resize(postImage.getWidth(),postImage.getHeight())
                             .into(postImage);
@@ -81,14 +87,22 @@ public class PostDetailsFragment extends DialogFragment {
                         ft.addToBackStack(null).commit();
                     });
 
-
                 }
             }
         });
 
 
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float score = ratingBar_comment.getRating();
+                System.out.println("score : " +score);
+            }
+        });
+
 
         return  view;
     }
+
 
 }
