@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#fff">
+    android:background="@color/contentBodyColor">
 
 
 
@@ -134,12 +134,14 @@
                     -->
 
                 <RatingBar
-                    android:id="@+id/item_book_ratingbar"
+                    android:id="@+id/user_ratingbar"
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:transitionName="rateTN" />
+                    android:transitionName="rateTN"
+                    android:isIndicator="true"
+                    android:rating="0"/>
 
                 <!--app:layout_constraintStart_toStartOf="@+id/post_detail_userName"
                     app:layout_constraintTop_toBottomOf="@+id/post_detail_userName"
@@ -210,7 +212,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_detail_desc" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -236,18 +238,30 @@
                 android:scrollbars="vertical"
                 android:maxLines="10"
                />
+            <RatingBar
+                android:id="@+id/comment_ratingbar"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:transitionName="rateTN"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/post_detail_comment"
+                android:stepSize="1"
+                android:isIndicator="false"/>
 
             <Button
                 android:id="@+id/post_detail_add_comment_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/post_detail_comment"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/comment_ratingbar"
                 android:background="@drawable/button_backround"
                 android:text="@string/add"
-                />
-        </LinearLayout>
+                android:onClick="addButtonClick"/>
+        </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -88,7 +88,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:isIndicator="false"
+                    android:isIndicator="true"
                     android:numStars="5"
                     android:scrollbarSize="1dp"
                     android:stepSize="1.0"
