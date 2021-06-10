@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -37,6 +38,7 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
     ArrayList<Comment> comment;
     FirebaseFirestore db;
     String userId;
+
 
     public ProfileCommentFragment() {
         // Required empty public constructor
@@ -80,8 +82,11 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
 
                                     for (QueryDocumentSnapshot document : value) {
                                         //String title, String comment,String point,String token
-                                        comment.add(new Comment(doc.get("title").toString(),document.get("commentText").toString(),document.get("score").toString(),document.getId()));
+                                        comment.add(new Comment(doc.get("title").toString(),document.get("commentText").toString(),document.getLong("score"),document.getId()));
                                     }
+
+                                    //ratingBar.setRating(totalPoint);
+
                                     commentRecyclerAdapter.notifyDataSetChanged();
                                 }
                             });

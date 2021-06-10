@@ -4,18 +4,18 @@ public class Comment {
 
     private String postTitle;
     private String comment;
-    private String score;
+    private Long score;
     private String token;
 
 
-    public Comment(String postTitle, String comment,String score,String token) {
+    public Comment(String postTitle, String comment,Long score,String token) {
         this.postTitle = postTitle;
         this.comment = comment;
         this.score = score;
         this.token = token;
     }
 
-    public String getScore() {
+    public Long getScore() {
         return score;
     }
 

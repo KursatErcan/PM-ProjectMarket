@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -25,11 +27,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kursat.pm_projectmarket.Adapter.FragmentPageAdapter;
 import com.kursat.pm_projectmarket.MessagesActivity;
+import com.kursat.pm_projectmarket.Model.Comment;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 import com.kursat.pm_projectmarket.SettingsActivity;
@@ -52,6 +58,10 @@ public class ProfileFragment extends Fragment {
     private FirebaseFirestore db;
     private String profileId;
     String token;
+    RatingBar ratingBar;
+    float totalPoint=0.0f;
+    int counter=0;
+    int points=0;
     CollectionReference cfr;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String profileName;
@@ -73,7 +83,7 @@ public class ProfileFragment extends Fragment {
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
         imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
         msgDetail=(TextView)view.findViewById(R.id.MessageDetail);
-
+        ratingBar=view.findViewById(R.id.ratingBar_profileFragment);
         tabs = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
 
@@ -82,7 +92,7 @@ public class ProfileFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         profileId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+        getUserPoint();
         Bundle bundle= this.getArguments();
 
         if(bundle==null){
@@ -196,5 +206,39 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
+    }
+
+
+    private void getUserPoint(){
+            db.collection("Posts").whereEqualTo("userId",user.getUid()).addSnapshotListener((value, error) -> {
+                if(value != null){
+                    for(DocumentSnapshot doc : value.getDocuments()){
+
+                        db.collection("Posts/"+doc.getId()+"/Comments")
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot value,
+                                                        @Nullable FirebaseFirestoreException e) {
+                                        if (e != null) {
+                                            Log.w(TAG, "Listen failed.", e);
+                                            return;
+                                        }
+
+                                        for (QueryDocumentSnapshot document : value) {
+                                            points+=document.getLong("score");
+                                            counter++;
+                                        }
+                                        totalPoint=0.0f;
+                                        totalPoint=points/counter;
+                                        ratingBar.setRating(totalPoint);
+
+                                    }
+                                });
+                    }
+                }
+
+            });
+
+
     }
 }

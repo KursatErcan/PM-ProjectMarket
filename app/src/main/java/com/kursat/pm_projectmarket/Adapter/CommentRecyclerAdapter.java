@@ -38,7 +38,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
         Comment currentItem = comment.get(position);
         holder.text_title.setText(currentItem.getPostTitle());
         holder.text_comment.setText(currentItem.getComment());
-        holder.score_rb.setRating(Float.parseFloat(currentItem.getScore()));
+        holder.score_rb.setRating(currentItem.getScore());
     }
 
     @Override

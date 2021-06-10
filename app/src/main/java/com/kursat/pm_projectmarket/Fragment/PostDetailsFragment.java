@@ -2,6 +2,7 @@ package com.kursat.pm_projectmarket.Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -33,6 +35,8 @@ import com.squareup.picasso.Picasso;
 import java.util.Date;
 import java.util.HashMap;
 
+import static android.content.ContentValues.TAG;
+
 public class PostDetailsFragment extends DialogFragment {
     String token;
     ImageView postImage,profileClick;
@@ -41,7 +45,8 @@ public class PostDetailsFragment extends DialogFragment {
     Button addCommentButton;
     RatingBar ratingBar_comment;
     RatingBar ratingBar_post;
-
+    Button getComments;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
@@ -52,7 +57,6 @@ public class PostDetailsFragment extends DialogFragment {
         int height = (int) (getResources().getDisplayMetrics().heightPixels*0.85);
         view.setMinimumWidth(width);
         view.setMinimumHeight(height);
-        final String[] userId = new String[1];
 
         postImage = view.findViewById(R.id.post_detail_img);
         profileClick= view.findViewById(R.id.post_detail_goToProfile);
@@ -63,12 +67,14 @@ public class PostDetailsFragment extends DialogFragment {
         addCommentButton = view.findViewById(R.id.post_detail_add_comment_btn);
         ratingBar_comment=view.findViewById(R.id.post_detail_comment_ratingBar);
         ratingBar_post=view.findViewById(R.id.post_detail_post_ratingBar);
-
+        getComments=view.findViewById(R.id.post_detail_get_comments_btn);
         Bundle args = getArguments();
         assert args != null;
         token = args.getString("token");
+        String userPost=args.getString("userId");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Posts").document(token);
+
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -76,8 +82,6 @@ public class PostDetailsFragment extends DialogFragment {
                 if (document.exists()) {
                     Post post = document.toObject(Post.class);
                     assert post != null;
-                    userId[0] = post.getUserId();
-
                     title.setText(post.getTitle());
                     userName.setText(post.getUserName());
                     price.setText(post.getPrice()+" "+price.getText());
@@ -87,6 +91,12 @@ public class PostDetailsFragment extends DialogFragment {
                             .resize(postImage.getWidth(),postImage.getHeight())
                             .into(postImage);
 
+                    System.out.println(post.getUserId()+"------------->asdasdas");
+                    if(post.getUserId().equals(user.getUid())){
+                        commentText.setVisibility(View.GONE);
+                        ratingBar_comment.setVisibility(View.GONE);
+                        addCommentButton.setVisibility(View.GONE);
+                    }
                     profileClick.setOnClickListener(v -> {
                         dismiss();
                         Bundle args1 = new Bundle();
@@ -100,53 +110,45 @@ public class PostDetailsFragment extends DialogFragment {
                         ft.addToBackStack(null).commit();
                     });
 
+                    addCommentButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            float score = ratingBar_comment.getRating();
+                            //System.out.println("score : " +score);
+                            if(score!=0 && commentText.getText()!=null){
+                                HashMap<String, Object> commentData = new HashMap<>();
+                                commentData.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                commentData.put("date",new Timestamp(new Date()));
+                                commentData.put("commentText",commentText.getText().toString());
+                                commentData.put("score",score);
+                                db.collection("Posts/"+token+"/Comments")
+                                        .add(commentData);
+                                Toast toast = Toast.makeText(getContext(), "Mesajınız gönderildi.", Toast.LENGTH_SHORT);
+                                toast.show();
+
+
+
+                            }
+
+                        }
+                    });
+
+                    getComments.setOnClickListener(v -> {
+
+                    });
+
+
                 }
             }
         });
 
 
-        addCommentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(userId[0] == FirebaseAuth.getInstance().getCurrentUser().getUid()){
-                    Toast.makeText(getContext(),"You cannot comment on your own post!",Toast.LENGTH_LONG).show();
-                    ratingBar_comment.setRating(0);
-                    commentText.setText(null);
-                }
-
-                float score = ratingBar_comment.getRating();
-                //System.out.println("score : " +score);
-                if(score!=0 && commentText.getText()!=null){
-                    HashMap<String, Object> commentData = new HashMap<>();
-                    commentData.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    commentData.put("date",new Timestamp(new Date()));
-                    commentData.put("commentText",commentText.getText());
-                    commentData.put("score",score);
-
-                    //CollectionReference collection = db.collection("Posts/"+token+"/Comments");
-                    //collection.document()
-                    db.collection("Posts").document(token).collection("Comments")
-                            .add(commentData)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(getContext(),"Posting a comment is successful..",Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(),"Failed to post comment..",Toast.LENGTH_LONG).show();
-                                }
-                            });
-                }
-
-            }
-        });
 
 
         return  view;
     }
+
 
 
 }
