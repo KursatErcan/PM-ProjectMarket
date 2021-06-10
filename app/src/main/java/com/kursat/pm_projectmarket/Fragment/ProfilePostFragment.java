@@ -13,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -84,7 +81,7 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
                             assert post != null;
                             System.out.println(post.getUserName());
                             //String userId,String userName, String price, String title, String postImageUrl
-                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),"nu",doc.getId()));
+                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getScore(),"nu",doc.getId()));
 
                         }
                         ProfilePostsAdapter.notifyDataSetChanged();

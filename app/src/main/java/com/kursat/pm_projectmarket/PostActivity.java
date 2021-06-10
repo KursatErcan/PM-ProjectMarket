@@ -44,12 +44,12 @@ public class PostActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private StorageReference storageReference;
     CollectionReference cfr;
-    CheckBox chkDigitalData;
-    CheckBox chkDigitalMarket;
-    CheckBox chkGraphics;
-    CheckBox chkVideo;
-    CheckBox chkWriting;
-    CheckBox chkProgramming;
+    private CheckBox chkDigitalData;
+    private CheckBox chkDigitalMarket;
+    private CheckBox chkGraphics;
+    private CheckBox chkVideo;
+    private CheckBox chkWriting;
+    private CheckBox chkProgramming;
     HashMap<String,String> array;
 
 
@@ -146,12 +146,10 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("userId", user.getUid());
                         postData.put("userName",userName);
                         postData.put("postCategory",array);
+                        postData.put("score","2");
                         //add the data into the Posts
                         cfr=db.collection("Posts");
                         cfr.add(postData);
-
-
-
 
                     });
 
@@ -160,7 +158,6 @@ public class PostActivity extends AppCompatActivity {
                     finish();
 
                 }).addOnFailureListener(e -> Toast.makeText(PostActivity.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show());
-
 
             } catch (IOException e) {
                 e.printStackTrace();

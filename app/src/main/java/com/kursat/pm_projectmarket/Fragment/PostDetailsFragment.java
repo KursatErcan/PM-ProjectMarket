@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +18,20 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.Date;
+import java.util.HashMap;
 
 public class PostDetailsFragment extends DialogFragment {
     String token;
@@ -43,6 +52,7 @@ public class PostDetailsFragment extends DialogFragment {
         int height = (int) (getResources().getDisplayMetrics().heightPixels*0.85);
         view.setMinimumWidth(width);
         view.setMinimumHeight(height);
+        final String[] userId = new String[1];
 
         postImage = view.findViewById(R.id.post_detail_img);
         profileClick= view.findViewById(R.id.post_detail_goToProfile);
@@ -66,10 +76,13 @@ public class PostDetailsFragment extends DialogFragment {
                 if (document.exists()) {
                     Post post = document.toObject(Post.class);
                     assert post != null;
+                    userId[0] = post.getUserId();
+
                     title.setText(post.getTitle());
                     userName.setText(post.getUserName());
                     price.setText(post.getPrice()+" "+price.getText());
-                    ratingBar_post.setRating(3);
+                    ratingBar_post.setRating(Float.parseFloat(post.getScore()));
+
                     Picasso.get().load(post.getPostImageUrl())
                             .resize(postImage.getWidth(),postImage.getHeight())
                             .into(postImage);
@@ -95,8 +108,39 @@ public class PostDetailsFragment extends DialogFragment {
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(userId[0] == FirebaseAuth.getInstance().getCurrentUser().getUid()){
+                    Toast.makeText(getContext(),"You cannot comment on your own post!",Toast.LENGTH_LONG).show();
+                    ratingBar_comment.setRating(0);
+                    commentText.setText(null);
+                }
+
                 float score = ratingBar_comment.getRating();
-                System.out.println("score : " +score);
+                //System.out.println("score : " +score);
+                if(score!=0 && commentText.getText()!=null){
+                    HashMap<String, Object> commentData = new HashMap<>();
+                    commentData.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    commentData.put("date",new Timestamp(new Date()));
+                    commentData.put("commentText",commentText.getText());
+                    commentData.put("score",score);
+
+                    //CollectionReference collection = db.collection("Posts/"+token+"/Comments");
+                    //collection.document()
+                    db.collection("Posts").document(token).collection("Comments")
+                            .add(commentData)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(getContext(),"Posting a comment is successful..",Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(),"Failed to post comment..",Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+
             }
         });
 

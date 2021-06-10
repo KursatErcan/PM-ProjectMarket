@@ -1,6 +1,5 @@
 package com.kursat.pm_projectmarket.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,9 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -38,7 +35,6 @@ import com.kursat.pm_projectmarket.R;
 import com.kursat.pm_projectmarket.SettingsActivity;
 import com.squareup.picasso.Picasso;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

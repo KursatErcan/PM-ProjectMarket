@@ -80,7 +80,7 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
 
                                     for (QueryDocumentSnapshot document : value) {
                                         //String title, String comment,String point,String token
-                                        comment.add(new Comment(doc.get("title").toString(),document.get("comment_detail").toString(),document.get("comment_point").toString(),document.getId()));
+                                        comment.add(new Comment(doc.get("title").toString(),document.get("commentText").toString(),document.get("score").toString(),document.getId()));
                                     }
                                     commentRecyclerAdapter.notifyDataSetChanged();
                                 }

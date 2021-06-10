@@ -73,7 +73,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 User user = documentSnapshot.toObject(User.class);
-                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),user.getProfileImageUrl(),doc.getId()));
+                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
                                 postRecyclerAdapter.notifyDataSetChanged();
                             }
                         });
@@ -81,33 +81,6 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                     }
                 }
             });
-
-        /*else{
-            db.collection("Posts").whereEqualTo("categoryId",filterNum).orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
-                if(value != null){
-                    for(DocumentSnapshot doc : value.getDocuments()){
-                        Post post = doc.toObject(Post.class);
-
-                        assert post != null;
-                        db.collection("Users").document(post.getUserId()).get()
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()){
-                                        User user = Objects.requireNonNull(task.getResult()).toObject(User.class);
-
-                                        assert user != null;
-                                        userNameList_db.add(user.getUserName());
-                                        profileImageList_db.add(user.getProfileImageUrl());
-                                        titleList_db.add(post.getTitle());
-                                        postImageList_db.add(post.getPostImageUrl());
-                                        priceList_db.add(post.getPrice());
-
-                                        postRecyclerAdapter.notifyDataSetChanged();
-                                    }
-                                });
-                    }
-                }
-            });
-        }*/
     }
 
     public void onMessageClick(int position) {

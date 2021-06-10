@@ -7,20 +7,23 @@ public class Post {
     private String postImageUrl;
     private String token;
     private String profileImage;
+    private String score;
 
-    public Post(String userId,String userName, String price, String title, String postImageUrl,String profileImage,String token) {
+    public Post(String userId,String userName, String price, String title, String postImageUrl,String score,String profileImage,String token) {
         this.userName = userName;
         this.userId = userId;
         this.price = price;
         this.title = title;
         this.postImageUrl = postImageUrl;
+        this.score=score;
         this.token=token;
         this.profileImage=profileImage;
     }
+
     Post(){
 
     }
-
+    public String getScore() { return score; }
     public String getProfileImage() {
         return profileImage;
     }

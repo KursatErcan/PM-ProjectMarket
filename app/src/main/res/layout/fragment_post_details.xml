@@ -263,7 +263,8 @@
                 android:layout_marginLeft="16dp"
                 android:layout_below="@+id/post_detail_comment"
                 android:stepSize="1"
-                android:isIndicator="false"/>
+                android:isIndicator="false"
+                android:rating="0"/>
 
             <Button
                 android:id="@+id/post_detail_add_comment_btn"

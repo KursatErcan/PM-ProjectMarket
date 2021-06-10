@@ -4,8 +4,8 @@ public class Comment {
 
     private String postTitle;
     private String comment;
-    String score;
-    String token;
+    private String score;
+    private String token;
 
 
     public Comment(String postTitle, String comment,String score,String token) {
