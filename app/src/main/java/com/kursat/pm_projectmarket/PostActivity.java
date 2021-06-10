@@ -168,7 +168,7 @@ public class PostActivity extends AppCompatActivity {
 
 
         }else {
-            Toast.makeText(PostActivity.this,"Olmadi !",Toast.LENGTH_SHORT).show();
+            Toast.makeText(PostActivity.this,"You must fill in the required fields!",Toast.LENGTH_SHORT).show();
         }
     }
 

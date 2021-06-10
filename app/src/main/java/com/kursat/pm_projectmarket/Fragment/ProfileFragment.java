@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
@@ -71,25 +72,21 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile1, container, false);
 
-        db = FirebaseFirestore.getInstance();
         FloatingActionButton flbtn= view.findViewById(R.id.fab);
         settings=view.findViewById(R.id.settings);
-
         textView_UserName = view.findViewById(R.id.text_userName_profileFragment);
         imageView_profileImage = view.findViewById(R.id.imageView_profilePhoto);
-
+        msgDetail=(TextView)view.findViewById(R.id.MessageDetail);
 
         tabs = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
 
         viewPager.setAdapter(new FragmentPageAdapter(getChildFragmentManager(),getContext()));
         tabs.setupWithViewPager(viewPager);
-        //setupWithViewPager(viewPager);
 
-        //SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE); //main activitede setlendi
-        //profileId = prefs.getString("profileId", "none");
-        msgDetail=(TextView)view.findViewById(R.id.MessageDetail);
+        db = FirebaseFirestore.getInstance();
         profileId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         Bundle bundle= this.getArguments();
 
         if(bundle==null){
@@ -97,82 +94,81 @@ public class ProfileFragment extends Fragment {
         }
         if(bundle!=null) {
             settings.setVisibility(View.GONE);
-            if(profileId.equals(bundle.getString("userId"))){
+            if (profileId.equals(bundle.getString("userId"))) {
                 flbtn.hide();
                 settings.setVisibility(View.VISIBLE);
             }
 
             profileId = bundle.getString("userId");
             profileName = bundle.getString("userName");
-            flbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        }
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences("PREFS",MODE_PRIVATE).edit();
+                        editor.putString("userId", profileId);
+                        editor.apply();
+        flbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    db.collection("Messages")
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot doc1 : task.getResult()) {
+                db.collection("Messages")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot doc1 : task.getResult()) {
 
-                                            if((doc1.get("message_received").equals(profileId) && doc1.get("message_posted").equals(user.getUid())) ||
-                                                    doc1.get("message_received").equals(user.getUid()) && doc1.get("message_posted").equals(profileId)){
-                                                Intent intent=new Intent(getActivity(), MessagesActivity.class);
-                                                intent.putExtra("userId",profileId);
-                                                intent.putExtra("userName",profileName);
-                                                intent.putExtra("token",doc1.getId());
-                                                System.out.println("Buraya girdim !!!!!!!!!!!!!!!!!!!!");
-                                                startActivity(intent);
+                                        if((doc1.get("message_received").equals(profileId) && doc1.get("message_posted").equals(user.getUid())) ||
+                                                doc1.get("message_received").equals(user.getUid()) && doc1.get("message_posted").equals(profileId)){
+                                            Intent intent=new Intent(getActivity(), MessagesActivity.class);
+                                            intent.putExtra("userId",profileId);
+                                            intent.putExtra("userName",profileName);
+                                            intent.putExtra("token",doc1.getId());
+                                            System.out.println("Buraya girdim !!!!!!!!!!!!!!!!!!!!");
+                                            startActivity(intent);
 
-                                                return;
-                                            }
-
+                                            return;
                                         }
 
-                                            //String token=documentReference.getId();
-                                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
-                                            String userName = sharedPreferences.getString("userName", "");
-                                            Map<String, Object> messageSend = new HashMap<>();
-                                            messageSend.put("message_posted",user.getUid());
-                                            messageSend.put("message_posted_name",userName);
-                                            messageSend.put("message_received",profileId);
-                                            messageSend.put("message_received_name",profileName);
-                                            db.collection("Messages")
-                                                    .add(messageSend)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            token=documentReference.getId();
-                                                            Intent intent=new Intent(getActivity(), MessagesActivity.class);
-                                                            intent.putExtra("userId",profileId);
-                                                            intent.putExtra("userName",profileName);
-                                                            intent.putExtra("token",token);
-                                                            System.out.println("Buraya daaaaaaaaaaaa girdim !!!!!!!!!!!!!!!!!!!!");
-                                                            startActivity(intent);
-                                                            return;
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Log.w(TAG, "Error adding document", e);
-                                                        }
-                                                    });
-                                    } else {
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
                                     }
+
+                                        //String token=documentReference.getId();
+                                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", MODE_PRIVATE);
+                                        String userName = sharedPreferences.getString("userName", "");
+                                        Map<String, Object> messageSend = new HashMap<>();
+                                        messageSend.put("message_posted",user.getUid());
+                                        messageSend.put("message_posted_name",userName);
+                                        messageSend.put("message_received",profileId);
+                                        messageSend.put("message_received_name",profileName);
+                                        db.collection("Messages")
+                                                .add(messageSend)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        token=documentReference.getId();
+                                                        Intent intent=new Intent(getActivity(), MessagesActivity.class);
+                                                        intent.putExtra("userId",profileId);
+                                                        intent.putExtra("userName",profileName);
+                                                        intent.putExtra("token",token);
+                                                        System.out.println("Buraya daaaaaaaaaaaa girdim !!!!!!!!!!!!!!!!!!!!");
+                                                        startActivity(intent);
+                                                        return;
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error adding document", e);
+                                                    }
+                                                });
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
-                            });
-
-
-
-                    Toast.makeText(getContext(),"You can write your message..",Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-
-
+                            }
+                        });
+                
+                Toast.makeText(getContext(),"You can write your message..",Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         settings.setOnClickListener(v -> {

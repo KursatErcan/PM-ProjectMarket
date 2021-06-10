@@ -60,6 +60,12 @@
     <string name="add">Add</string>
     <string name="delete_profile">DELETE PROFILE</string>
     <string name="get_comments">get comments</string>
+    <string name="i_can_for_you_in_a_sentence">I can … for you. (in a sentence)</string>
+    <string name="digital_marketing">Digital Marketing</string>
+    <string name="graphics_and_design">Graphics and Design</string>
+    <string name="video_and_audio">Video and Audio</string>
+    <string name="writing_and_translation">Writing and Translation</string>
+    <string name="programming_and_tech">Programming and Tech</string>
 
 
 </resources>

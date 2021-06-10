@@ -1,5 +1,7 @@
 package com.kursat.pm_projectmarket.Fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,19 +49,17 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
         View view = inflater.inflate(R.layout.fragment_profile_post, container, false);
 
         db = FirebaseFirestore.getInstance();
-        Bundle args1 = getArguments();
-        if(args1==null)
-            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        else{
-            userId=args1.getString("userId");
-            System.out.println(userId+"---------------->");
-        }
+
+        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        userId = prefs.getString("userId", "none");
+
         ppost = new ArrayList<>();
 
         RecyclerView recyclerView = view.findViewById(R.id.rcwProfilePosts);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ProfilePostsAdapter = new PostRecyclerAdapter(ppost, this::onMessageClick);
         recyclerView.setAdapter(ProfilePostsAdapter);
+
         getDataFromDB();
         return view;
     }
@@ -91,21 +91,6 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
                     }
                 });
 
-
-        /*
-        db.collection("Posts").whereEqualTo("userId",userId).orderBy("date", Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
-            if(value != null){
-                for(DocumentSnapshot doc : value.getDocuments()){
-                    Post post = doc.toObject(Post.class);
-                    assert post != null;
-                    System.out.println(post.getUserName());
-                    //String userId,String userName, String price, String title, String postImageUrl
-                    ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getProfileImage(),doc.getId()));
-                    postRecyclerAdapter.notifyDataSetChanged();
-
-                }
-            }
-        });*/
     }
 
 

@@ -1,20 +1,20 @@
 package com.kursat.pm_projectmarket.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,26 +30,17 @@ import java.util.ArrayList;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileCommentFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ProfileCommentFragment extends Fragment implements MessageBoxAdapter.OnMessageListener{
 
     CommentRecyclerAdapter commentRecyclerAdapter;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ArrayList<Comment> comment;
     FirebaseFirestore db;
+    String userId;
+
     public ProfileCommentFragment() {
         // Required empty public constructor
     }
-
-    public static ProfileCommentFragment newInstance(String param1, String param2) {
-        ProfileCommentFragment fragment = new ProfileCommentFragment();
-        return fragment;
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,30 +55,42 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
         commentRecyclerAdapter = new CommentRecyclerAdapter(comment,this::onMessageClick);
         recyclerView.setAdapter(commentRecyclerAdapter);
         db = FirebaseFirestore.getInstance();
+
+        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        userId = prefs.getString("userId", "none");
+
         getUserComments();
         return view;
     }
 
     void getUserComments(){
-        db.collection("Users/"+user.getUid()+"/Comments")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
+        db.collection("Posts").whereEqualTo("userId",userId).addSnapshotListener((value, error) -> {
+            if(value != null){
+                for(DocumentSnapshot doc : value.getDocuments()){
 
-                        for (QueryDocumentSnapshot doc : value) {
-                            //String title, String comment,String point,String token
-                            comment.add(new Comment(doc.get("comment_title").toString(),doc.get("comment_detail").toString(),doc.get("comment_point").toString(),doc.getId()));
-                        }
-                        commentRecyclerAdapter.notifyDataSetChanged();
-                    }
-                });
+                    db.collection("Posts/"+doc.getId()+"/Comments")
+                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable QuerySnapshot value,
+                                                    @Nullable FirebaseFirestoreException e) {
+                                    if (e != null) {
+                                        Log.w(TAG, "Listen failed.", e);
+                                        return;
+                                    }
 
+                                    for (QueryDocumentSnapshot document : value) {
+                                        //String title, String comment,String point,String token
+                                        comment.add(new Comment(doc.get("title").toString(),document.get("comment_detail").toString(),document.get("comment_point").toString(),document.getId()));
+                                    }
+                                    commentRecyclerAdapter.notifyDataSetChanged();
+                                }
+                            });
+                }
+            }
+
+        });
     }
+
     public void onMessageClick(int position) {
         Intent intent=new Intent(getActivity(), MessagesActivity.class);
         intent.putExtra("token",comment.get(position).getToken());

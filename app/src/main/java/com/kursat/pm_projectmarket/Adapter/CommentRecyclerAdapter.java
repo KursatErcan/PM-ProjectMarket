@@ -3,6 +3,7 @@ package com.kursat.pm_projectmarket.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,8 +36,9 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     @Override
     public void onBindViewHolder(@NonNull CommentRecyclerAdapter.CommentHolder holder, int position) {
         Comment currentItem = comment.get(position);
-        holder.text_title.setText(currentItem.getTitle());
+        holder.text_title.setText(currentItem.getPostTitle());
         holder.text_comment.setText(currentItem.getComment());
+        holder.score_rb.setRating(Float.parseFloat(currentItem.getScore()));
     }
 
     @Override
@@ -48,13 +50,13 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
 
         TextView text_title;
         TextView text_comment;
-        TextView text_point;
+        RatingBar score_rb;
         OnMessageListener msgListener;
         public CommentHolder(@NonNull View itemView , OnMessageListener msgListener) {
 
             super(itemView);
             this.msgListener=msgListener;
-            text_point=itemView.findViewById(R.id.textView_post_point);
+            score_rb=itemView.findViewById(R.id.ratingBar_score_commentItem);
             text_title = itemView.findViewById(R.id.textView_postTitle_commentItem);
             text_comment = itemView.findViewById(R.id.textView_comment_commentItem);
 

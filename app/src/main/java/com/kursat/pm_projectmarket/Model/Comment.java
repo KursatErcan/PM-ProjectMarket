@@ -2,29 +2,28 @@ package com.kursat.pm_projectmarket.Model;
 
 public class Comment {
 
-    private String title;
+    private String postTitle;
     private String comment;
-    String point;
+    String score;
     String token;
 
 
-    public Comment(String title, String comment,String point,String token) {
-        this.title = title;
+    public Comment(String postTitle, String comment,String score,String token) {
+        this.postTitle = postTitle;
         this.comment = comment;
-        this.point = point;
+        this.score = score;
         this.token = token;
     }
 
-    public String getPoint() {
-        return point;
+    public String getScore() {
+        return score;
     }
 
     public String getToken() {
         return token;
     }
 
-    public String getTitle() { return title;
-    }
+    public String getPostTitle() { return postTitle; }
 
     public String getComment() { return comment;
     }

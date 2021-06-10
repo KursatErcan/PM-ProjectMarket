@@ -48,7 +48,7 @@ public class PostDetailsFragment extends DialogFragment {
         profileClick= view.findViewById(R.id.post_detail_goToProfile);
         title = view.findViewById(R.id.post_detail_title);
         userName = view.findViewById(R.id.post_detail_userName);
-        //price = view.findViewById(R.id.post_detail_price);
+        price = view.findViewById(R.id.post_detail_price);
         commentText = view.findViewById(R.id.post_detail_comment);
         addCommentButton = view.findViewById(R.id.post_detail_add_comment_btn);
         ratingBar_comment=view.findViewById(R.id.post_detail_comment_ratingBar);
@@ -68,7 +68,7 @@ public class PostDetailsFragment extends DialogFragment {
                     assert post != null;
                     title.setText(post.getTitle());
                     userName.setText(post.getUserName());
-                    //price.setText(post.getPrice()+price.getText());
+                    price.setText(post.getPrice()+" "+price.getText());
                     ratingBar_post.setRating(3);
                     Picasso.get().load(post.getPostImageUrl())
                             .resize(postImage.getWidth(),postImage.getHeight())
