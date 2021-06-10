@@ -59,9 +59,9 @@ public class ProfileFragment extends Fragment {
     private String profileId;
     String token;
     RatingBar ratingBar;
-    float totalPoint=0.0f;
+    float totalScore=0.0f;
     int counter=0;
-    int points=0;
+    int score=0;
     CollectionReference cfr;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String profileName;
@@ -92,7 +92,7 @@ public class ProfileFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         profileId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        getUserPoint();
+        getUserScore();
         Bundle bundle= this.getArguments();
 
         if(bundle==null){
@@ -209,7 +209,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private void getUserPoint(){
+    private void getUserScore(){
             db.collection("Posts").whereEqualTo("userId",user.getUid()).addSnapshotListener((value, error) -> {
                 if(value != null){
                     for(DocumentSnapshot doc : value.getDocuments()){
@@ -225,19 +225,19 @@ public class ProfileFragment extends Fragment {
                                         }
 
                                         for (QueryDocumentSnapshot document : value) {
-                                            points+=document.getLong("score");
+                                            score+=document.getLong("score");
                                             counter++;
                                         }
-                                        totalPoint=0.0f;
+                                        totalScore=0.0f;
 
                                         if(counter==0){
-                                            totalPoint = 0;
+                                            totalScore = 0;
                                         }
                                         else{
-                                            totalPoint=points/counter;
+                                            totalScore=score/counter;
 
                                         }
-                                        ratingBar.setRating(totalPoint);
+                                        ratingBar.setRating(totalScore);
 
                                     }
                                 });
