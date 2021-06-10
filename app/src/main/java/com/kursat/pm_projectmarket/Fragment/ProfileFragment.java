@@ -229,7 +229,14 @@ public class ProfileFragment extends Fragment {
                                             counter++;
                                         }
                                         totalPoint=0.0f;
-                                        totalPoint=points/counter;
+
+                                        if(counter==0){
+                                            totalPoint = 0;
+                                        }
+                                        else{
+                                            totalPoint=points/counter;
+
+                                        }
                                         ratingBar.setRating(totalPoint);
 
                                     }
