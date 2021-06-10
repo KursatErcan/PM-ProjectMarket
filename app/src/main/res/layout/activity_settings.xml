@@ -37,6 +37,7 @@
 
         <TextView
             style="@style/viewParent.headerText.settingsTextIcon"
+            android:id="@+id/changePassword"
             android:layout_marginTop="10dp"
             android:text="@string/change_password"
             app:drawableStartCompat="@drawable/ic_edit_password" />

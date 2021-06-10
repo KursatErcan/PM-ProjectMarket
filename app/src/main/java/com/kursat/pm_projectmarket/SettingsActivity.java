@@ -1,24 +1,36 @@
 package com.kursat.pm_projectmarket;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences mode;
     SharedPreferences.Editor editor;
     boolean isNightModeOn;
-    TextView logout, editProfile;
+    TextView logout, editProfile,changePassword;
+    AlertDialog.Builder alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +38,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         logout = findViewById(R.id.logout);
         editProfile = findViewById(R.id.editProfile);
+        changePassword = findViewById(R.id.changePassword);
+        alertDialog = new AlertDialog.Builder(SettingsActivity.this);
+
+
         //function for enabling dark mode
         //mode = getActivity().getSharedPreferences("modePref",Context.MODE_PRIVATE);
         /*
@@ -69,6 +85,83 @@ public class SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(SettingsActivity.this, EditProfileActivity.class);
             startActivity(intent);
         });
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.setTitle("Change Password");
+                final EditText oldPass = new EditText(SettingsActivity.this);
+                final EditText newPass = new EditText(SettingsActivity.this);
+                final EditText confirmPass = new EditText(SettingsActivity.this);
+
+                oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                oldPass.setHint("Old Password");
+                newPass.setHint("New Password");
+                confirmPass.setHint("Confirm Password");
+                LinearLayout ll=new LinearLayout(SettingsActivity.this);
+                ll.setOrientation(LinearLayout.VERTICAL);
+
+                ll.addView(oldPass);
+
+                ll.addView(newPass);
+                ll.addView(confirmPass);
+                alertDialog.setView(ll);
+                alertDialog.setPositiveButton("Change",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                String newPassword= newPass.getText().toString();
+                                String oldPassword= oldPass.getText().toString();
+                                String confirmPassword= confirmPass.getText().toString();
+                                if(oldPassword==null || oldPassword.isEmpty()){
+                                    oldPassword = " ";
+                                }
+                                if(newPassword==null || newPassword.isEmpty()){
+                                    oldPassword = "      ";
+                                }
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                String email = user.getEmail();
+                                AuthCredential credential = EmailAuthProvider.getCredential(email,oldPassword);
+
+                                user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            if(!newPassword.equals(confirmPassword)) {
+                                                Toast.makeText(SettingsActivity.this, "Passwords do not match!", Toast.LENGTH_LONG).show();
+
+                                            }else{
+                                                user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(!task.isSuccessful()){
+                                                            Toast.makeText(SettingsActivity.this,"Something went wrong. Please try again later!",Toast.LENGTH_LONG).show();
+                                                            dialog.cancel();
+                                                        }else {
+                                                                Toast.makeText(SettingsActivity.this, "Password Successfully Modified.", Toast.LENGTH_LONG).show();
+                                                                dialog.cancel();
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }else {
+                                            Toast.makeText(SettingsActivity.this,"Make sure you enter your password correctly!",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                alertDialog.setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                alertDialog.show();
+            }
+        });
     }
+
 
 }
