@@ -24,6 +24,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         this.post=post;
         this.msgListener=msgListener;
 
+
     }
 
     @NonNull
@@ -71,16 +72,20 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             itemView.setOnClickListener(this);
 
 
+
         }
 
         @Override
         public void onClick(View v) {
             msgListener.onMessageClick(getAdapterPosition());
         }
+
     }
 
     public interface OnMessageListener{
         void onMessageClick(int position);
     }
+
+
 
 }

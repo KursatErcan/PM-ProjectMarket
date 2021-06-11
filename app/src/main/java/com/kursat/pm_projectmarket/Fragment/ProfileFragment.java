@@ -92,7 +92,7 @@ public class ProfileFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
         profileId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        getUserScore();
+
         Bundle bundle= this.getArguments();
 
         if(bundle==null){
@@ -108,6 +108,8 @@ public class ProfileFragment extends Fragment {
             profileId = bundle.getString("userId");
             profileName = bundle.getString("userName");
         }
+
+        getUserScore();
         SharedPreferences.Editor editor = getActivity().getSharedPreferences("PREFS",MODE_PRIVATE).edit();
                         editor.putString("userId", profileId);
                         editor.apply();
@@ -227,6 +229,7 @@ public class ProfileFragment extends Fragment {
                                         for (QueryDocumentSnapshot document : value) {
                                             score+=document.getLong("score");
                                             counter++;
+
                                         }
                                         totalScore=0.0f;
 

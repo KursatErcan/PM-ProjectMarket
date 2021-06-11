@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,7 +28,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
@@ -46,6 +51,9 @@ public class PostDetailsFragment extends DialogFragment {
     RatingBar ratingBar_comment;
     RatingBar ratingBar_post;
     Button getComments;
+    float totalScore=0.0f;
+    int counter=0;
+    int score=0;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -78,6 +86,7 @@ public class PostDetailsFragment extends DialogFragment {
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
+
                 assert document != null;
                 if (document.exists()) {
                     Post post = document.toObject(Post.class);
@@ -85,13 +94,34 @@ public class PostDetailsFragment extends DialogFragment {
                     title.setText(post.getTitle());
                     userName.setText(post.getUserName());
                     price.setText(post.getPrice()+" "+price.getText());
-                    ratingBar_post.setRating(Float.parseFloat(post.getScore()));
 
+                    //getPostScrore
+                    db.collection("Posts/"+document.getId()+"/Comments")
+                            .addSnapshotListener((value, error) -> {
+                                if(value != null){
+                                    for(DocumentSnapshot doc : value.getDocuments()){
+                                        //all comments is here doc.get("detail")
+                                        score+=doc.getLong("score");
+                                        counter++;
+                                    }
+                                    totalScore=0.0f;
+
+                                    if(counter==0){
+                                        totalScore = 0;
+                                    }
+                                    else{
+                                        totalScore=score/counter;
+
+                                    }
+                                    ratingBar_post.setRating(totalScore);
+                                }
+
+                            });
+                    //end of getPostScore
                     Picasso.get().load(post.getPostImageUrl())
                             .resize(postImage.getWidth(),postImage.getHeight())
                             .into(postImage);
 
-                    System.out.println(post.getUserId()+"------------->asdasdas");
                     if(post.getUserId().equals(user.getUid())){
                         commentText.setVisibility(View.GONE);
                         ratingBar_comment.setVisibility(View.GONE);
@@ -148,6 +178,7 @@ public class PostDetailsFragment extends DialogFragment {
 
         return  view;
     }
+
 
 
 
