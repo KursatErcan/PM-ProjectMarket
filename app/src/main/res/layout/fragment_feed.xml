@@ -6,13 +6,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.FeedFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/filtersBar"
+        android:paddingBottom="@dimen/vertical_search"
+        android:paddingTop="30dp"
+
+        >
+        <EditText
+            android:id="@+id/edt_search"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:digits="0,1,2,3,4,5,6,7,8,9,*,qwertzuiopasdfghjklyxcvbnm"
+
+            android:maxLines="1"
+            android:singleLine="true"
+
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/horizontal_dashboard"
+
+            android:layout_marginRight="@dimen/horizontal_dashboard"
+
+            android:background="#ffba60"
+            android:drawableStart="@drawable/ic_search_black_24dp"
+
+            android:drawablePadding="@dimen/drawable_left"
+            android:fontFamily="@font/bariol_regular"
+
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/normalPadding"
+            android:paddingTop="@dimen/vertical_search"
+            android:paddingRight="@dimen/normalPadding"
+
+
+            android:hint="@string/search_here"
+
+            android:textColor="@color/contentTextColor"
+            android:textColorHint="@color/frutorial_title"
+            android:textSize="14sp"
+            android:autofillHints="">
+
+        </EditText>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/edt_search"
+            android:src="@drawable/go_profile"
+            android:paddingRight="@dimen/normalPadding"
+            />
+
+    </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_feedFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/horizontal_dashboard"
         android:layout_marginTop="@dimen/normalPadding"
-        android:layout_marginRight="@dimen/horizontal_dashboard">
+        android:layout_marginRight="@dimen/horizontal_dashboard"
+        android:layout_below="@id/filtersBar">
 
     </androidx.recyclerview.widget.RecyclerView>
 
