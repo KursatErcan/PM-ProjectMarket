@@ -210,7 +210,7 @@ public class ProfileFragment extends Fragment {
 
 
     private void getUserScore(){
-            db.collection("Posts").whereEqualTo("userId",user.getUid()).addSnapshotListener((value, error) -> {
+            db.collection("Posts").whereEqualTo("userId",profileId).addSnapshotListener((value, error) -> {
                 if(value != null){
                     for(DocumentSnapshot doc : value.getDocuments()){
 
