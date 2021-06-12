@@ -63,15 +63,15 @@ public class RegisterActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
         if(TextUtils.isEmpty(userName)||TextUtils.isEmpty(email)||TextUtils.isEmpty(password)){
-            Toast.makeText(RegisterActivity.this,"Please, fill in all fields!",Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_LONG).show();
         }else if(password.length()<6){
-            Toast.makeText(RegisterActivity.this,"Password must be longer than 5 characters!",Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this,R.string.password_must_be_longer_than_6_characters,Toast.LENGTH_LONG).show();
         }else {
             registerUser(userName, email, password);
         }
     }
     private void registerUser(String userName, String email, String password){
-        progressDialog.setMessage("Please Wait!");
+        progressDialog.setMessage(getText(R.string.please_wait));
         progressDialog.show();
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PM-ProjectMarket</string>
+    <string name="project_market">Project Market</string>
+    <string name="next">Next</string>
+    <string name="second_fragment_label">İkinci Fragment</string>
+    <string name="first_fragment_label">İlk Fragment</string>
+    <string name="previous">Önceki</string>
+    <string name="settings">Ayarlar</string>
+    <string name="dark_mode">Karanlık Mod</string>
+    <string name="profile">Profil</string>
+    <string name="edit_profile">Profili Düzenle</string>
+    <string name="change_password">Parola Değiştir</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="change_profile_photo">Profil fotoğrafını değiştirmek için tıkla!</string>
+    <string name="your_name">Adınız</string>
+    <string name="mail_address">Mail Adresiniz</string>
+    <string name="update_profile">PROFİLİ GÜNCELLE</string>
+    <string name="gallery_requestPermission">Galeriye erişime izin vermelisiniz!</string>
+    <string name="search_here">Search Here</string>
+    <string name="programmingAndTeach">Programlama &amp; Teknoloji</string>
+    <string name="writingAndTranslation">Yazma &amp; Çeviri</string>
+    <string name="videoAndAudio">Video &amp; Ses</string>
+    <string name="data">Veri</string>
+    <string name="digitalMarketing">Dijital Pazarlama</string>
+    <string name="graphicsAndDesign">Grafik &amp; Tasarım</string>
+    <string name="regional">Bölgesel</string>
+    <string name="language">Dil</string>
+    <string name="logout">Çıkış Yap</string>
+    <string name="app_ver_1_0">App ver 1.0</string>
+    <string name="share">PAYLAŞ</string>
+    <string name="titleSentence">Senin için ... yapabilirim. (Bir cümlede)</string>
+    <string name="price">Fiyat</string>
+    <string name="message">Mesaj</string>
+    <string name="send">Gönder</string>
+    <string name="enter_message">Mesajı Gir</string>
+    <string name="tl">TL</string>
+    <string name="write_comment">Yorum Yaz</string>
+    <string name="delete_profile">Hesabı Kaldır</string>
+    <string name="get_comments">Yorumları Getir</string>
+    <!-- Toast Messages-->
+    <string name="your_comment_has_been_sent">Yorumunuz gönderildi.</string>
+    <string name="you_can_write_your_message">Mesajınızı yazabilirsiniz..</string>
+    <string name="the_post_is_successfully_deleted">Post başarıyla silindi.</string>
+    <string name="your_post_is_successfully_posted">Postunuz başarıyla paylaşıldı!</string>
+    <string name="your_profile_is_successfully_updated">Profil başarıyla güncellendi!</string>
+    <string name="upload_failed">"Upload Failed -> "</string>
+    <string name="email_is_required">Email gerekli!</string>
+    <string name="password_lenght_cannot_be_shorter_than_6">Parola 6 karakterden daha kısa olamaz!</string>
+    <string name="password_must_be_longer_than_6_characters">Parola 5 karakterden uzun olmalıdır!</string>
+    <string name="check_your_email_address">Email adresini kontol ediniz!</string>
+    <string name="welcome">Hoşgeldiniz!</string>
+    <string name="opps">Opps! Bişeyler yanlış gitti.</string>
+    <string name="you_must_fill_in_the_required_fields">Zorunlu alanları doldurmanız gerekiyor!</string>
+    <string name="please_wait">Lütfen Bekleyiniz!</string>
+    <string name="passwords_do_not_match">Parolalar eşleşmiyor!</string>
+    <string name="something_went_wrong">Bir şeyler yanlış gitti. Lütfen daha sonra tekrar deneyiniz!</string>
+    <string name="password_successfully_modified">Parola başarıyla güncellendi!</string>
+    <string name="make_sure_you_enter_your_password_correctly">Şifrenizi doğru girdiğinizden emin olun!</string>
+    <string name="choose_your_language">Dilinizi seçiniz!</string>
+
+    <string name="old_password">Eski Parola</string>
+    <string name="new_password">Yeni Parola</string>
+    <string name="confirm_password">Yeni Parolayı Tekrar Giriniz</string>
+
+</resources>

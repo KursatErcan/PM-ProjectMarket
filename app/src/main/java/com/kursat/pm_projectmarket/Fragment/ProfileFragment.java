@@ -174,7 +174,7 @@ public class ProfileFragment extends Fragment {
                             }
                         });
                 
-                Toast.makeText(getContext(),"You can write your message..",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
             }
         });
 

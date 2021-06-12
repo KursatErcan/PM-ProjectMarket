@@ -118,7 +118,7 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
                 .setPositiveButton("Yes",(dialog, which) ->{
                     db.collection("Posts").document(ppost.get(position).getToken())
                             .delete();
-                    Toast toast = Toast.makeText(getContext(), "This post is successfully deleted.", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getContext(), R.string.the_post_is_successfully_deleted, Toast.LENGTH_SHORT);
                     toast.show();
 
                 })

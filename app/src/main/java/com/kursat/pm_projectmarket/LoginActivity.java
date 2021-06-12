@@ -1,9 +1,5 @@
 package com.kursat.pm_projectmarket;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,8 +7,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -105,16 +103,16 @@ public class LoginActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(email)) {
             //Toast.makeText(LoginActivity.this,"Please, fill in all fields!",Toast.LENGTH_LONG).show();
             emailText.setErrorEnabled(true);
-            emailText.setError("Email is required!");
+            emailText.setError(getText(R.string.email_is_required));
             //passwordText.setErrorEnabled(true);
             //passwordText.setError("Password is required!");
         }else if(password.length()<6){
             //Toast.makeText(LoginActivity.this,"Password must be longer than 5 characters!",Toast.LENGTH_LONG).show();
             passwordText.setErrorEnabled(true);
-            passwordText.setError("Password lenght cannot be shorter than 6.");
+            passwordText.setError(getText(R.string.password_lenght_cannot_be_shorter_than_6));
         }else if(validate(email)){//email.matches(emailpattern)){
             emailText.setErrorEnabled(true);
-            emailText.setError("Check your email address!");
+            emailText.setError(getText(R.string.check_your_email_address));
         }else{
             loginUser(email,password);
         }
@@ -170,12 +168,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-            Toast.makeText(LoginActivity.this,"Welcome!",Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this,R.string.welcome,Toast.LENGTH_LONG).show();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
 
-        }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this,"Opps! Something went wrong.",Toast.LENGTH_LONG).show());
+        }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this,R.string.opps,Toast.LENGTH_LONG).show());
 
     }
 }

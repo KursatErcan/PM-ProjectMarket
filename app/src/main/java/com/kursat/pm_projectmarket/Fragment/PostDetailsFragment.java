@@ -2,7 +2,6 @@ package com.kursat.pm_projectmarket.Fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,32 +14,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.HashMap;
-
-import static android.content.ContentValues.TAG;
 
 public class PostDetailsFragment extends DialogFragment {
     String token;
@@ -156,7 +145,7 @@ public class PostDetailsFragment extends DialogFragment {
                                 commentData.put("score",score);
                                 db.collection("Posts/"+token+"/Comments")
                                         .add(commentData);
-                                Toast toast = Toast.makeText(getContext(), "Mesajınız gönderildi.", Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getContext(), R.string.your_comment_has_been_sent, Toast.LENGTH_SHORT);
                                 toast.show();
 
 

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.method.PasswordTransformationMethod;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -28,8 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
-    SharedPreferences mode;
-    SharedPreferences.Editor editor;
     boolean isNightModeOn;
     TextView logout, editProfile,changePassword,language;
     AlertDialog.Builder alertDialog;
@@ -91,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog.setTitle("Change Password");
+                alertDialog.setTitle(R.string.change_password);
                 final EditText oldPass = new EditText(SettingsActivity.this);
                 final EditText newPass = new EditText(SettingsActivity.this);
                 final EditText confirmPass = new EditText(SettingsActivity.this);
@@ -100,9 +99,9 @@ public class SettingsActivity extends AppCompatActivity {
                 newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-                oldPass.setHint("Old Password");
-                newPass.setHint("New Password");
-                confirmPass.setHint("Confirm Password");
+                oldPass.setHint(R.string.old_password);
+                newPass.setHint(R.string.new_password);
+                confirmPass.setHint(R.string.confirm_password);
                 LinearLayout ll=new LinearLayout(SettingsActivity.this);
                 ll.setOrientation(LinearLayout.VERTICAL);
 
@@ -132,24 +131,24 @@ public class SettingsActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
                                             if(!newPassword.equals(confirmPassword)) {
-                                                Toast.makeText(SettingsActivity.this, "Passwords do not match!", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(SettingsActivity.this, R.string.passwords_do_not_match, Toast.LENGTH_LONG).show();
 
                                             }else{
                                                 user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(!task.isSuccessful()){
-                                                            Toast.makeText(SettingsActivity.this,"Something went wrong. Please try again later!",Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(SettingsActivity.this,R.string.something_went_wrong,Toast.LENGTH_LONG).show();
                                                             dialog.cancel();
                                                         }else {
-                                                                Toast.makeText(SettingsActivity.this, "Password Successfully Modified.", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(SettingsActivity.this, R.string.password_successfully_modified, Toast.LENGTH_LONG).show();
                                                                 dialog.cancel();
                                                         }
                                                     }
                                                 });
                                             }
                                         }else {
-                                            Toast.makeText(SettingsActivity.this,"Make sure you enter your password correctly!",Toast.LENGTH_LONG).show();
+                                            Toast.makeText(SettingsActivity.this,R.string.make_sure_you_enter_your_password_correctly,Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
@@ -168,25 +167,46 @@ public class SettingsActivity extends AppCompatActivity {
         language.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("lang : "+ Locale.getDefault().getLanguage());
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String lang = sharedPreferences.getString("lang","");
+                /*
+                System.out.println("lang locale: "+ Locale.getDefault().getLanguage());
+                System.out.println("lang sharedPref: "+ lang);
+                */
                 new AlertDialog.Builder(SettingsActivity.this)
-                        .setMessage("Choose your language!")
+                        .setMessage(R.string.choose_your_language)
                         .setCancelable(false)
                         .setPositiveButton("ENG",(dialog, which) ->{
-                            if(!Locale.getDefault().getLanguage().equals("en")){
+
+                            if(!lang.equals("en")){
+
+                                SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor=saved_values.edit();
+                                editor.putString("lang","en");
+                                editor.commit();
+
+
                                 Locale myLocale = new Locale("en");
                                 Resources res = getResources();
                                 DisplayMetrics dm = res.getDisplayMetrics();
                                 Configuration conf = res.getConfiguration();
-                                conf.locale = myLocale;
+                                conf.setLocale(myLocale);
+                                //conf.locale = myLocale;
                                 res.updateConfiguration(conf, dm);
-                                Intent refresh = new Intent(SettingsActivity.this, IntroActivity.class);
+                                Intent refresh = new Intent(SettingsActivity.this, SettingsActivity.class);
                                 finish();
                                 startActivity(refresh);
+
                             }
                         })
                         .setNegativeButton("TR",(dialog, which) ->{
-                            if(!Locale.getDefault().getLanguage().equals("tr")){
+                            if(!lang.equals("tr")){
+
+                                SharedPreferences saved_values = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor=saved_values.edit();
+                                editor.putString("lang","tr");
+                                editor.commit();
+
                                 Locale myLocale = new Locale("tr");
                                 Resources res = getResources();
                                 DisplayMetrics dm = res.getDisplayMetrics();
@@ -196,6 +216,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 Intent refresh = new Intent(SettingsActivity.this, IntroActivity.class);
                                 finish();
                                 startActivity(refresh);
+
                             }
 
                         })
@@ -203,6 +224,5 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }

@@ -222,12 +222,12 @@ public class EditProfileActivity extends AppCompatActivity {
                         postData.put("profileImageUrl",downloadUrl);
                         db.collection("Users").document(user.getUid())
                                 .set(postData,SetOptions.merge());
-                        Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
 
                     });
 
 
-                }).addOnFailureListener(e -> Toast.makeText(EditProfileActivity.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show());
+                }).addOnFailureListener(e -> Toast.makeText(EditProfileActivity.this, R.string.upload_failed +""+ e, Toast.LENGTH_LONG).show());
 
 
             } catch (IOException e) {
@@ -237,7 +237,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
             db.collection("Users").document(user.getUid())
                     .set(postData, SetOptions.merge());
-            Toast.makeText(EditProfileActivity.this, "Your profile is successfully updated!", Toast.LENGTH_LONG).show();
+            Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
 
         }
     }

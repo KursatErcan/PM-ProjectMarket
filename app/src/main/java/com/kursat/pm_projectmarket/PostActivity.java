@@ -153,11 +153,11 @@ public class PostActivity extends AppCompatActivity {
 
                     });
 
-                    Toast.makeText(PostActivity.this, "Your post is successfully posted!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PostActivity.this, R.string.your_post_is_successfully_posted, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(PostActivity.this, MainActivity.class));
                     finish();
 
-                }).addOnFailureListener(e -> Toast.makeText(PostActivity.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show());
+                }).addOnFailureListener(e -> Toast.makeText(PostActivity.this, R.string.your_post_is_successfully_posted + "" + e, Toast.LENGTH_LONG).show());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -165,7 +165,7 @@ public class PostActivity extends AppCompatActivity {
 
 
         }else {
-            Toast.makeText(PostActivity.this,"You must fill in the required fields!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(PostActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
         }
     }
 
