@@ -58,13 +58,15 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
         recyclerView.setAdapter(commentRecyclerAdapter);
         db = FirebaseFirestore.getInstance();
         Bundle args = this.getArguments();
-        token=args.getString("token");
+
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         userId = prefs.getString("userId", "none");
         if(args==null)
             getUserComments();
-        else
+        else{
+            token=args.getString("token");
             getPostComments(token);
+        }
         return view;
     }
 
