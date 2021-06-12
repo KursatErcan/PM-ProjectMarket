@@ -44,6 +44,7 @@ import static android.content.ContentValues.TAG;
 
 public class PostDetailsFragment extends DialogFragment {
     String token;
+    String tokenDocument;
     ImageView postImage,profileClick;
     TextView title,userName,price;
     EditText commentText;
@@ -65,7 +66,7 @@ public class PostDetailsFragment extends DialogFragment {
         int height = (int) (getResources().getDisplayMetrics().heightPixels*0.85);
         view.setMinimumWidth(width);
         view.setMinimumHeight(height);
-
+        Bundle args = this.getArguments();
         postImage = view.findViewById(R.id.post_detail_img);
         profileClick= view.findViewById(R.id.post_detail_goToProfile);
         title = view.findViewById(R.id.post_detail_title);
@@ -80,7 +81,7 @@ public class PostDetailsFragment extends DialogFragment {
 //        assert args != null;
 //        token = args.getString("token");
 //        String userPost=args.getString("userId");
-        token=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        token=args.getString("token");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Posts").document(token);
 

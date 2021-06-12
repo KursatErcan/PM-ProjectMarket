@@ -1,6 +1,7 @@
 package com.kursat.pm_projectmarket.Adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,10 +14,12 @@ import com.kursat.pm_projectmarket.Fragment.ProfileCommentFragment;
 public class DetailsFragmentPageAdapter extends FragmentPagerAdapter {
     private final String[] tabTitle = new String[] {"Post Detail", "Comments"};
     private final int ITEMS = tabTitle.length;
+    Bundle data;
     Context context;
-    public DetailsFragmentPageAdapter(@NonNull FragmentManager fm, Context context) {
+    public DetailsFragmentPageAdapter(@NonNull FragmentManager fm, Context context,Bundle data) {
         super(fm);
         this.context=context;
+        this.data=data;
     }
 
 
@@ -30,6 +33,7 @@ public class DetailsFragmentPageAdapter extends FragmentPagerAdapter {
         else if(position == 1) {
             fragment = new ProfileCommentFragment();
         }
+        fragment.setArguments(data);
         return fragment;
     }
 

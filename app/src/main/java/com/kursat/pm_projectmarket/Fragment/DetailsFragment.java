@@ -17,7 +17,7 @@ public class DetailsFragment extends DialogFragment {
 
     private TabLayout tabs;
     private ViewPager viewPager;
-
+    String token;
     public DetailsFragment() {
         // Required empty public constructor
     }
@@ -33,11 +33,12 @@ public class DetailsFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_details, container, false);
-
+        Bundle args = this.getArguments();
+        token=args.getString("token");
         tabs = view.findViewById(R.id.tabLayout);
         viewPager = view.findViewById(R.id.view_pager);
 
-        viewPager.setAdapter(new DetailsFragmentPageAdapter(getChildFragmentManager(),getContext()));
+        viewPager.setAdapter(new DetailsFragmentPageAdapter(getChildFragmentManager(),getContext(),args));
         tabs.setupWithViewPager(viewPager);
 
         return view;

@@ -38,7 +38,7 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
     ArrayList<Comment> comment;
     FirebaseFirestore db;
     String userId;
-
+    String token;
 
     public ProfileCommentFragment() {
         // Required empty public constructor
@@ -57,19 +57,22 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
         commentRecyclerAdapter = new CommentRecyclerAdapter(comment,this::onMessageClick);
         recyclerView.setAdapter(commentRecyclerAdapter);
         db = FirebaseFirestore.getInstance();
-
+        Bundle args = this.getArguments();
+        token=args.getString("token");
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         userId = prefs.getString("userId", "none");
-
-        getUserComments();
+        if(args==null)
+            getUserComments();
+        else
+            getPostComments(token);
         return view;
     }
 
     void getUserComments(){
+
         db.collection("Posts").whereEqualTo("userId",userId).addSnapshotListener((value, error) -> {
             if(value != null){
                 for(DocumentSnapshot doc : value.getDocuments()){
-
                     db.collection("Posts/"+doc.getId()+"/Comments")
                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                 @Override
@@ -94,6 +97,29 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
             }
 
         });
+    }
+
+    public void getPostComments(String token){
+        db.collection("Posts/"+token+"/Comments")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot document : value) {
+                            //String title, String comment,String point,String token
+                            comment.add(new Comment(document.get("commentText").toString(),document.get("date").toString(),document.getLong("score"),document.getId()));
+                        }
+
+                        //ratingBar.setRating(totalPoint);
+
+                        commentRecyclerAdapter.notifyDataSetChanged();
+                    }
+                });
     }
 
     public void onMessageClick(int position) {
