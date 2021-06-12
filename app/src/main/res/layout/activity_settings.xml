@@ -59,6 +59,7 @@
 
         <TextView
             style="@style/viewParent.headerText.settingsTextIcon"
+            android:id="@+id/language"
             android:text="@string/language"
             app:drawableStartCompat="@drawable/ic_languages" />
 

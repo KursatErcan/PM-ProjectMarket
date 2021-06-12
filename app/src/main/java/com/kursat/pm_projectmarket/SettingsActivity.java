@@ -1,22 +1,22 @@
 package com.kursat.pm_projectmarket;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,11 +25,13 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Locale;
+
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences mode;
     SharedPreferences.Editor editor;
     boolean isNightModeOn;
-    TextView logout, editProfile,changePassword;
+    TextView logout, editProfile,changePassword,language;
     AlertDialog.Builder alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout);
         editProfile = findViewById(R.id.editProfile);
         changePassword = findViewById(R.id.changePassword);
+        language = findViewById(R.id.language);
         alertDialog = new AlertDialog.Builder(SettingsActivity.this);
 
 
@@ -159,6 +162,44 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                         });
                 alertDialog.show();
+            }
+        });
+
+        language.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("lang : "+ Locale.getDefault().getLanguage());
+                new AlertDialog.Builder(SettingsActivity.this)
+                        .setMessage("Choose your language!")
+                        .setCancelable(false)
+                        .setPositiveButton("ENG",(dialog, which) ->{
+                            if(!Locale.getDefault().getLanguage().equals("en")){
+                                Locale myLocale = new Locale("en");
+                                Resources res = getResources();
+                                DisplayMetrics dm = res.getDisplayMetrics();
+                                Configuration conf = res.getConfiguration();
+                                conf.locale = myLocale;
+                                res.updateConfiguration(conf, dm);
+                                Intent refresh = new Intent(SettingsActivity.this, IntroActivity.class);
+                                finish();
+                                startActivity(refresh);
+                            }
+                        })
+                        .setNegativeButton("TR",(dialog, which) ->{
+                            if(!Locale.getDefault().getLanguage().equals("tr")){
+                                Locale myLocale = new Locale("tr");
+                                Resources res = getResources();
+                                DisplayMetrics dm = res.getDisplayMetrics();
+                                Configuration conf = res.getConfiguration();
+                                conf.locale = myLocale;
+                                res.updateConfiguration(conf, dm);
+                                Intent refresh = new Intent(SettingsActivity.this, IntroActivity.class);
+                                finish();
+                                startActivity(refresh);
+                            }
+
+                        })
+                        .show();
             }
         });
     }

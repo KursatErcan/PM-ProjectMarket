@@ -46,7 +46,7 @@
 
 
             android:fontFamily=""
-            android:text="@string/title_topic_course"
+            android:text="Category Title"
             android:textColor="@color/darkTextColor"
             android:textSize="15sp" />
 

@@ -278,7 +278,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/post_detail_comment_ratingBar"
                 android:background="@drawable/button_backround"
-                android:text="@string/add"
+                android:text="@string/send"
                 />
             <Button
                 android:id="@+id/post_detail_get_comments_btn"

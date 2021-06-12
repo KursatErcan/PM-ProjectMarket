@@ -61,7 +61,7 @@
             android:id="@+id/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/i_can_for_you_in_a_sentence"
+            android:hint="@string/titleSentence"
             android:maxLines="2"
             android:layout_marginTop="15dp"/>
         <CheckBox
@@ -80,7 +80,7 @@
             android:padding="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/digital_marketing"
+            android:text="@string/digitalMarketing"
             android:onClick="onCheckboxClicked"/>
         <CheckBox
             android:id="@+id/chkGraphics"
@@ -89,7 +89,7 @@
             android:padding="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/graphics_and_design"
+            android:text="@string/graphicsAndDesign"
             android:onClick="onCheckboxClicked"/>
         <CheckBox
             android:id="@+id/chkVideo"
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/video_and_audio"
+            android:text="@string/videoAndAudio"
             android:onClick="onCheckboxClicked"/>
         <CheckBox
             android:id="@+id/chkWriting"
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/writing_and_translation"
+            android:text="@string/writingAndTranslation"
             android:onClick="onCheckboxClicked"/>
         <CheckBox
             android:id="@+id/chkProgramming"
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/programming_and_tech"
+            android:text="@string/programmingAndTeach"
             android:onClick="onCheckboxClicked"/>
 
 
