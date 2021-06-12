@@ -76,10 +76,11 @@ public class PostDetailsFragment extends DialogFragment {
         ratingBar_comment=view.findViewById(R.id.post_detail_comment_ratingBar);
         ratingBar_post=view.findViewById(R.id.post_detail_post_ratingBar);
         getComments=view.findViewById(R.id.post_detail_get_comments_btn);
-        Bundle args = getArguments();
-        assert args != null;
-        token = args.getString("token");
-        String userPost=args.getString("userId");
+//        Bundle args = getArguments();
+//        assert args != null;
+//        token = args.getString("token");
+//        String userPost=args.getString("userId");
+        token=FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Posts").document(token);
 
