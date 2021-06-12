@@ -87,7 +87,8 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
 
         Bundle args = new Bundle();
         args.putString("token", ppost.get(position).getToken());
-        PostDetailsFragment detailsFragment = new PostDetailsFragment();
+        DetailsFragment detailsFragment = new DetailsFragment();
+        //PostDetailsFragment detailsFragment = new PostDetailsFragment();
         detailsFragment.setArguments(args);
 
         assert getFragmentManager() != null;
