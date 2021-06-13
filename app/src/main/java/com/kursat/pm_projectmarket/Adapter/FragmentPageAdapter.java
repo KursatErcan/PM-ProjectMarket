@@ -7,8 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.kursat.pm_projectmarket.Fragment.FeedFragment;
-import com.kursat.pm_projectmarket.Fragment.ProfileCommentFragment;
+import com.kursat.pm_projectmarket.Fragment.CommentFragment;
 import com.kursat.pm_projectmarket.Fragment.ProfilePostFragment;
 
 public class FragmentPageAdapter extends FragmentPagerAdapter {
@@ -29,7 +28,7 @@ public class FragmentPageAdapter extends FragmentPagerAdapter {
             fragment = new ProfilePostFragment();
         }
         else if(position == 1) {
-            fragment = new ProfileCommentFragment();
+            fragment = new CommentFragment();
         }
         return fragment;
     }

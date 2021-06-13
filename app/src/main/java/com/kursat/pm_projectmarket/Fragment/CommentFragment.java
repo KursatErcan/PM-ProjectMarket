@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,13 +25,14 @@ import com.kursat.pm_projectmarket.Adapter.MessageBoxAdapter;
 import com.kursat.pm_projectmarket.MessagesActivity;
 import com.kursat.pm_projectmarket.Model.Comment;
 import com.kursat.pm_projectmarket.R;
+import com.kursat.pm_projectmarket.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
-public class ProfileCommentFragment extends Fragment implements MessageBoxAdapter.OnMessageListener{
+public class CommentFragment extends Fragment implements MessageBoxAdapter.OnMessageListener{
 
     CommentRecyclerAdapter commentRecyclerAdapter;
     ArrayList<Comment> comment;
@@ -40,7 +40,7 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
     String userId;
     String token;
 
-    public ProfileCommentFragment() {
+    public CommentFragment() {
         // Required empty public constructor
     }
 
@@ -48,14 +48,18 @@ public class ProfileCommentFragment extends Fragment implements MessageBoxAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_profile_comment, container, false);
+        View view= inflater.inflate(R.layout.fragment_comment, container, false);
 
         comment = new ArrayList<>();
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_profileCommentFragment);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_commentFragment);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         commentRecyclerAdapter = new CommentRecyclerAdapter(comment,this::onMessageClick);
         recyclerView.setAdapter(commentRecyclerAdapter);
+
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
+
         db = FirebaseFirestore.getInstance();
         Bundle args = this.getArguments();
 

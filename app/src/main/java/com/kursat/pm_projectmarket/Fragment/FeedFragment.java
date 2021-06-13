@@ -18,6 +18,7 @@ import com.kursat.pm_projectmarket.Adapter.PostRecyclerAdapter;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
+import com.kursat.pm_projectmarket.helpers.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,8 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         postRecyclerAdapter = new PostRecyclerAdapter(ppost,this);
         recyclerView.setAdapter(postRecyclerAdapter);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
 
 
         return view;

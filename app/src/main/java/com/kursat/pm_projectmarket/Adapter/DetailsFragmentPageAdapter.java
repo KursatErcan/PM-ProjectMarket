@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.kursat.pm_projectmarket.Fragment.DetailsFragment;
-import com.kursat.pm_projectmarket.Fragment.ProfileCommentFragment;
+import com.kursat.pm_projectmarket.Fragment.CommentFragment;
 
 public class DetailsFragmentPageAdapter extends FragmentPagerAdapter {
     private final String[] tabTitle = new String[] {"Post Detail", "Comments"};
@@ -31,7 +31,7 @@ public class DetailsFragmentPageAdapter extends FragmentPagerAdapter {
             fragment = new DetailsFragment();
         }
         else if(position == 1) {
-            fragment = new ProfileCommentFragment();
+            fragment = new CommentFragment();
         }
         fragment.setArguments(data);
         return fragment;
