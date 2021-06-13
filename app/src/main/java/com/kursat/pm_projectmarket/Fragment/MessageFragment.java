@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.EventListener;
@@ -27,7 +28,9 @@ import com.kursat.pm_projectmarket.MessagesActivity;
 import com.kursat.pm_projectmarket.Model.MessageBox;
 import com.kursat.pm_projectmarket.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
@@ -126,8 +129,8 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                     }
 
                                                     for (QueryDocumentSnapshot doc : value) {
-
-                                                        MessageBox.add(new MessageBox(doc.get("message_date").toString(), doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
+                                                        String date=getDate((Timestamp) doc.get("message_date"));
+                                                        MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
                                                     }
                                                     Adapter.notifyDataSetChanged();
                                                 }
@@ -156,5 +159,15 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
         intent.putExtra("token",MessageBox.get(position).getToken());
         startActivity(intent);
 
+    }
+    private String getDate(Timestamp milliSeconds) {
+        // Create a DateFormatter object for displaying date in specified
+        // format.
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        // Create a calendar object that will convert the date and time value in
+        // milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis( milliSeconds.getSeconds()*1000);
+        return formatter.format(calendar.getTime());
     }
 }

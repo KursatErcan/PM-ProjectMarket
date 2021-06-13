@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +28,9 @@ import com.kursat.pm_projectmarket.Model.Comment;
 import com.kursat.pm_projectmarket.R;
 import com.kursat.pm_projectmarket.helpers.GridSpacingItemDecoration;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
@@ -118,7 +121,8 @@ public class CommentFragment extends Fragment implements MessageBoxAdapter.OnMes
 
                         for (QueryDocumentSnapshot document : value) {
                             //String title, String comment,String point,String token
-                            comment.add(new Comment(document.get("commentText").toString(),document.get("date").toString(),document.getLong("score"),document.getId()));
+                            String date=getDate((Timestamp)document.get("date"));
+                            comment.add(new Comment(document.get("commentText").toString(),date,document.getLong("score"),document.getId()));
                         }
 
                         //ratingBar.setRating(totalPoint);
@@ -133,5 +137,16 @@ public class CommentFragment extends Fragment implements MessageBoxAdapter.OnMes
         intent.putExtra("token",comment.get(position).getToken());
         startActivity(intent);
 
+    }
+
+    private String getDate(Timestamp milliSeconds) {
+        // Create a DateFormatter object for displaying date in specified
+        // format.
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        // Create a calendar object that will convert the date and time value in
+        // milliseconds to date.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis( milliSeconds.getSeconds()*1000);
+        return formatter.format(calendar.getTime());
     }
 }
