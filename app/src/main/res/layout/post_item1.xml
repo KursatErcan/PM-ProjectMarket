@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clickable="true"
+    android:focusable="true"
+
+    android:foreground="?selectableItemBackground"
+    app:cardBackgroundColor="@android:color/white"
+
+    app:cardCornerRadius="@dimen/card_radius"
+    app:cardElevation=".15dp"
+    app:cardPreventCornerOverlap="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
+        <!--
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/text_price_postElement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/text_userName_postElement"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:hint="Price"
+                android:inputType="number"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+        -->
+        <ImageView
+            android:id="@+id/imageView_postImage_postElement"
+            android:layout_width="240dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/text_price_postElement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"/>
+        <TextView
+            android:id="@+id/text_postTitle_postElement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
