@@ -1,27 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+
+<androidx.core.widget.NestedScrollView
+
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragment.DetailsFragment">
+    android:background="@color/contentBodyColor">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMode="scrollable"
-        app:tabGravity="center"
-        app:tabIndicator="@color/white"
-        android:background="#ff7"
-        tools:ignore="MissingConstraints" />
+        android:layout_height="match_parent">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_below="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/post_detail_img"
+            android:layout_width="240dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_launcher_background"
+
+            />
+
+        <TextView
+            android:id="@+id/post_detail_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:lineSpacingExtra="4dp"
+            android:text="Title"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/bariol_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_detail_img"
+            />
+        <View
+            android:background="#2e2e2e"
+            android:id="@+id/view4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_detail_title" />
+
+        <RelativeLayout
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/view4"
+        >
+
+            <RatingBar
+                android:id="@+id/post_detail_post_ratingBar"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:rating="0"
+                android:stepSize="0.5"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                />
+            <TextView
+                android:id="@+id/post_detail_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/post_detail_post_ratingBar"
+                android:text="@string/tl"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:textSize="24sp"
+                android:textColor="@color/red"
+                tools:ignore="MissingConstraints"
+                android:background="@android:color/transparent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+
+                android:fontFamily="@font/bariol_regular"
+                />
+        </RelativeLayout>
+
+        <View
+            android:background="#2e2e2e"
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout2" />
+
+        <LinearLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="@+id/view"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+
+            tools:ignore="MissingConstraints">
+
+
+                <TextView
+                    android:id="@+id/post_detail_userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bariol_regular"
+                    android:text="User Name"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    app:layout_constraintStart_toStartOf="@+id/layout1"
+                    app:layout_constraintEnd_toEndOf="@+id/layout1"
+                    tools:ignore="MissingConstraints"
+                    />
+
+
+            <ImageView
+                android:id="@+id/post_detail_goToProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+
+                android:src="@drawable/go_profile"
+                android:layout_marginStart="80dp"
+
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/layout1"
+                tools:ignore="MissingConstraints"
+                />
+
+        </LinearLayout>
+
+
+        <View
+            android:background="#2e2e2e"
+            android:id="@+id/view1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout1" />
+
+        <TextView
+
+            android:textColor="#373737"
+            android:lineSpacingExtra="8dp"
+            android:id="@+id/post_detail_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,rum eiusmod tempor incididunt ut labore et dolore magna aliqua"
+            android:fontFamily="@font/bariol_regular"
+            app:layout_constraintTop_toBottomOf="@+id/view1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <View
+            android:background="#2e2e2e"
+            android:id="@+id/view2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_detail_desc" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints"
+            app:layout_constraintEnd_toEndOf="@+id/view2"
+            app:layout_constraintStart_toStartOf="@+id/view2"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/view2"
+
+
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+
+            >
+
+            <EditText
+
+                android:id="@+id/post_detail_comment"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/edittext_backround"
+                android:ems="10"
+                android:hint="@string/write_comment"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:scrollbars="vertical"
+                android:maxLines="10"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+               />
+            <RatingBar
+                android:id="@+id/post_detail_comment_ratingBar"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:transitionName="rateTN"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_below="@+id/post_detail_comment"
+                android:stepSize="1"
+                android:isIndicator="false"
+                android:rating="0"/>
+
+            <Button
+                android:id="@+id/post_detail_add_comment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/post_detail_comment"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="45dp"
+
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/post_detail_comment_ratingBar"
+
+                android:background="@drawable/button_backround"
+                android:text="@string/send"
+                />
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+
+

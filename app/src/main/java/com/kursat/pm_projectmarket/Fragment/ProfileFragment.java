@@ -35,7 +35,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kursat.pm_projectmarket.Adapter.FragmentPageAdapter;
 import com.kursat.pm_projectmarket.MessagesActivity;
-import com.kursat.pm_projectmarket.Model.Comment;
 import com.kursat.pm_projectmarket.Model.User;
 import com.kursat.pm_projectmarket.R;
 import com.kursat.pm_projectmarket.SettingsActivity;
@@ -76,7 +75,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile1, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         FloatingActionButton flbtn= view.findViewById(R.id.fab);
         settings=view.findViewById(R.id.settings);

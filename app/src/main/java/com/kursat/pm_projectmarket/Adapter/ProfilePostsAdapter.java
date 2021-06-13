@@ -32,7 +32,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     @Override
     public ProfilePostsAdapter.PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.post_item,parent,false);
+        View view = layoutInflater.inflate(R.layout.post_item1,parent,false);
 
         return new PostHolder(view,msgListener,LongMsgListener);
     }
@@ -40,7 +40,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     @Override
     public void onBindViewHolder(@NonNull ProfilePostsAdapter.PostHolder holder, int position) {
         Post currentItem = post.get(position);
-        holder.text_userName.setText(currentItem.getUserName());
+        //holder.text_userName.setText(currentItem.getUserName());
         holder.text_title.setText(currentItem.getTitle());
         holder.text_price.setText(currentItem.getPrice());
         Picasso.get().load(currentItem.getPostImageUrl())
@@ -53,7 +53,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
 
     static class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
-        TextView text_userName;
+        //TextView text_userName;
         TextView text_title;
         ImageView imageView_postImage;
         TextView text_price;
@@ -64,7 +64,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
             super(itemView);
             this.LongMsgListener=LongMsgListener;
             this.msgListener=msgListener;
-            text_userName = itemView.findViewById(R.id.text_userName_postElement);
+            //text_userName = itemView.findViewById(R.id.text_userName_postElement);
             text_title = itemView.findViewById(R.id.text_postTitle_postElement);
             imageView_postImage = itemView.findViewById(R.id.imageView_postImage_postElement);
             text_price = itemView.findViewById(R.id.text_price_postElement);

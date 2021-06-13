@@ -193,7 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 conf.setLocale(myLocale);
                                 //conf.locale = myLocale;
                                 res.updateConfiguration(conf, dm);
-                                Intent refresh = new Intent(SettingsActivity.this, SettingsActivity.class);
+                                Intent refresh = new Intent(SettingsActivity.this, IntroActivity.class);
                                 finish();
                                 startActivity(refresh);
 

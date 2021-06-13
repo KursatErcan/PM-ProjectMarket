@@ -40,18 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         emailText = findViewById(R.id.editText_email);
         passwordText = findViewById(R.id.editText_password);
 
-        /*FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if(firebaseUser != null){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }*/
-
     }
+
+    //String emailpattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"; // regex
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[\\\\w!#$%&’*+/=?`{|}~^-]+(?:\\\\.[\\\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-            //Pattern.compile("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+", Pattern.CASE_INSENSITIVE);
-        //Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static boolean validate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
@@ -64,50 +57,15 @@ public class LoginActivity extends AppCompatActivity {
         passwordText.setErrorEnabled(false);
         passwordText.setError("");
 
-        String emailpattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"; // regex
-        //String emailpattern = "^(.+)@(.+)$";
-        boolean isValidEmail = false, isValidPass = false;
+
         String email = emailText.getEditText().getText().toString().trim();
         String password = passwordText.getEditText().getText().toString().trim();
 
-        /*if(TextUtils.isEmpty(email)){
-            //isValid = false;
-            //Toast.makeText(LoginActivity.this,"Please, fill in all fields!",Toast.LENGTH_LONG).show();
-            emailText.setErrorEnabled(true);
-            emailText.setError("Email is required!");
-        }else{
-            //emailpattern.matches(email)
-            //validate(email)
-            if(emailpattern.matches(email)){
-                isValidEmail = true;
-            }else{
-                //isValid = false;
-                emailText.setErrorEnabled(true);
-                emailText.setError("Check your email address!");
-            }
-        }
-        if(TextUtils.isEmpty(password)){
-            isValidPass = false;
-            //Toast.makeText(LoginActivity.this,"Password must be longer than 5 characters!",Toast.LENGTH_LONG).show();
-            passwordText.setErrorEnabled(true);
-            passwordText.setError("Password is required!");
-        }else{
-            isValidPass = true;
-        }
 
-        if (isValidEmail && isValidPass){
-            loginUser(email,password);
-        }*/
-
-        //if(TextUtils.isEmpty(email)||TextUtils.isEmpty(password)){
         if(TextUtils.isEmpty(email)) {
-            //Toast.makeText(LoginActivity.this,"Please, fill in all fields!",Toast.LENGTH_LONG).show();
             emailText.setErrorEnabled(true);
             emailText.setError(getText(R.string.email_is_required));
-            //passwordText.setErrorEnabled(true);
-            //passwordText.setError("Password is required!");
         }else if(password.length()<6){
-            //Toast.makeText(LoginActivity.this,"Password must be longer than 5 characters!",Toast.LENGTH_LONG).show();
             passwordText.setErrorEnabled(true);
             passwordText.setError(getText(R.string.password_lenght_cannot_be_shorter_than_6));
         }else if(validate(email)){//email.matches(emailpattern)){

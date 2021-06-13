@@ -102,7 +102,7 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
         Bundle args = new Bundle();
         args.putString("token", ppost.get(position).getToken());
 
-        PostDetailsFragment detailsFragment = new PostDetailsFragment();
+        DetailsFragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(args);
 
         assert getFragmentManager() != null;
