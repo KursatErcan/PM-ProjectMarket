@@ -90,7 +90,7 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
                             assert post != null;
                             System.out.println(post.getUserName());
                             //String userId,String userName, String price, String title, String postImageUrl
-                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getScore(),"nu",doc.getId()));
+                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),"nu",doc.getId()));
                             ProfilePostsAdapter.notifyDataSetChanged();
                         }
 

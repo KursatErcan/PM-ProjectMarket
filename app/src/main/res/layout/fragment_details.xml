@@ -193,7 +193,7 @@
 
             android:textColor="#373737"
             android:lineSpacingExtra="8dp"
-            android:id="@+id/post_detail_desc"
+            android:id="@+id/post_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
