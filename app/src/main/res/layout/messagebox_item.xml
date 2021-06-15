@@ -17,7 +17,6 @@
             android:id="@+id/text_view_Received"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:fontFamily="@font/bariol_regular"
             android:maxLines="1"
             android:text="User Name"

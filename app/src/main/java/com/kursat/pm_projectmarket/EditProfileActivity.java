@@ -1,5 +1,7 @@
 package com.kursat.pm_projectmarket;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,7 +53,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
     private StorageReference storageReference;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private TextView bioTw;
 
     @Override
@@ -97,10 +101,30 @@ public class EditProfileActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     db.collection("Posts").document(document.getId()).delete();
                                 }
-                                Intent intent = new Intent(EditProfileActivity.this, LoginActivity.class);
+                                Intent intent = new Intent(EditProfileActivity.this, IntroActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
+
+
+                                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                                StorageReference desertRef = storageRef.child("profileImages/"+firebaseAuth.getCurrentUser().getUid());
+
+                                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        System.out.println("kullanıcı silindi");
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        System.out.println("exeption: "+exception);
+                                    }
+                                });
+                                //String uId =user.getUid();
+
+                                FirebaseAuth.getInstance().signOut();
                                 db.collection("Users").document(user.getUid()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         progressDialog.dismiss();
@@ -127,25 +151,23 @@ public class EditProfileActivity extends AppCompatActivity {
                 .setNegativeButton("No", null)
                 .show();
 
-
     }
 */
     private void userInfo(){
-
-        DocumentReference reference = db.collection("Users").document(firebaseAuth.getCurrentUser().getUid());
-
+        DocumentReference reference = db.collection("Users")
+                .document(firebaseAuth.getCurrentUser().getUid());
         reference.addSnapshotListener((value, error) -> {
             if(error == null){
                 if(getContext() == null){ return; }
                 if(value != null){
-                    User user = value.toObject(User.class);
-                    assert user != null;
-                    Picasso.get().load(user.getProfileImageUrl()).into(imageView_profilePhoto);
-                    editText_name.setText(user.getUserName());
-                    editText_mailAddress.setText(user.getEmail());
-                    bioTw.setText(user.getBio());
+                    User userModel = value.toObject(User.class);
+                    //assert user != null;
+                    Picasso.get().load(userModel.getProfileImageUrl())
+                            .into(imageView_profilePhoto);
+                    editText_name.setText(userModel.getUserName());
+                    editText_mailAddress.setText(userModel.getEmail());
+                    bioTw.setText(userModel.getBio());
                 }
-
             }
         });
     }
@@ -206,12 +228,16 @@ public class EditProfileActivity extends AppCompatActivity {
                     });
 
         }
-        postData.put("bio",bioTw.getText().toString());
-        postData.put("email",editText_mailAddress.getText().toString());
+        String bio = bioTw.getText().toString();
+        String email = editText_mailAddress.getText().toString();
+        postData.put("bio",bio);
+        postData.put("email",email);
         if(imageData !=null){
-            StorageReference fileReference= storageReference.child("profileImages/"+System.currentTimeMillis()+"."+getFileExtension(imageData));
+            StorageReference fileReference= storageReference
+                    .child("profileImages/"+firebaseAuth.getCurrentUser().getUid());
             try {
-                Bitmap bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), imageData);
+                Bitmap bmp = MediaStore.Images
+                        .Media.getBitmap(getContentResolver(), imageData);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.JPEG, 25, baos);
                 byte[] data = baos.toByteArray();
@@ -224,6 +250,14 @@ public class EditProfileActivity extends AppCompatActivity {
                             Toast.makeText(EditProfileActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
                         }else{
                         db.collection("Users").document(user.getUid()).set(postData,SetOptions.merge());
+                        user.updateEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(EditProfileActivity.this,R.string.opps,Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                         Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
                         }
 
@@ -235,15 +269,16 @@ public class EditProfileActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }}else{
+            }
+        }else{
             //image is not selected.
             if(postData.containsValue("")){
                 Toast.makeText(EditProfileActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
-            }else
-            db.collection("Users").document(user.getUid())
-                    .set(postData, SetOptions.merge());
-            Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
-
+            }else {
+                db.collection("Users").document(user.getUid())
+                        .set(postData, SetOptions.merge());
+                Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

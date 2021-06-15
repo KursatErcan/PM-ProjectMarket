@@ -24,7 +24,7 @@ public MessageBoxAdapter(ArrayList<MessageBox> MessageBox ,OnMessageListener msg
     @NonNull
     @Override
     public MessageBoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.messagebox,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.messageBox_item,parent,false);
         return new MessageBoxViewHolder(view,msgListener);
     }
 
