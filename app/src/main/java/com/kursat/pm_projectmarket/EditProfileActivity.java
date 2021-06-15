@@ -220,9 +220,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
                         String downloadUrl = uri.toString();
                         postData.put("profileImageUrl",downloadUrl);
-                        db.collection("Users").document(user.getUid())
-                                .set(postData,SetOptions.merge());
+                        if(postData.containsValue("")){
+                            Toast.makeText(EditProfileActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
+                        }else{
+                        db.collection("Users").document(user.getUid()).set(postData,SetOptions.merge());
                         Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
+                        }
 
                     });
 
@@ -234,7 +237,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 e.printStackTrace();
             }}else{
             //image is not selected.
-
+            if(postData.containsValue("")){
+                Toast.makeText(EditProfileActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
+            }else
             db.collection("Users").document(user.getUid())
                     .set(postData, SetOptions.merge());
             Toast.makeText(EditProfileActivity.this, R.string.your_profile_is_successfully_updated, Toast.LENGTH_LONG).show();
