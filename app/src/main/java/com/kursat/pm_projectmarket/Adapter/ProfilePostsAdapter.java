@@ -1,5 +1,6 @@
 package com.kursat.pm_projectmarket.Adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     public ArrayList<Post> post;
     private OnMessageListener msgListener;
     private OnLongClickListener LongMsgListener;
-
+    private String currency;
     public ProfilePostsAdapter(ArrayList<Post> post, OnMessageListener msgListener, OnLongClickListener LongMsgListener) {
         this.post=post;
         this.msgListener=msgListener;
@@ -33,16 +34,17 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     public ProfilePostsAdapter.PostHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.post_item1,parent,false);
-
+        currency = " "+view.getContext().getResources().getString(R.string.tl);
         return new PostHolder(view,msgListener,LongMsgListener);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ProfilePostsAdapter.PostHolder holder, int position) {
         Post currentItem = post.get(position);
         //holder.text_userName.setText(currentItem.getUserName());
         holder.text_title.setText(currentItem.getTitle());
-        holder.text_price.setText(currentItem.getPrice());
+        holder.text_price.setText(currentItem.getPrice()+currency);
         Picasso.get().load(currentItem.getPostImageUrl())
                 .resize(240,150)
                 .into(holder.imageView_postImage);

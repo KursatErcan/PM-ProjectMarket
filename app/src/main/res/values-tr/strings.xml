@@ -30,6 +30,8 @@
     <string name="app_ver_1_0">App ver 1.0</string>
     <string name="share">PAYLAŞ</string>
     <string name="titleSentence">Senin için ... yapabilirim. (Bir cümlede)</string>
+    <string name="postContent">Post İçeriği..</string>
+
     <string name="price">Fiyat</string>
     <string name="message">Mesaj</string>
     <string name="send">Gönder</string>
@@ -63,4 +65,7 @@
     <string name="new_password">Yeni Parola</string>
     <string name="confirm_password">Yeni Parolayı Tekrar Giriniz</string>
 
+    <string name="are_you_sure_you_want_to_delete">Bu postu kaldırmak istediğinden emin misin?</string>
+    <string name="yes">EVET</string>
+    <string name="no">HAYIR</string>
 </resources>

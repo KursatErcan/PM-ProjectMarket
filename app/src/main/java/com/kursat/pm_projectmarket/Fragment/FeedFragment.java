@@ -76,7 +76,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 User user = documentSnapshot.toObject(User.class);
-                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
+                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
                                 postRecyclerAdapter.notifyDataSetChanged();
                             }
                         });

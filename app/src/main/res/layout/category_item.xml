@@ -41,14 +41,13 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/normalPadding"
             android:layout_marginTop="@dimen/top_text_card"
-
             android:layout_marginRight="@dimen/normalPadding"
 
-
-            android:fontFamily=""
+            android:fontFamily="@font/bariol_regular"
             android:text="Category Title"
             android:textColor="@color/darkTextColor"
-            android:textSize="15sp" />
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
 
     </LinearLayout>

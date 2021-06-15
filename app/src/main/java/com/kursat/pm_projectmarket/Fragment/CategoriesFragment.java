@@ -1,6 +1,8 @@
 package com.kursat.pm_projectmarket.Fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +55,16 @@ public class CategoriesFragment extends Fragment {
     }
 
     public void getDataFromDB() {
-        //categoryCards = new ArrayList<>();
+        SharedPreferences sharedPreferences = PreferenceManager.
+                getDefaultSharedPreferences(getContext());
+        String lang = sharedPreferences.getString("lang","en");
 
         db.collection("Categories").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot doc : task.getResult()) {
                     CategoryCard category = doc.toObject(CategoryCard.class);
-                    categoryList_db.add(category.getCategoryName());
+                    if(lang == "en") categoryList_db.add(category.getCategoryName());
+                    else categoryList_db.add(category.getCategoryName_tr());
                     categoryImageUrlList_db.add(category.getImageUrl());
                     categoryId_db.add(category.getCategoryId());
                 }

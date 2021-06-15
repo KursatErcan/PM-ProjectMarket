@@ -5,14 +5,20 @@ public class CategoryCard {
     private String categoryId;
     private String imageUrl;
     private String categoryName;
+    private String categoryName_tr;
 
     public CategoryCard(){}
 
-    public CategoryCard(String categoryId, String imageUrl, String categoryName) {
+    public CategoryCard(String categoryId, String imageUrl, String categoryName, String categoryName_tr) {
         this.categoryId = categoryId;
         this.imageUrl = imageUrl;
         this.categoryName = categoryName;
+        this.categoryName_tr = categoryName_tr;
     }
+
+    public String getCategoryName_tr() { return categoryName_tr; }
+
+    public void setCategoryName_tr(String categoryName_tr) { this.categoryName_tr = categoryName_tr; }
 
     public String getCategoryId() {
         return categoryId;

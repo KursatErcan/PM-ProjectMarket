@@ -36,7 +36,7 @@ import java.util.HashMap;
 
 public class PostActivity extends AppCompatActivity {
     private ImageView postImage;
-    private EditText title,priceText;
+    private EditText title,postContent,priceText;
     private TextView shareText;
     private Bitmap selectedImage;
     private Uri imageData;
@@ -70,6 +70,7 @@ public class PostActivity extends AppCompatActivity {
         array = new HashMap<>();
         postImage = findViewById(R.id.post_image);
         title = findViewById(R.id.text_title);
+        postContent = findViewById(R.id.text_postContent);
         priceText = findViewById(R.id.text_price);
         shareText = findViewById(R.id.text_share);
         db = FirebaseFirestore.getInstance();
@@ -143,6 +144,7 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("postImageUrl", downloadUrl);
                         postData.put("price",priceText.getText().toString());
                         postData.put("title",title.getText().toString());
+                        postData.put("postContent",postContent.getText().toString());
                         postData.put("userId", user.getUid());
                         postData.put("userName",userName);
                         postData.put("postCategory",array);

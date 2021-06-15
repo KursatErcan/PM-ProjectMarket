@@ -48,6 +48,7 @@
     <string name="app_ver_1_0">App ver 1.0</string>
     <string name="share">SHARE</string>
     <string name="titleSentence">I can … for you. (in a sentence)</string>
+    <string name="postContent">Post Content..</string>
     <string name="price">Price..</string>
     <string name="message">Message</string>
     <string name="send">Send</string>
@@ -88,5 +89,10 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
+
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+
 
 </resources>

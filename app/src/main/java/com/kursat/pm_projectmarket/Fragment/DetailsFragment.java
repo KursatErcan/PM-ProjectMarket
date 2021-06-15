@@ -35,7 +35,7 @@ public class DetailsFragment extends DialogFragment {
     String token;
     String tokenDocument;
     ImageView postImage,profileClick;
-    TextView title,userName,price;
+    TextView title,postContent,userName,price;
     EditText commentText;
     Button addCommentButton;
     RatingBar ratingBar_comment;
@@ -54,6 +54,7 @@ public class DetailsFragment extends DialogFragment {
         postImage = view.findViewById(R.id.post_detail_img);
         profileClick= view.findViewById(R.id.post_detail_goToProfile);
         title = view.findViewById(R.id.post_detail_title);
+        postContent = view.findViewById(R.id.post_content);
         userName = view.findViewById(R.id.post_detail_userName);
         price = view.findViewById(R.id.post_detail_price);
         commentText = view.findViewById(R.id.post_detail_comment);
@@ -77,6 +78,7 @@ public class DetailsFragment extends DialogFragment {
                     Post post = document.toObject(Post.class);
                     assert post != null;
                     title.setText(post.getTitle());
+                    postContent.setText(post.getPostContent());
                     userName.setText(post.getUserName());
                     price.setText(post.getPrice()+" "+price.getText());
 

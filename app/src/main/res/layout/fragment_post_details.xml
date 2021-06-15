@@ -18,7 +18,7 @@
             app:tabMode="scrollable"
             app:tabGravity="center"
             app:tabIndicator="@color/white"
-            android:background="#ff7"
+            android:background="#8896AB"
             tools:ignore="MissingConstraints" />
 
         <androidx.viewpager.widget.ViewPager
