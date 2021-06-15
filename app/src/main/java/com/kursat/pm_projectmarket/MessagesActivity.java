@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -107,8 +108,12 @@ public class MessagesActivity extends AppCompatActivity {
                                         message.put("message_detail",msgDetail.getText().toString());
                                         message.put("message_sended",userName);
                                         message.put("message_sended_id",user.getUid().toString());
-                                        cfr.add(message);
+                                        if(msgDetail.getText().toString().isEmpty())
+                                            Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
+                                        else{
+                                            cfr.add(message);
                                         msgDetail.setText("");
+                                        }
 
 
                 }

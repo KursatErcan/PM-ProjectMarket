@@ -130,7 +130,6 @@ public class ProfileFragment extends Fragment {
                                             intent.putExtra("userId",profileId);
                                             intent.putExtra("userName",profileName);
                                             intent.putExtra("token",doc1.getId());
-                                            System.out.println("Buraya girdim !!!!!!!!!!!!!!!!!!!!");
                                             startActivity(intent);
 
                                             return;
@@ -156,7 +155,6 @@ public class ProfileFragment extends Fragment {
                                                         intent.putExtra("userId",profileId);
                                                         intent.putExtra("userName",profileName);
                                                         intent.putExtra("token",token);
-                                                        System.out.println("Buraya daaaaaaaaaaaa girdim !!!!!!!!!!!!!!!!!!!!");
                                                         startActivity(intent);
                                                         return;
                                                     }

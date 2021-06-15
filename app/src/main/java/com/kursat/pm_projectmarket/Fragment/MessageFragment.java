@@ -124,10 +124,11 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                 public void onEvent(@Nullable QuerySnapshot value,
                                                                     @Nullable FirebaseFirestoreException e) {
                                                     if (e != null) {
-                                                        MsgTw.setText("Mesaj kutunuz boş.");
+
                                                         return;
                                                     }
-
+                                                    if(value.isEmpty())
+                                                        MsgTw.setText("Mesaj kutunuz boş.");
                                                     for (QueryDocumentSnapshot doc : value) {
                                                         String date=getDate((Timestamp) doc.get("message_date"));
                                                         MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
