@@ -53,6 +53,7 @@ public class PostActivity extends AppCompatActivity {
     HashMap<String,String> array;
 
 
+
     public PostActivity() {
     }
 
@@ -74,6 +75,7 @@ public class PostActivity extends AppCompatActivity {
         priceText = findViewById(R.id.text_price);
         shareText = findViewById(R.id.text_share);
         db = FirebaseFirestore.getInstance();
+
         storageReference = FirebaseStorage.getInstance().getReference("Images");
 
 
@@ -149,18 +151,23 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("userName",userName);
                         postData.put("postCategory",array);
                         postData.put("score","2");
-                        if(postData.containsValue(null)){
+                        System.out.println(postData+"--------------<");
+                        if(postData.containsValue(null) || postData.containsValue("") ||
+                                priceText.getText().toString().isEmpty() || postContent.getText().toString().isEmpty() || title.getText().toString().isEmpty() ||
+                        array.isEmpty()){
                             Toast.makeText(PostActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
+                        }else {
+                            //add the data into the Posts
+                            Toast.makeText(PostActivity.this, R.string.your_post_is_successfully_posted, Toast.LENGTH_LONG).show();
+                            cfr = db.collection("Posts");
+                            cfr.add(postData);
+                            startActivity(new Intent(PostActivity.this, MainActivity.class));
+                            finish();
                         }
-                        //add the data into the Posts
-                        cfr=db.collection("Posts");
-                        cfr.add(postData);
 
                     });
 
-                    Toast.makeText(PostActivity.this, R.string.your_post_is_successfully_posted, Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(PostActivity.this, MainActivity.class));
-                    finish();
+
 
                 }).addOnFailureListener(e -> Toast.makeText(PostActivity.this, R.string.your_post_is_successfully_posted + "" + e, Toast.LENGTH_LONG).show());
 
