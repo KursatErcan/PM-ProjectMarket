@@ -116,19 +116,17 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
         if(!ppost.get(position).getUserId().equals(user.getUid()))
             return;
         new AlertDialog.Builder(getContext())
-                .setMessage("Are you sure you want to delete?")
+                .setMessage(getText(R.string.are_you_sure_you_want_to_delete))
                 .setCancelable(false)
-                .setPositiveButton("Yes",(dialog, which) ->{
-                    db.collection("Posts").document(ppost.get(position).getToken())
+                .setPositiveButton(getText(R.string.yes),(dialog, which) ->{
+                    db.collection("Posts")
+                            .document(ppost.get(position).getToken())
                             .delete();
-                    Toast toast = Toast.makeText(getContext(), R.string.the_post_is_successfully_deleted, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getContext(),
+                            R.string.the_post_is_successfully_deleted, Toast.LENGTH_SHORT);
                     toast.show();
-
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(getText(R.string.no), null)
                 .show();
-
-
-
     }
 }

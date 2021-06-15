@@ -44,7 +44,7 @@
                         android:layout_marginEnd="10dp"
                         android:onClick="onShareClick"
                         android:text="@string/share"
-                        android:textColor="#EA0F0F"
+                        android:textColor="#6A2E35"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         tools:ignore="RelativeOverlap" />
@@ -60,7 +60,7 @@
             android:layout_gravity="center"
             android:onClick="uploadImage"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_add_image" />
 
         <EditText
             android:id="@+id/text_title"
