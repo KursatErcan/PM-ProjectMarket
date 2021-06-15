@@ -87,6 +87,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     MessageBoxAdapter Adapter;
     TextView MsgTw;
+    String messageUser;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,6 +117,11 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
 
                                 System.out.println(user.getUid());
                                 if(doc1.get("message_received").equals(user.getUid()) || doc1.get("message_posted").equals(user.getUid())){
+                                    if(doc1.get("message_received").equals(user.getUid()))
+                                        messageUser=doc1.get("message_posted_name").toString();
+                                    else
+                                        messageUser=doc1.get("message_received_name").toString();
+
                                     db.collection("Messages/"+doc1.getId()+"/Message_details")
                                             .orderBy("message_date", Query.Direction.DESCENDING)
                                             .limit(1)
@@ -131,7 +137,9 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                         MsgTw.setText("Mesaj kutunuz boş.");
                                                     for (QueryDocumentSnapshot doc : value) {
                                                         String date=getDate((Timestamp) doc.get("message_date"));
+
                                                         MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
+
                                                     }
                                                     Adapter.notifyDataSetChanged();
                                                 }
@@ -158,6 +166,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     public void onMessageClick(int position) {
         Intent intent=new Intent(getActivity(), MessagesActivity.class);
         intent.putExtra("token",MessageBox.get(position).getToken());
+        intent.putExtra("userN",messageUser);
         startActivity(intent);
 
     }

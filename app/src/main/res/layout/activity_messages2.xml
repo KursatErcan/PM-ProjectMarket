@@ -24,6 +24,12 @@
             app:popupTheme="@style/Theme.AppCompat.Light">
 
         </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/textViewUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="User Name" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

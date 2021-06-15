@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,12 +56,14 @@ public class MessagesActivity extends AppCompatActivity {
     CollectionReference cfr;
     String receiverName;
     String receiverId;
+    String messageUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages2);
         receiverName=getIntent().getStringExtra("userName");
         receiverId=getIntent().getStringExtra("userId");
+        messageUser=getIntent().getStringExtra("userN");
         token=getIntent().getStringExtra("token");
         recView=(RecyclerView) findViewById(R.id.MessageSend);
         recView.setLayoutManager(new LinearLayoutManager(this));
@@ -69,7 +72,8 @@ public class MessagesActivity extends AppCompatActivity {
         recView.setAdapter(Adapter);
         msgDetail=(EditText) findViewById(R.id.MessageDetail);
         btnSend=(Button) findViewById(R.id.SendMessage);
-
+        TextView textUser= findViewById(R.id.textViewUser);
+        textUser.setText(messageUser);
 
         if(user!=null && token != null) {
 
