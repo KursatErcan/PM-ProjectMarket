@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String profileName;
     TextView msgDetail;
+    String messageUser;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -126,9 +127,14 @@ public class ProfileFragment extends Fragment {
 
                                         if((doc1.get("message_received").equals(profileId) && doc1.get("message_posted").equals(user.getUid())) ||
                                                 doc1.get("message_received").equals(user.getUid()) && doc1.get("message_posted").equals(profileId)){
+                                            if(doc1.get("message_received").equals(profileId))
+                                                messageUser=doc1.get("message_received_name").toString();
+                                            else
+                                                messageUser=doc1.get("message_posted_name").toString();
                                             Intent intent=new Intent(getActivity(), MessagesActivity.class);
                                             intent.putExtra("userId",profileId);
                                             intent.putExtra("userName",profileName);
+                                            intent.putExtra("userN",messageUser);
                                             intent.putExtra("token",doc1.getId());
                                             startActivity(intent);
 
@@ -154,6 +160,7 @@ public class ProfileFragment extends Fragment {
                                                         Intent intent=new Intent(getActivity(), MessagesActivity.class);
                                                         intent.putExtra("userId",profileId);
                                                         intent.putExtra("userName",profileName);
+                                                        intent.putExtra("userN",profileName);
                                                         intent.putExtra("token",token);
                                                         startActivity(intent);
                                                         return;
