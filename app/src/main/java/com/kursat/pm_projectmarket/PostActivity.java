@@ -150,7 +150,7 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("userId", user.getUid());
                         postData.put("userName",userName);
                         postData.put("postCategory",array);
-                        postData.put("score","2");
+                        postData.put("score","0");
                         System.out.println(postData+"--------------<");
                         if(postData.containsValue(null) || postData.containsValue("") ||
                                 priceText.getText().toString().isEmpty() || postContent.getText().toString().isEmpty() || title.getText().toString().isEmpty() ||
