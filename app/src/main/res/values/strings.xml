@@ -93,6 +93,10 @@
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
+    <string name="change">CHANGE</string>
+    <string name="cancel">CANCEL</string>
+
+
 
 
 </resources>

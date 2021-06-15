@@ -68,4 +68,6 @@
     <string name="are_you_sure_you_want_to_delete">Bu postu kaldırmak istediğinden emin misin?</string>
     <string name="yes">EVET</string>
     <string name="no">HAYIR</string>
+    <string name="change">ONAYLA</string>
+    <string name="cancel">İPTAL</string>
 </resources>

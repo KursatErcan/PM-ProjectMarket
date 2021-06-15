@@ -110,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity {
                 ll.addView(newPass);
                 ll.addView(confirmPass);
                 alertDialog.setView(ll);
-                alertDialog.setPositiveButton("Change",
+                alertDialog.setPositiveButton(getText(R.string.change),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 String newPassword= newPass.getText().toString();
@@ -154,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 });
                             }
                         });
-                alertDialog.setNegativeButton("Cancel",
+                alertDialog.setNegativeButton(getText(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
