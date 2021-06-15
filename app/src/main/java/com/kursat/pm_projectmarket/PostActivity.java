@@ -147,6 +147,9 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("userName",userName);
                         postData.put("postCategory",array);
                         postData.put("score","2");
+                        if(postData.containsValue(null)){
+                            Toast.makeText(PostActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
+                        }
                         //add the data into the Posts
                         cfr=db.collection("Posts");
                         cfr.add(postData);
