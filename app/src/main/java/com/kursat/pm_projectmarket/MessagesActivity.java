@@ -97,7 +97,6 @@ public class MessagesActivity extends AppCompatActivity {
                                 }
                                 Adapter.notifyDataSetChanged();
                             }
-
                         });
             }
             btnSend.setOnClickListener(new View.OnClickListener() {
