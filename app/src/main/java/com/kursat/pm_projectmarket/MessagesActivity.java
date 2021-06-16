@@ -89,7 +89,7 @@ public class MessagesActivity extends AppCompatActivity {
                                     MessageSend.add(new MessageSend(doc1.get("message_detail").toString(),doc1.get("message_sended_id").toString()));
                                     HashMap<String,String> hp=new HashMap<>();
                                     hp.put("message_viewed","1");
-                                    if(doc1.get("message_sended_id").toString().equals(user.getUid())) {
+                                    if(!doc1.get("message_sended_id").toString().equals(user.getUid())) {
                                         db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
                                                 .set(hp, SetOptions.merge());
                                     }
