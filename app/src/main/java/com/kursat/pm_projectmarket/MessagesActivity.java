@@ -93,6 +93,10 @@ public class MessagesActivity extends AppCompatActivity {
                                         hp.put("isRead","1");
                                         db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
                                                 .set(hp, SetOptions.merge());
+                                    }else{
+                                        hp.put("isReadMe","1");
+                                        db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
+                                                .set(hp, SetOptions.merge());
                                     }
                                 }
                                 Adapter.notifyDataSetChanged();
@@ -119,15 +123,15 @@ public class MessagesActivity extends AppCompatActivity {
                     message.put("content",msgDetail.getText().toString());
                     message.put("senderName",userName);
                     message.put("senderId",user.getUid().toString());
-                    //message.put("message_viewed_received","0");
                     message.put("isRead","0");
+                    message.put("isReadMe","0");
 
 
                     if(msgDetail.getText().toString().isEmpty())
                         Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
                     else{
                         cfr.add(message);
-                    msgDetail.setText("");
+                        msgDetail.setText("");
                     }
 
 
