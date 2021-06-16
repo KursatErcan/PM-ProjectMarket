@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kursat.pm_projectmarket.Model.MessageBox;
 import com.kursat.pm_projectmarket.R;
 
@@ -33,13 +35,18 @@ public MessageBoxAdapter(ArrayList<MessageBox> MessageBox ,OnMessageListener msg
     @Override
     public void onBindViewHolder(@NonNull MessageBoxAdapter.MessageBoxViewHolder holder, int position) {
         MessageBox currentItem = MessageBox.get(position);
-        holder.Received.setText(currentItem.getDetail());
-        holder.MessageContent.setText(currentItem.getMessageContent());
-        holder.MessageDate.setText(currentItem.getMessageDate());
-        if(currentItem.isRead.equals("0"))
-            holder.MessageContent.setTextColor(Color.RED);
-        else
-            holder.MessageContent.setTextColor(Color.WHITE);
+        holder.senderName.setText(currentItem.getSenderName());
+        holder.messageContent.setText(currentItem.getContent());
+        holder.messageDate.setText(currentItem.getDate());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentItem.getSenderId().equals(user.getUid()))
+            holder.messageContent.setTextColor(Color.WHITE);
+        else {
+            if(currentItem.isRead.equals("0"))
+                holder.messageContent.setTextColor(Color.RED);
+            else
+                holder.messageContent.setTextColor(Color.WHITE);
+        }
         //notifyDataSetChanged();
 
     }
@@ -53,18 +60,18 @@ public MessageBoxAdapter(ArrayList<MessageBox> MessageBox ,OnMessageListener msg
 
     public static class MessageBoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         OnMessageListener msgListener;
-        public TextView Received;
-        public TextView MessageContent;
-        public TextView MessageDate;
+        public TextView senderName;
+        public TextView messageDate;
+        public TextView messageContent;
 
 
 
         public MessageBoxViewHolder(@NonNull View itemView , OnMessageListener msgListener) {
             super(itemView);
             this.msgListener=msgListener;
-            Received=itemView.findViewById(R.id.text_view_Received);
-            MessageDate=itemView.findViewById(R.id.text_view_MessageDate);
-            MessageContent=itemView.findViewById(R.id.text_view_MessageContent);
+            senderName=itemView.findViewById(R.id.text_view_senderName);
+            messageDate=itemView.findViewById(R.id.text_view_MessageDate);
+            messageContent=itemView.findViewById(R.id.text_view_MessageContent);
             itemView.setOnClickListener(this);
         }
         @Override

@@ -1,36 +1,41 @@
 package com.kursat.pm_projectmarket.Model;
 
 public class MessageBox {
-    public String MessageDate;
-    public String Detail;
-    public String MessageContent;
-    public String Token;
+    public String date;
+    public String senderName;
+    public String content;
+    public String token;
     public String isRead;
-    public MessageBox(String MessageDate, String Detail, String MessageContent, String Token,String isRead){
-        this.MessageContent=MessageContent;
-        this.MessageDate=MessageDate;
-        this.Detail=Detail;
-        this.Token=Token;
+    public String senderId;
+
+    public MessageBox(String date, String content, String senderId,String senderName, String isRead, String token){
+        this.date=date;
+        this.content=content;
+        this.senderId=senderId;
+        this.senderName=senderName;
         this.isRead=isRead;
+        this.token=token;
     }
+
+    public String getSenderId() { return senderId; }
 
     public String getIsRead() {
         return isRead;
     }
 
-    public String getMessageDate() {
-        return MessageDate;
+    public String getDate() {
+        return date;
     }
 
-    public String getDetail() {
-        return Detail;
+    public String getSenderName() {
+        return senderName;
     }
 
     public String getToken() {
-        return Token;
+        return token;
     }
 
-    public String getMessageContent() {
-        return MessageContent;
+    public String getContent() {
+        return content;
     }
 }

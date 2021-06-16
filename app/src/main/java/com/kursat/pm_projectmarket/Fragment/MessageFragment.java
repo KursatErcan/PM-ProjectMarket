@@ -129,7 +129,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                         messageUser=doc1.get("message_received_name").toString();
 
                                     db.collection("Messages/"+doc1.getId()+"/Message_details")
-                                            .orderBy("message_date", Query.Direction.DESCENDING)
+                                            .orderBy("date", Query.Direction.DESCENDING)
                                             .limit(1)
                                             .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                                 @Override
@@ -142,9 +142,15 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                     if(value.isEmpty())
                                                         MsgTw.setText("Mesaj kutunuz boş.");
                                                     for (QueryDocumentSnapshot doc : value) {
-                                                        String date=getDate((Timestamp) doc.get("message_date"));
+                                                        String date=getDate((Timestamp) doc.get("date"));
 
-                                                        MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId(),doc.get("message_viewed").toString()));
+                                                        //MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId(),doc.get("message_viewed").toString()));
+                                                        MessageBox.add(new MessageBox(date,
+                                                                doc.get("content").toString(),
+                                                                doc.get("senderId").toString(),
+                                                                doc.get("senderName").toString(),
+                                                                doc.get("isRead").toString(),
+                                                                doc1.getId()));
 
                                                         //if(doc.get("message_viewed").toString().equals("0")){
                                                             //System.out.println(cardView.getCurrentTextColor()+"-----------<");

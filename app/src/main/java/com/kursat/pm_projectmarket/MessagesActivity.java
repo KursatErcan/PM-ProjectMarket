@@ -74,7 +74,7 @@ public class MessagesActivity extends AppCompatActivity {
             db = FirebaseFirestore.getInstance();
             if(token!=null){
                 db.collection("Messages/"+token+"/Message_details")
-                        .orderBy("message_date", Query.Direction.ASCENDING)
+                        .orderBy("date", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -86,20 +86,14 @@ public class MessagesActivity extends AppCompatActivity {
                                 MessageSend.clear();
                                 for (QueryDocumentSnapshot doc1 : value) {
                                     //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
-                                    MessageSend.add(new MessageSend(doc1.get("message_detail").toString(),doc1.get("message_sended_id").toString()));
+                                    MessageSend.add(new MessageSend(doc1.get("content").toString(),doc1.get("senderId").toString()));
                                     HashMap<String,String> hp=new HashMap<>();
 
-                                    if(doc1.get("message_sended_id").toString().equals(user.getUid())) {
-                                        hp.put("message_viewed","1");
-                                        db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
-                                                .set(hp, SetOptions.merge());
-                                    }else{
-                                        hp.put("message_viewed_received","1");
+                                    if(!doc1.get("senderId").toString().equals(user.getUid())) {
+                                        hp.put("isRead","0");
                                         db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
                                                 .set(hp, SetOptions.merge());
                                     }
-
-
                                 }
                                 Adapter.notifyDataSetChanged();
                             }
@@ -112,20 +106,30 @@ public class MessagesActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
                     String userName = sharedPreferences.getString("userName", "");
                     Map<String, Object> message = new HashMap<>();
-                        cfr=db.collection("Messages/"+token+"/Message_details");
-                                        message.put("message_date",new Timestamp(new Date()));
-                                        message.put("message_detail",msgDetail.getText().toString());
-                                        message.put("message_sended",userName);
-                                        message.put("message_sended_id",user.getUid().toString());
-                                        message.put("message_viewed","0");
-                                        message.put("message_viewed_received","0");
+                    cfr=db.collection("Messages/"+token+"/Message_details");
 
-                                        if(msgDetail.getText().toString().isEmpty())
-                                            Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
-                                        else{
-                                            cfr.add(message);
-                                        msgDetail.setText("");
-                                        }
+                    /*message.put("message_date",new Timestamp(new Date()));
+                    message.put("message_detail",msgDetail.getText().toString());
+                    message.put("message_sended",userName);
+                    message.put("message_sended_id",user.getUid().toString());
+                    message.put("message_viewed","0");
+                    message.put("message_viewed_received","0");
+                    */
+
+                    message.put("date",new Timestamp(new Date()));
+                    message.put("content",msgDetail.getText().toString());
+                    message.put("senderName",userName);
+                    message.put("senderId",user.getUid().toString());
+                    //message.put("message_viewed_received","0");
+                    message.put("isRead","0");
+
+
+                    if(msgDetail.getText().toString().isEmpty())
+                        Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
+                    else{
+                        cfr.add(message);
+                    msgDetail.setText("");
+                    }
 
 
                 }

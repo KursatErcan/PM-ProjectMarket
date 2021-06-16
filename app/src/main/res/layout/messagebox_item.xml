@@ -16,7 +16,7 @@
 
         <!-- pp eklenebilir  -->
         <TextView
-            android:id="@+id/text_view_Received"
+            android:id="@+id/text_view_senderName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bariol_regular"
@@ -30,7 +30,7 @@
             android:id="@+id/text_view_MessageContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_Received"
+            android:layout_below="@+id/text_view_senderName"
             android:ellipsize="end"
             android:textColor="@color/white"
             android:maxLines="1"
