@@ -52,7 +52,7 @@ public class PostActivity extends AppCompatActivity {
     private CheckBox chkProgramming;
     HashMap<String,String> array;
 
-
+    static final int SELECTED_IMAGE=1;
 
     public PostActivity() {
     }
@@ -94,7 +94,7 @@ public class PostActivity extends AppCompatActivity {
         Intent intent =new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,1);//get image type files
+        startActivityForResult(intent,SELECTED_IMAGE);//get image type files
     }
 
 
@@ -107,7 +107,7 @@ public class PostActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 1 && resultCode == RESULT_OK) {
+        if(requestCode == SELECTED_IMAGE && resultCode == RESULT_OK) {
             assert data != null;
             if (data.getData() != null) {
                 imageData = data.getData();
@@ -164,18 +164,12 @@ public class PostActivity extends AppCompatActivity {
                             startActivity(new Intent(PostActivity.this, MainActivity.class));
                             finish();
                         }
-
                     });
-
-
-
                 }).addOnFailureListener(e -> Toast.makeText(PostActivity.this, R.string.your_post_is_successfully_posted + "" + e, Toast.LENGTH_LONG).show());
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }else {
             Toast.makeText(PostActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
         }
