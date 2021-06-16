@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.kursat.pm_projectmarket.Adapter.MessageSendAdapter;
 import com.kursat.pm_projectmarket.Model.MessageSend;
 
@@ -86,6 +87,12 @@ public class MessagesActivity extends AppCompatActivity {
                                 for (QueryDocumentSnapshot doc1 : value) {
                                     //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
                                     MessageSend.add(new MessageSend(doc1.get("message_detail").toString(),doc1.get("message_sended_id").toString()));
+                                    HashMap<String,String> hp=new HashMap<>();
+                                    hp.put("message_viewed","1");
+                                    if(doc1.get("message_sended_id").toString().equals(user.getUid())) {
+                                        db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
+                                                .set(hp, SetOptions.merge());
+                                    }
 
 
                                 }
@@ -105,6 +112,7 @@ public class MessagesActivity extends AppCompatActivity {
                                         message.put("message_detail",msgDetail.getText().toString());
                                         message.put("message_sended",userName);
                                         message.put("message_sended_id",user.getUid().toString());
+                                        message.put("message_viewed","0");
                                         if(msgDetail.getText().toString().isEmpty())
                                             Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
                                         else{

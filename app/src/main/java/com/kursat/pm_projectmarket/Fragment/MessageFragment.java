@@ -1,9 +1,12 @@
 package com.kursat.pm_projectmarket.Fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.Timestamp;
@@ -88,6 +92,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     MessageBoxAdapter Adapter;
     TextView MsgTw;
     String messageUser;
+    TextView cardView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,6 +104,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
         Adapter=new MessageBoxAdapter(MessageBox,this);
         recView.setAdapter(Adapter);
         MsgTw = view.findViewById(R.id.MessageBoxTw);
+        cardView=view.findViewById(R.id.text_view_MessageContent);
 
         if(user!=null) {
             db = FirebaseFirestore.getInstance();
@@ -116,8 +122,8 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                             for (QueryDocumentSnapshot doc1 : value) {
 
                                 System.out.println(user.getUid());
-                                if(doc1.get("message_received").equals(user.getUid()) || doc1.get("message_posted").equals(user.getUid())){
-                                    if(doc1.get("message_received").equals(user.getUid()))
+                                if(doc1.get("message_received").toString().equals(user.getUid()) || doc1.get("message_posted").toString().equals(user.getUid())){
+                                    if(doc1.get("message_received").toString().equals(user.getUid()))
                                         messageUser=doc1.get("message_posted_name").toString();
                                     else
                                         messageUser=doc1.get("message_received_name").toString();
@@ -138,7 +144,12 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                     for (QueryDocumentSnapshot doc : value) {
                                                         String date=getDate((Timestamp) doc.get("message_date"));
 
-                                                        MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
+                                                        MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId(),doc.get("message_viewed").toString()));
+
+                                                        //if(doc.get("message_viewed").toString().equals("0")){
+                                                            //System.out.println(cardView.getCurrentTextColor()+"-----------<");
+
+                                                        //}
 
                                                     }
                                                     Adapter.notifyDataSetChanged();

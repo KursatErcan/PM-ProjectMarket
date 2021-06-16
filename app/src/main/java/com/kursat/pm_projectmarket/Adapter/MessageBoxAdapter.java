@@ -1,5 +1,6 @@
 package com.kursat.pm_projectmarket.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +29,19 @@ public MessageBoxAdapter(ArrayList<MessageBox> MessageBox ,OnMessageListener msg
         return new MessageBoxViewHolder(view,msgListener);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MessageBoxAdapter.MessageBoxViewHolder holder, int position) {
         MessageBox currentItem = MessageBox.get(position);
         holder.Received.setText(currentItem.getDetail());
         holder.MessageContent.setText(currentItem.getMessageContent());
         holder.MessageDate.setText(currentItem.getMessageDate());
+        if(currentItem.isRead.equals("0"))
+            holder.MessageContent.setTextColor(Color.RED);
+        else
+            holder.MessageContent.setTextColor(Color.WHITE);
+        //notifyDataSetChanged();
+
     }
 
     @Override
@@ -41,11 +49,15 @@ public MessageBoxAdapter(ArrayList<MessageBox> MessageBox ,OnMessageListener msg
         return MessageBox.size();
     }
 
+
+
     public static class MessageBoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         OnMessageListener msgListener;
         public TextView Received;
         public TextView MessageContent;
         public TextView MessageDate;
+
+
 
         public MessageBoxViewHolder(@NonNull View itemView , OnMessageListener msgListener) {
             super(itemView);
@@ -60,7 +72,11 @@ public MessageBoxAdapter(ArrayList<MessageBox> MessageBox ,OnMessageListener msg
             msgListener.onMessageClick(getAdapterPosition());
 
         }
+
+
     }
+
+
 
     public interface OnMessageListener{
         void onMessageClick(int position);

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -123,8 +124,12 @@ public class DetailsFragment extends DialogFragment {
                         profileFragment.setArguments(args1);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = fragmentManager.beginTransaction();
-                        ft.replace(R.id.mainFragment, profileFragment, "tag");
+                        ft.replace(R.id.mainFragment, profileFragment, "tag");//from here.
                         ft.addToBackStack(null).commit();
+                        return;
+
+
+
                     });
 
                     addCommentButton.setOnClickListener(new View.OnClickListener() {

@@ -5,11 +5,17 @@ public class MessageBox {
     public String Detail;
     public String MessageContent;
     public String Token;
-    public MessageBox(String MessageDate, String Detail, String MessageContent, String Token){
+    public String isRead;
+    public MessageBox(String MessageDate, String Detail, String MessageContent, String Token,String isRead){
         this.MessageContent=MessageContent;
         this.MessageDate=MessageDate;
         this.Detail=Detail;
         this.Token=Token;
+        this.isRead=isRead;
+    }
+
+    public String getIsRead() {
+        return isRead;
     }
 
     public String getMessageDate() {
