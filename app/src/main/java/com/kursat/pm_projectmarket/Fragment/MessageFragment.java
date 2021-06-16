@@ -138,7 +138,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                                     for (QueryDocumentSnapshot doc : value) {
                                                         String date=getDate((Timestamp) doc.get("message_date"));
 
-                                                        MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId()));
+                                                        MessageBox.add(new MessageBox(date, messageUser.toString(), doc.get("message_detail").toString(), doc1.getId()));
 
                                                     }
                                                     Adapter.notifyDataSetChanged();
@@ -168,7 +168,6 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
         intent.putExtra("token",MessageBox.get(position).getToken());
         intent.putExtra("userN",messageUser);
         startActivity(intent);
-
     }
     private String getDate(Timestamp milliSeconds) {
         // Create a DateFormatter object for displaying date in specified

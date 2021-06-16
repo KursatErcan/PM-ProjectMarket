@@ -69,57 +69,51 @@ public class MessagesActivity extends AppCompatActivity {
 
 
         if(user!=null && token != null) {
-
             db = FirebaseFirestore.getInstance();
             if(token!=null){
                 db.collection("Messages/"+token+"/Message_details")
                         .orderBy("message_date", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
-                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                            public void onEvent(@Nullable QuerySnapshot value,
+                                                @Nullable FirebaseFirestoreException e) {
                                 if (e != null) {
                                     Log.w(TAG, "Listen failed.", e);
                                     return;
                                 }
-
                                 MessageSend.clear();
                                 for (QueryDocumentSnapshot doc1 : value) {
-                                    //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
-                                    MessageSend.add(new MessageSend(doc1.get("message_detail").toString(),doc1.get("message_sended_id").toString()));
-
-
+                                    MessageSend.add(
+                                            new MessageSend(doc1.get("message_detail").toString(),
+                                                    doc1.get("message_sended_id").toString()));
                                 }
                                 Adapter.notifyDataSetChanged();
                             }
-
                         });
             }
-            btnSend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
-                    String userName = sharedPreferences.getString("userName", "");
-                    Map<String, Object> message = new HashMap<>();
-                        cfr=db.collection("Messages/"+token+"/Message_details");
-                                        message.put("message_date",new Timestamp(new Date()));
-                                        message.put("message_detail",msgDetail.getText().toString());
-                                        message.put("message_sended",userName);
-                                        message.put("message_sended_id",user.getUid().toString());
-                                        if(msgDetail.getText().toString().isEmpty())
-                                            Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
-                                        else{
-                                            cfr.add(message);
-                                        msgDetail.setText("");
-                                        }
+        }
 
-
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
+                String userName = sharedPreferences.getString("userName", "");
+                Map<String, Object> message = new HashMap<>();
+                cfr=db.collection("Messages/"+token+"/Message_details");
+                message.put("message_date",new Timestamp(new Date()));
+                message.put("message_detail",msgDetail.getText().toString());
+                message.put("message_sended",userName);
+                message.put("message_sended_id",user.getUid().toString());
+                if(msgDetail.getText().toString().isEmpty())
+                    Toast.makeText(MessagesActivity.this,
+                            R.string.you_can_write_your_message,
+                            Toast.LENGTH_LONG).show();
+                else{
+                    cfr.add(message);
+                    msgDetail.setText("");
                 }
-            });
-
-        }
-        else{
-            //Nobody is signed in
-        }
+            }
+        });
     }
 
 }
