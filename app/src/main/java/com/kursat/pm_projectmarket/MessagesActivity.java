@@ -118,6 +118,8 @@ public class MessagesActivity extends AppCompatActivity {
                                         message.put("message_sended",userName);
                                         message.put("message_sended_id",user.getUid().toString());
                                         message.put("message_viewed","0");
+                                        message.put("message_viewed_received","0");
+
                                         if(msgDetail.getText().toString().isEmpty())
                                             Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
                                         else{
