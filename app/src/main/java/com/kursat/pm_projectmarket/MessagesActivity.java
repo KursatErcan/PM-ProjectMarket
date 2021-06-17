@@ -1,5 +1,6 @@
 package com.kursat.pm_projectmarket;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -91,18 +92,18 @@ public class MessagesActivity extends AppCompatActivity {
 
                                     if(!doc1.get("senderId").toString().equals(user.getUid())) {
                                         hp.put("isRead","1");
-                                        db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
-                                                .set(hp, SetOptions.merge());
+
                                     }else{
                                         hp.put("isReadMe","1");
-                                        db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
-                                                .set(hp, SetOptions.merge());
                                     }
+                                    db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
+                                            .set(hp, SetOptions.merge());
                                 }
                                 Adapter.notifyDataSetChanged();
                             }
                         });
             }
+
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -138,10 +139,16 @@ public class MessagesActivity extends AppCompatActivity {
                 }
             });
 
+
         }
+
         else{
             //Nobody is signed in
         }
+    }
+    public void onCloseClick(View view){
+        startActivity(new Intent(MessagesActivity.this, MainActivity.class));
+        finish();
     }
 
 }
