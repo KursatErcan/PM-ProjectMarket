@@ -89,15 +89,20 @@ public class MessagesActivity extends AppCompatActivity {
                                     //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
                                     MessageSend.add(new MessageSend(doc1.get("content").toString(),doc1.get("senderId").toString()));
                                     HashMap<String,String> hp=new HashMap<>();
-
+                                    hp.clear();
                                     if(!doc1.get("senderId").toString().equals(user.getUid())) {
+                                        hp.put("isReadMe","1");
+
+                                        //hp.remove("isReadMe");
+
+                                    }else if(doc1.get("senderId").toString().equals(user.getUid())){
                                         hp.put("isRead","1");
 
-                                    }else{
-                                        hp.put("isReadMe","1");
+                                        //hp.remove("isRead");
                                     }
                                     db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
                                             .set(hp, SetOptions.merge());
+
                                 }
                                 Adapter.notifyDataSetChanged();
                             }
