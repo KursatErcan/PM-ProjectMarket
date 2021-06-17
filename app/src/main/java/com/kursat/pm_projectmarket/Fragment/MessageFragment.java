@@ -1,22 +1,17 @@
 package com.kursat.pm_projectmarket.Fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.DrawableRes;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,51 +33,15 @@ import java.util.Calendar;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MessageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMessageListener{
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public MessageFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MessageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MessageFragment newInstance(String param1, String param2) {
-        MessageFragment fragment = new MessageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
     }
     RecyclerView recView;
@@ -96,89 +55,91 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Buradan devam
-        View view = inflater.inflate(R.layout.fragment_messagebox, container, false);
-        recView=(RecyclerView) view.findViewById(R.id.messagebox_recycleview);
-        recView.setLayoutManager(new LinearLayoutManager(getContext()));
-        MessageBox= new ArrayList<>();
-        Adapter=new MessageBoxAdapter(MessageBox,this);
-        recView.setAdapter(Adapter);
-        MsgTw = view.findViewById(R.id.MessageBoxTw);
-        cardView=view.findViewById(R.id.text_view_MessageContent);
+    // Buradan devam
+    View view = inflater.inflate(R.layout.fragment_messagebox, container, false);
+    recView=(RecyclerView) view.findViewById(R.id.messagebox_recycleview);
+    recView.setLayoutManager(new LinearLayoutManager(getContext()));
+    MessageBox= new ArrayList<>();
+    Adapter=new MessageBoxAdapter(MessageBox,this);
+    recView.setAdapter(Adapter);
+    MsgTw = view.findViewById(R.id.MessageBoxTw);
+    cardView=view.findViewById(R.id.text_view_MessageContent);
 
-        if(user!=null) {
-            db = FirebaseFirestore.getInstance();
-            db.collection("Messages")
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value,
-                                            @Nullable FirebaseFirestoreException e) {
-                            if (e != null) {
-                                Log.w(TAG, "Listen failed.", e);
-                                return;
-                            }
-
-
-                            for (QueryDocumentSnapshot doc1 : value) {
-
-                                System.out.println(user.getUid());
-                                if(doc1.get("message_received").toString().equals(user.getUid()) || doc1.get("message_posted").toString().equals(user.getUid())){
-                                    if(doc1.get("message_received").toString().equals(user.getUid()))
-                                        messageUser=doc1.get("message_posted_name").toString();
-                                    else
-                                        messageUser=doc1.get("message_received_name").toString();
-
-                                    db.collection("Messages/"+doc1.getId()+"/Message_details")
-                                            .orderBy("date", Query.Direction.DESCENDING)
-                                            .limit(1)
-                                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onEvent(@Nullable QuerySnapshot value,
-                                                                    @Nullable FirebaseFirestoreException e) {
-                                                    if (e != null) {
-
-                                                        return;
-                                                    }
-                                                    if(value.isEmpty())
-                                                        MsgTw.setText("Mesaj kutunuz boş.");
-                                                    for (QueryDocumentSnapshot doc : value) {
-                                                        String date=getDate((Timestamp) doc.get("date"));
-
-                                                        //MessageBox.add(new MessageBox(date, doc.get("message_sended").toString(), doc.get("message_detail").toString(), doc1.getId(),doc.get("message_viewed").toString()));
-                                                        MessageBox.add(new MessageBox(date,
-                                                                doc.get("content").toString(),
-                                                                doc.get("senderId").toString(),
-                                                                doc.get("senderName").toString(),
-                                                                doc.get("isRead").toString(),
-                                                                doc1.getId()));
-
-                                                        //if(doc.get("message_viewed").toString().equals("0")){
-                                                            //System.out.println(cardView.getCurrentTextColor()+"-----------<");
-
-                                                        //}
-
-                                                    }
-                                                    Adapter.notifyDataSetChanged();
-                                                }
-                                            });
-                                }
-                            }
-                            Adapter.notifyDataSetChanged();
+    if(user!=null) {
+        db = FirebaseFirestore.getInstance();
+        db.collection("Messages")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
                         }
+                        for (QueryDocumentSnapshot doc1 : value) {
+                            if(value.isEmpty())
+                                MsgTw.setText("Mesaj kutunuz boş.");
+                            //System.out.println(user.getUid());
+                            if(doc1.get("message_received").toString().equals(user.getUid()) ||
+                                    doc1.get("message_posted").toString().equals(user.getUid())){
 
-                    });
+                                if(doc1.get("message_received").toString().equals(user.getUid()))
+                                    messageUser=doc1.get("message_posted_name").toString();
+                                else
+                                    messageUser=doc1.get("message_received_name").toString();
+
+                                db.collection("Messages/"+doc1.getId()+"/Message_details")
+                                .orderBy("date", Query.Direction.DESCENDING)
+                                .limit(1)
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot value,
+                                                        @Nullable FirebaseFirestoreException e) {
+                                        if (e != null) {
+                                            return;
+                                        }
+                                        if(value.isEmpty())
+                                            MsgTw.setText("Mesaj kutunuz boş.");
+
+                                        for (QueryDocumentSnapshot doc : value) {
+                                            String date=getDate((Timestamp) doc.get("date"));
+                                            String readControl;
+                                            if(!doc1.get("senderId").toString().equals(user.getUid())) {
+                                                readControl = doc.get("isReadMe").toString();
+                                            }else{
+                                                readControl = doc.get("isRead").toString();
+                                            }
+
+                                            MessageBox.add(new MessageBox(date,
+                                                    doc.get("content").toString(),
+                                                    doc.get("senderId").toString(),
+                                                    doc.get("senderName").toString(),
+                                                    readControl,
+                                                    doc1.getId()));
+
+                                            //if(doc.get("message_viewed").toString().equals("0")){
+                                                //System.out.println(cardView.getCurrentTextColor()+"-----------<");
+
+                                            //}
+
+                                        }
+                                        Adapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        }
+                        Adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+    else{
+        //No one is signed in
+
+    }
 
 
 
-        }
-        else{
-            //No one is signed in
-
-        }
-
-
-
-        return view;
+    return view;
     }
     public void onMessageClick(int position) {
         Intent intent=new Intent(getActivity(), MessagesActivity.class);

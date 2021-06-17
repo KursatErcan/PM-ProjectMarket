@@ -70,87 +70,81 @@ public class MessagesActivity extends AppCompatActivity {
 
 
 
-        if(user!=null && token != null) {
-
-            db = FirebaseFirestore.getInstance();
-            if(token!=null){
-                db.collection("Messages/"+token+"/Message_details")
-                        .orderBy("date", Query.Direction.ASCENDING)
-                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                                if (e != null) {
-                                    Log.w(TAG, "Listen failed.", e);
-                                    return;
-                                }
-
-                                MessageSend.clear();
-                                for (QueryDocumentSnapshot doc1 : value) {
-                                    //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
-                                    MessageSend.add(new MessageSend(doc1.get("content").toString(),doc1.get("senderId").toString()));
-                                    HashMap<String,String> hp=new HashMap<>();
-                                    hp.clear();
-                                    if(!doc1.get("senderId").toString().equals(user.getUid())) {
-                                        hp.put("isReadMe","1");
-
-                                        //hp.remove("isReadMe");
-
-                                    }else if(doc1.get("senderId").toString().equals(user.getUid())){
-                                        hp.put("isRead","1");
-
-                                        //hp.remove("isRead");
-                                    }
-                                    db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
-                                            .set(hp, SetOptions.merge());
-
-                                }
-                                Adapter.notifyDataSetChanged();
+        db = FirebaseFirestore.getInstance();
+        if(token!=null){
+            db.collection("Messages/"+token+"/Message_details")
+                    .orderBy("date", Query.Direction.ASCENDING)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                Log.w(TAG, "Listen failed.", e);
+                                return;
                             }
-                        });
-            }
 
-            btnSend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
-                    String userName = sharedPreferences.getString("userName", "");
-                    Map<String, Object> message = new HashMap<>();
-                    cfr=db.collection("Messages/"+token+"/Message_details");
+                            MessageSend.clear();
+                            for (QueryDocumentSnapshot doc1 : value) {
+                                //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
+                                MessageSend.add(new MessageSend(doc1.get("content").toString(),doc1.get("senderId").toString()));
+                                HashMap<String,String> hp=new HashMap<>();
+                                hp.clear();
+                                if(!doc1.get("senderId").toString().equals(user.getUid())) {
+                                    hp.put("isReadMe","1");
 
-                    /*message.put("message_date",new Timestamp(new Date()));
-                    message.put("message_detail",msgDetail.getText().toString());
-                    message.put("message_sended",userName);
-                    message.put("message_sended_id",user.getUid().toString());
-                    message.put("message_viewed","0");
-                    message.put("message_viewed_received","0");
-                    */
+                                    //hp.remove("isReadMe");
 
-                    message.put("date",new Timestamp(new Date()));
-                    message.put("content",msgDetail.getText().toString());
-                    message.put("senderName",userName);
-                    message.put("senderId",user.getUid().toString());
-                    message.put("isRead","0");
-                    message.put("isReadMe","0");
+                                }/*else if(doc1.get("senderId").toString().equals(user.getUid())){
+                                    hp.put("isRead","1");
+
+                                    //hp.remove("isRead");
+                                }*/
+                                db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
+                                        .set(hp, SetOptions.merge());
+
+                            }
+                            Adapter.notifyDataSetChanged();
+                        }
+                    });
+        }
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("sharedPref",MODE_PRIVATE);
+                String userName = sharedPreferences.getString("userName", "");
+                Map<String, Object> message = new HashMap<>();
+                cfr=db.collection("Messages/"+token+"/Message_details");
+
+                /*message.put("message_date",new Timestamp(new Date()));
+                message.put("message_detail",msgDetail.getText().toString());
+                message.put("message_sended",userName);
+                message.put("message_sended_id",user.getUid().toString());
+                message.put("message_viewed","0");
+                message.put("message_viewed_received","0");
+                */
+
+                message.put("date",new Timestamp(new Date()));
+                message.put("content",msgDetail.getText().toString());
+                message.put("senderName",userName);
+                message.put("senderId",user.getUid().toString());
+                message.put("isRead","1");
+                message.put("isReadMe","0");
 
 
-                    if(msgDetail.getText().toString().isEmpty())
-                        Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
-                    else{
-                        cfr.add(message);
-                        msgDetail.setText("");
-                    }
-
-
+                if(msgDetail.getText().toString().isEmpty())
+                    Toast.makeText(MessagesActivity.this,R.string.you_can_write_your_message,Toast.LENGTH_LONG).show();
+                else{
+                    cfr.add(message);
+                    msgDetail.setText("");
                 }
-            });
 
 
-        }
+            }
+        });
 
-        else{
-            //Nobody is signed in
-        }
+
     }
+
     public void onCloseClick(View view){
         startActivity(new Intent(MessagesActivity.this, MainActivity.class));
         finish();
