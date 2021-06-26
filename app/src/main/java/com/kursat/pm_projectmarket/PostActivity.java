@@ -1,6 +1,5 @@
 package com.kursat.pm_projectmarket;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,11 +7,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.CheckBox;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -38,37 +40,29 @@ public class PostActivity extends AppCompatActivity {
     private ImageView postImage;
     private EditText title,postContent,priceText;
     private TextView shareText;
-    private Bitmap selectedImage;
     private Uri imageData;
     private FirebaseFirestore db;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private StorageReference storageReference;
-    CollectionReference cfr;
-    private CheckBox chkDigitalData;
-    private CheckBox chkDigitalMarket;
-    private CheckBox chkGraphics;
-    private CheckBox chkVideo;
-    private CheckBox chkWriting;
-    private CheckBox chkProgramming;
-    HashMap<String,String> array;
+    private CollectionReference cfr;
 
+    ListView lv_Categories;
+    private Integer categoryEntryControl = 0;
+    private Integer[] categoryArr;
     static final int SELECTED_IMAGE=1;
 
     public PostActivity() {
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        chkDigitalData=findViewById(R.id.chkData);
-        chkGraphics=findViewById(R.id.chkGraphics);
-        chkVideo=findViewById(R.id.chkVideo);
-        chkWriting=findViewById(R.id.chkWriting);
-        chkProgramming=findViewById(R.id.chkProgramming);
-        chkDigitalMarket=findViewById(R.id.chkDigitalMarket);
-        array = new HashMap<>();
+
+        lv_Categories=findViewById(R.id.lv_categories);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.categories_array,android.R.layout.simple_list_item_multiple_choice);
+        lv_Categories.setAdapter(adapter);
+
         postImage = findViewById(R.id.post_image);
         title = findViewById(R.id.text_title);
         postContent = findViewById(R.id.text_postContent);
@@ -78,17 +72,25 @@ public class PostActivity extends AppCompatActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference("Images");
 
-
-
     }
-
+    public void getCategoryInfo(){
+        SparseBooleanArray checked = lv_Categories.getCheckedItemPositions();
+        categoryArr=new Integer[checked.size()+1];
+        categoryArr[0]=0;
+        categoryEntryControl=0;
+        for(int i=0;i<lv_Categories.getCount();i++){
+            if(lv_Categories.isItemChecked(i)){
+                categoryEntryControl++;
+                categoryArr[categoryEntryControl] = i+1;
+            }
+        }
+    }
 
     public void onShareClick(View view){
         //when click share button, this function is triggered
+        getCategoryInfo();
         UploadFile();
-
     }
-
 
     public void uploadImage(View v){
         Intent intent =new Intent();
@@ -96,7 +98,6 @@ public class PostActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,SELECTED_IMAGE);//get image type files
     }
-
 
     public void onCloseClick(View view){
         startActivity(new Intent(PostActivity.this, MainActivity.class));
@@ -149,12 +150,14 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("postContent",postContent.getText().toString());
                         postData.put("userId", user.getUid());
                         postData.put("userName",userName);
-                        postData.put("postCategory",array);
+                        postData.put("postCategory",Arrays.asList(categoryArr));
                         postData.put("score","0");
                         System.out.println(postData+"--------------<");
                         if(postData.containsValue(null) || postData.containsValue("") ||
-                                priceText.getText().toString().isEmpty() || postContent.getText().toString().isEmpty() || title.getText().toString().isEmpty() ||
-                        array.isEmpty()){
+                                priceText.getText().toString().isEmpty() ||
+                                postContent.getText().toString().isEmpty() ||
+                                title.getText().toString().isEmpty() ||
+                                categoryEntryControl==0){
                             Toast.makeText(PostActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
                         }else {
                             //add the data into the Posts
@@ -174,51 +177,4 @@ public class PostActivity extends AppCompatActivity {
             Toast.makeText(PostActivity.this,R.string.you_must_fill_in_the_required_fields,Toast.LENGTH_SHORT).show();
         }
     }
-
-    @SuppressLint("NonConstantResourceId")
-    public HashMap<String,String> onCheckboxClicked(View view){
-        //selected list of category
-        boolean checked = ((CheckBox) view).isChecked();
-        switch(view.getId()) {
-            case R.id.chkData:
-                if (checked)
-                    array.put("chkData",((CheckBox) view).getText().toString());
-                else
-                    array.remove("chkData");
-                break;
-            case R.id.chkDigitalMarket:
-                if (checked)
-                    array.put("chkDigitalMarket",((CheckBox) view).getText().toString());
-                else
-                    array.remove("chkDigitalMarket");
-                break;
-            case R.id.chkGraphics:
-                if (checked)
-                    array.put("chkGraphics",((CheckBox) view).getText().toString());
-                else
-                    array.remove("chkGraphics");
-                    break;
-            case R.id.chkVideo:
-                if (checked)
-                    array.put("chkVideo",((CheckBox) view).getText().toString());
-                else
-                    array.remove("chkVideo");
-                    break;
-            case R.id.chkWriting:
-                if (checked)
-                    array.put("chkWriting",((CheckBox) view).getText().toString());
-                else
-                    array.remove("chkWriting");
-                    break;
-            case R.id.chkProgramming:
-                if (checked)
-                    array.put("chkProgramming",((CheckBox) view).getText().toString());
-                else
-                    array.remove("chkProgramming");
-                    break;
-        }
-
-        return array;
-    }
-
 }

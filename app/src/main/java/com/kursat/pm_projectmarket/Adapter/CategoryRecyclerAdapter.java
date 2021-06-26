@@ -39,10 +39,9 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         CategoryHolder cHolder = new CategoryHolder(view);
 
         cHolder.category_item.setOnClickListener(v -> {
-            //Toast.makeText(view.getContext(), "Test Click"+String.valueOf(cHolder.getAdapterPosition()), Toast.LENGTH_SHORT).show();
 
             Bundle filter = new Bundle();
-            filter.putString("filterNum",categoryIdList.get(cHolder.getAdapterPosition()));
+            filter.putInt("filterNum",Integer.parseInt(categoryIdList.get(cHolder.getAdapterPosition())));
 
             FeedFragment feedFragment = new FeedFragment();
             feedFragment.setArguments(filter);

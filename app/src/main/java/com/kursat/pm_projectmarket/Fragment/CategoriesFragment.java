@@ -69,8 +69,6 @@ public class CategoriesFragment extends Fragment {
                     categoryId_db.add(category.getCategoryId());
                 }
                 adapter.notifyDataSetChanged();
-            } else {
-                System.out.println("kategorilere ulaşmakta sıkıntı var");
             }
         });
     }

@@ -22,11 +22,9 @@
                 android:background="?android:attr/windowBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <ImageView
                         android:id="@+id/close"
                         android:layout_width="wrap_content"
@@ -34,7 +32,6 @@
                         android:layout_alignParentStart="true"
                         android:onClick="onCloseClick"
                         android:src="@drawable/ic_close" />
-
                     <TextView
                         android:id="@+id/text_share"
                         android:layout_width="wrap_content"
@@ -52,7 +49,6 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <ImageView
             android:id="@+id/post_image"
             android:layout_width="240dp"
@@ -61,7 +57,6 @@
             android:onClick="uploadImage"
             android:scaleType="centerInside"
             android:src="@drawable/ic_add_image" />
-
         <EditText
             android:id="@+id/text_title"
             android:layout_width="match_parent"
@@ -70,9 +65,7 @@
             android:maxLines="2"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-
-            />
+            android:layout_marginRight="10dp" />
         <View
             android:background="#2e2e2e"
             android:layout_width="match_parent"
@@ -92,9 +85,7 @@
             android:scrollbars="vertical"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-
-            />
+            android:layout_marginRight="10dp" />
         <View
             android:background="#2e2e2e"
             android:layout_width="match_parent"
@@ -104,55 +95,17 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp" />
-
-        <CheckBox
-            android:id="@+id/chkData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="@string/data"
-            android:onClick="onCheckboxClicked"/>
-
-        <CheckBox
-            android:id="@+id/chkDigitalMarket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:onClick="onCheckboxClicked"
-            android:text="@string/digitalMarketing" />
-
-        <CheckBox
-            android:id="@+id/chkGraphics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="@string/graphicsAndDesign"
-            android:onClick="onCheckboxClicked"/>
-        <CheckBox
-            android:id="@+id/chkVideo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="@string/videoAndAudio"
-            android:onClick="onCheckboxClicked"/>
-        <CheckBox
-            android:id="@+id/chkWriting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="@string/writingAndTranslation"
-            android:onClick="onCheckboxClicked"/>
-        <CheckBox
-            android:id="@+id/chkProgramming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="@string/programmingAndTeach"
-            android:onClick="onCheckboxClicked"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical">
+            <ListView
+                android:id="@+id/lv_categories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="multipleChoice"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -179,7 +132,6 @@
 
         </LinearLayout>
 
-
     </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
