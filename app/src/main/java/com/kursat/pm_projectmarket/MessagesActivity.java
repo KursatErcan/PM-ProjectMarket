@@ -97,7 +97,7 @@ public class MessagesActivity extends AppCompatActivity {
                                     if(doc1.get("senderId").toString().equals(user.getUid())){
                                             hp.put("isReadMe","1");
                                     }else{
-                                        hp.put("isReadMe","0");
+                                        hp.put("isRead","1");
                                     }
                                     db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
                                             .set(hp, SetOptions.merge());

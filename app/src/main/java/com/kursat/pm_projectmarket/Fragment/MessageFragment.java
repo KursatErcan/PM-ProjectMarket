@@ -50,7 +50,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     MessageBoxAdapter Adapter;
     TextView MsgTw;
-    String messageUser;
+    String[] messageUser;
     TextView cardView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +64,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
         recView.setAdapter(Adapter);
         MsgTw = view.findViewById(R.id.MessageBoxTw);
         cardView=view.findViewById(R.id.text_view_MessageContent);
-
+        messageUser=new String[100];
         if(user!=null) {
             db = FirebaseFirestore.getInstance();
             db.collection("Messages")
@@ -76,6 +76,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                 Log.w(TAG, "Listen failed.", e);
                                 return;
                             }
+                            int counter=0;
                             for (QueryDocumentSnapshot doc1 : value) {
                                 if(value.isEmpty())
                                     MsgTw.setText("Mesaj kutunuz boş.");
@@ -84,9 +85,10 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
                                         doc1.get("message_posted").toString().equals(user.getUid())){
 
                                     if(doc1.get("message_received").toString().equals(user.getUid()))
-                                        messageUser=doc1.get("message_posted_name").toString();
+                                        messageUser[counter]=doc1.get("message_posted_name").toString();
                                     else
-                                        messageUser=doc1.get("message_received_name").toString();
+                                        messageUser[counter]=doc1.get("message_received_name").toString();
+                                    counter++;
 
                                     db.collection("Messages/"+doc1.getId()+"/Message_details")
                                             .orderBy("date", Query.Direction.DESCENDING)
@@ -137,7 +139,7 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     public void onMessageClick(int position) {
         Intent intent=new Intent(getActivity(), MessagesActivity.class);
         intent.putExtra("token",MessageBox.get(position).getToken());
-        intent.putExtra("userN",messageUser);
+        intent.putExtra("userN",messageUser[position]);
         startActivity(intent);
 
     }
