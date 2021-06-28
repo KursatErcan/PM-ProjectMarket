@@ -95,8 +95,10 @@
     <string name="no">NO</string>
     <string name="change">CHANGE</string>
     <string name="cancel">CANCEL</string>
-
-
+    <string name="max_price">Max Price</string>
+    <string name="min_price">Min Price</string>
+    <string name="post_score">Post score</string>
+    <string name="filter">Filter</string>
 
 
 </resources>

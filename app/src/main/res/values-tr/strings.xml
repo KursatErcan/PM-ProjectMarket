@@ -70,4 +70,9 @@
     <string name="no">HAYIR</string>
     <string name="change">ONAYLA</string>
     <string name="cancel">İPTAL</string>
+    <string name="filter">FİLTRELE</string>
+
+    <string name="max_price">Max Fiyat</string>
+    <string name="min_price">Min Fiyat</string>
+    <string name="post_score">Post Puanı</string>
 </resources>

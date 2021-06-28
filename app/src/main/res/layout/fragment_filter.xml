@@ -26,17 +26,19 @@
             android:textSize="16sp"
             android:fontFamily="@font/bariol_regular" />
         <EditText
+            android:id="@+id/minPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Min Price"
+            android:hint="@string/min_price"
             android:fontFamily="@font/bariol_regular"
             android:textSize="16sp"
             android:background="@null"
             android:layout_marginStart="32dp" />
         <EditText
+            android:id="@+id/maxPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Max Price"
+            android:hint="@string/max_price"
             android:fontFamily="@font/bariol_regular"
             android:textSize="16sp"
             android:background="@null"
@@ -54,7 +56,7 @@
         <TextView
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Post score"
+            android:text="@string/post_score"
             android:textSize="16sp"
             android:fontFamily="@font/bariol_regular" />
 
@@ -64,11 +66,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:max="4"
+            android:max="5"
             android:progress="0"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" />
-
 
     </LinearLayout>
 
@@ -93,7 +94,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:max="4"
+            android:max="5"
             android:progress="0"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" />
@@ -107,7 +108,7 @@
             android:id="@+id/filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Filter"
+            android:text="@string/filter"
             android:textSize="16sp"
             android:textStyle="bold"
             android:fontFamily="@font/bariol_regular"

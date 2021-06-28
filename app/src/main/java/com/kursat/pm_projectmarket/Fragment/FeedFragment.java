@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,19 +29,15 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
     private FirebaseFirestore db;
     PostRecyclerAdapter postRecyclerAdapter;
     ArrayList<Post> ppost;
-
-    public FeedFragment() {
-        // Required empty public constructor
-    }
-
-
+    ImageView btn_filter;
+    private int postScore = 0, minPrice = 0,maxPrice = 0, filter =0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-
+        btn_filter = view.findViewById(R.id.filter_btn);
         db = FirebaseFirestore.getInstance();
         ppost = new ArrayList<>();
 
@@ -47,7 +45,10 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         Bundle bundle = this.getArguments();
         if(bundle != null){
             filterNum = bundle.getInt("filterNum",0);
-            //System.out.println("gelen filterNum : "+filterNum);
+            filter = bundle.getInt("filter",0);
+            postScore = bundle.getInt("postScore",0);
+            minPrice = bundle.getInt("minPrice",0);
+            maxPrice = bundle.getInt("maxPrice",100000000);
         }
 
         getDataFromDB(filterNum);
@@ -59,6 +60,15 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
 
+        btn_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FilterFragment filterFragment = new FilterFragment();
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.add(R.id.mainFragment, filterFragment);
+                ft.commit();
+            }
+        });
         return view;
     }
 
@@ -73,8 +83,20 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             User user = documentSnapshot.toObject(User.class);
-                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
-                            postRecyclerAdapter.notifyDataSetChanged();
+                            if(filter==1){
+                                if(Integer.parseInt(post.getScore())>= postScore
+                                        && Integer.parseInt(post.getPrice()) < maxPrice
+                                        && Integer.parseInt(post.getPrice()) >= minPrice){
+                                    ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
+                                    postRecyclerAdapter.notifyDataSetChanged();
+                                }
+                            }
+                            else{
+                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
+                                postRecyclerAdapter.notifyDataSetChanged();
+                            }
+
+
                         }
                     });
                 }
