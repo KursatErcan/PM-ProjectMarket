@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:background="@color/purple_200"
+    android:orientation="vertical"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_gravity="center_vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:textSize="16sp"
+            android:fontFamily="@font/bariol_regular" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Min Price"
+            android:fontFamily="@font/bariol_regular"
+            android:textSize="16sp"
+            android:background="@null"
+            android:layout_marginStart="32dp" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Max Price"
+            android:fontFamily="@font/bariol_regular"
+            android:textSize="16sp"
+            android:background="@null"
+            android:layout_marginStart="32dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Post score"
+            android:textSize="16sp"
+            android:fontFamily="@font/bariol_regular" />
+
+        <SeekBar
+            android:id="@+id/seekBar_postScore"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:max="4"
+            android:progress="0"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="User score"
+            android:textSize="16sp"
+            android:fontFamily="@font/bariol_regular"  />
+
+        <SeekBar
+            android:id="@+id/seekBar_userScore"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:max="4"
+            android:progress="0"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+        <Button
+            android:id="@+id/filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filter"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/bariol_regular"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp" />
+
+        <Space
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/bariol_regular"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

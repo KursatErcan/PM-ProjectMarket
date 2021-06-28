@@ -51,12 +51,14 @@
         </EditText>
 
         <ImageView
-            android:id="@+id/edt_search_btn"
+            android:id="@+id/filter_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/edt_search"
             android:src="@drawable/ic_filter"
-            android:paddingEnd="@dimen/normalPadding"/>
+            android:paddingEnd="@dimen/normalPadding"
+            tools:ignore="RtlSymmetry"
+            />
 
     </RelativeLayout>
 
