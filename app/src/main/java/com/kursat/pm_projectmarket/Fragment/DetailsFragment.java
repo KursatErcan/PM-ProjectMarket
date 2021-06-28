@@ -15,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -34,7 +33,6 @@ import java.util.HashMap;
 
 public class DetailsFragment extends DialogFragment {
     String token;
-    String tokenDocument;
     ImageView postImage,profileClick;
     TextView title,postContent,userName,price;
     EditText commentText;
@@ -62,10 +60,8 @@ public class DetailsFragment extends DialogFragment {
         addCommentButton = view.findViewById(R.id.post_detail_add_comment_btn);
         ratingBar_comment=view.findViewById(R.id.post_detail_comment_ratingBar);
         ratingBar_post=view.findViewById(R.id.post_detail_post_ratingBar);
-//        Bundle args = getArguments();
-//        assert args != null;
-//        token = args.getString("token");
-//        String userPost=args.getString("userId");
+
+        assert args != null;
         token=args.getString("token");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Posts").document(token);
@@ -117,6 +113,7 @@ public class DetailsFragment extends DialogFragment {
                     }
                     profileClick.setOnClickListener(v -> {
                         dismiss();
+                        PostDetailsFragment parentFrag = ((PostDetailsFragment) DetailsFragment.this.getParentFragment());
                         Bundle args1 = new Bundle();
                         args1.putString("userId", post.getUserId());
                         args1.putString("userName", post.getUserName());
@@ -124,12 +121,10 @@ public class DetailsFragment extends DialogFragment {
                         profileFragment.setArguments(args1);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = fragmentManager.beginTransaction();
+                        assert parentFrag != null;
+                        ft.remove(parentFrag);
                         ft.replace(R.id.mainFragment, profileFragment, "tag");//from here.
                         ft.addToBackStack(null).commit();
-                        return;
-
-
-
                     });
 
                     addCommentButton.setOnClickListener(new View.OnClickListener() {
@@ -148,22 +143,12 @@ public class DetailsFragment extends DialogFragment {
                                         .add(commentData);
                                 Toast toast = Toast.makeText(getContext(), R.string.your_comment_has_been_sent, Toast.LENGTH_SHORT);
                                 toast.show();
-
                             }
                         }
                     });
-
                 }
             }
         });
-
-
-
-
         return  view;
     }
-
-
-
-
 }
