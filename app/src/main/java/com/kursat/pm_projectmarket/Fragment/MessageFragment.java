@@ -55,91 +55,84 @@ public class MessageFragment extends Fragment implements MessageBoxAdapter.OnMes
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-    // Buradan devam
-    View view = inflater.inflate(R.layout.fragment_messagebox, container, false);
-    recView=(RecyclerView) view.findViewById(R.id.messagebox_recycleview);
-    recView.setLayoutManager(new LinearLayoutManager(getContext()));
-    MessageBox= new ArrayList<>();
-    Adapter=new MessageBoxAdapter(MessageBox,this);
-    recView.setAdapter(Adapter);
-    MsgTw = view.findViewById(R.id.MessageBoxTw);
-    cardView=view.findViewById(R.id.text_view_MessageContent);
+        // Buradan devam
+        View view = inflater.inflate(R.layout.fragment_messagebox, container, false);
+        recView=(RecyclerView) view.findViewById(R.id.messagebox_recycleview);
+        recView.setLayoutManager(new LinearLayoutManager(getContext()));
+        MessageBox= new ArrayList<>();
+        Adapter=new MessageBoxAdapter(MessageBox,this);
+        recView.setAdapter(Adapter);
+        MsgTw = view.findViewById(R.id.MessageBoxTw);
+        cardView=view.findViewById(R.id.text_view_MessageContent);
 
-    if(user!=null) {
-        db = FirebaseFirestore.getInstance();
-        db.collection("Messages")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-                        for (QueryDocumentSnapshot doc1 : value) {
-                            if(value.isEmpty())
-                                MsgTw.setText("Mesaj kutunuz boş.");
-                            //System.out.println(user.getUid());
-                            if(doc1.get("message_received").toString().equals(user.getUid()) ||
-                                    doc1.get("message_posted").toString().equals(user.getUid())){
-
-                                if(doc1.get("message_received").toString().equals(user.getUid()))
-                                    messageUser=doc1.get("message_posted_name").toString();
-                                else
-                                    messageUser=doc1.get("message_received_name").toString();
-
-                                db.collection("Messages/"+doc1.getId()+"/Message_details")
-                                .orderBy("date", Query.Direction.DESCENDING)
-                                .limit(1)
-                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable QuerySnapshot value,
-                                                        @Nullable FirebaseFirestoreException e) {
-                                        if (e != null) {
-                                            return;
-                                        }
-                                        if(value.isEmpty())
-                                            MsgTw.setText("Mesaj kutunuz boş.");
-
-                                        for (QueryDocumentSnapshot doc : value) {
-                                            String date=getDate((Timestamp) doc.get("date"));
-                                            String readControl;
-                                            if(!doc1.get("senderId").toString().equals(user.getUid())) {
-                                                readControl = doc.get("isReadMe").toString();
-                                            }else{
-                                                readControl = doc.get("isRead").toString();
-                                            }
-
-                                            MessageBox.add(new MessageBox(date,
-                                                    doc.get("content").toString(),
-                                                    doc.get("senderId").toString(),
-                                                    doc.get("senderName").toString(),
-                                                    readControl,
-                                                    doc1.getId()));
-
-                                            //if(doc.get("message_viewed").toString().equals("0")){
-                                                //System.out.println(cardView.getCurrentTextColor()+"-----------<");
-
-                                            //}
-
-                                        }
-                                        Adapter.notifyDataSetChanged();
-                                    }
-                                });
+        if(user!=null) {
+            db = FirebaseFirestore.getInstance();
+            db.collection("Messages")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value,
+                                            @Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                Log.w(TAG, "Listen failed.", e);
+                                return;
                             }
+                            for (QueryDocumentSnapshot doc1 : value) {
+                                if(value.isEmpty())
+                                    MsgTw.setText("Mesaj kutunuz boş.");
+                                //System.out.println(user.getUid());
+                                if(doc1.get("message_received").toString().equals(user.getUid()) ||
+                                        doc1.get("message_posted").toString().equals(user.getUid())){
+
+                                    if(doc1.get("message_received").toString().equals(user.getUid()))
+                                        messageUser=doc1.get("message_posted_name").toString();
+                                    else
+                                        messageUser=doc1.get("message_received_name").toString();
+
+                                    db.collection("Messages/"+doc1.getId()+"/Message_details")
+                                            .orderBy("date", Query.Direction.DESCENDING)
+                                            .limit(1)
+                                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable QuerySnapshot value,
+                                                                    @Nullable FirebaseFirestoreException e) {
+                                                    if (e != null) {
+                                                        return;
+                                                    }
+                                                    if(value.isEmpty())
+                                                        MsgTw.setText("Mesaj kutunuz boş.");
+
+                                                    for (QueryDocumentSnapshot doc : value) {
+                                                        String date=getDate((Timestamp) doc.get("date"));
+                                                        MessageBox.add(new MessageBox(date,
+                                                                doc.get("content").toString(),
+                                                                doc.get("senderId").toString(),
+                                                                doc.get("senderName").toString(),
+                                                                doc.get("isRead").toString(),
+                                                                doc1.getId()));
+
+                                                        //if(doc.get("message_viewed").toString().equals("0")){
+                                                        //System.out.println(cardView.getCurrentTextColor()+"-----------<");
+
+                                                        //}
+
+                                                    }
+                                                    Adapter.notifyDataSetChanged();
+                                                }
+                                            });
+                                }
+                            }
+                            Adapter.notifyDataSetChanged();
                         }
-                        Adapter.notifyDataSetChanged();
-                    }
-                });
-    }
-    else{
-        //No one is signed in
+                    });
+        }
+        else{
+            //No one is signed in
 
-    }
+        }
 
 
 
-    return view;
+        return view;
     }
     public void onMessageClick(int position) {
         Intent intent=new Intent(getActivity(), MessagesActivity.class);

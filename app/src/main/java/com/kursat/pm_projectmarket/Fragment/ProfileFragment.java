@@ -136,6 +136,7 @@ public class ProfileFragment extends Fragment {
                                             intent.putExtra("userName",profileName);
                                             intent.putExtra("userN",messageUser);
                                             intent.putExtra("token",doc1.getId());
+                                            System.out.println(doc1.getId()+"----------------------------------->");
                                             startActivity(intent);
 
                                             return;
@@ -162,6 +163,7 @@ public class ProfileFragment extends Fragment {
                                                         intent.putExtra("userName",profileName);
                                                         intent.putExtra("userN",profileName);
                                                         intent.putExtra("token",token);
+                                                        System.out.println(token+"----------------------------<<<<<<------->");
                                                         startActivity(intent);
                                                         return;
                                                     }

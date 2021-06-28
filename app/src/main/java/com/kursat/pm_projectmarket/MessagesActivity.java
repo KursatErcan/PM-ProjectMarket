@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class MessagesActivity extends AppCompatActivity {
     String receiverName;
     String receiverId;
     String messageUser;
+    ImageView closeButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,7 @@ public class MessagesActivity extends AppCompatActivity {
         recView.setAdapter(Adapter);
         msgDetail=(EditText) findViewById(R.id.MessageDetail);
         btnSend=(Button) findViewById(R.id.SendMessage);
-
+        closeButton=findViewById(R.id.closeButton);
         TextView textUser= findViewById(R.id.textViewUser);
         textUser.setText(messageUser);
 
@@ -81,25 +83,34 @@ public class MessagesActivity extends AppCompatActivity {
                                 Log.w(TAG, "Listen failed.", e);
                                 return;
                             }
-
+                            HashMap<String,String> hp=new HashMap<>();
                             MessageSend.clear();
                             for (QueryDocumentSnapshot doc1 : value) {
                                 //Buradan String message_sended, String message_detail, String message_date, String message_sended_id
-                                MessageSend.add(new MessageSend(doc1.get("content").toString(),doc1.get("senderId").toString()));
-                                HashMap<String,String> hp=new HashMap<>();
-                                hp.clear();
-                                if(!doc1.get("senderId").toString().equals(user.getUid())) {
-                                    hp.put("isReadMe","1");
+                                MessageSend.add(new MessageSend(doc1.get("content").toString(),doc1.get("senderId").toString(),doc1.get("isRead").toString()));
 
-                                    //hp.remove("isReadMe");
+                                    closeButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if(doc1.exists()){
+                                    hp.clear();
+                                    if(doc1.get("senderId").toString().equals(user.getUid())){
+                                            hp.put("isReadMe","1");
+                                    }else{
+                                        hp.put("isReadMe","0");
+                                    }
+                                    db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
+                                            .set(hp, SetOptions.merge());
 
-                                }/*else if(doc1.get("senderId").toString().equals(user.getUid())){
-                                    hp.put("isRead","1");
 
-                                    //hp.remove("isRead");
-                                }*/
-                                db.collection("Messages/" + token + "/Message_details").document(doc1.getId())
-                                        .set(hp, SetOptions.merge());
+                                            }
+                                            startActivity(new Intent(MessagesActivity.this, MainActivity.class));
+                                            finish();
+                                        }
+
+                                    });
+
+
 
                             }
                             Adapter.notifyDataSetChanged();
@@ -127,7 +138,7 @@ public class MessagesActivity extends AppCompatActivity {
                 message.put("content",msgDetail.getText().toString());
                 message.put("senderName",userName);
                 message.put("senderId",user.getUid().toString());
-                message.put("isRead","1");
+                message.put("isRead","0");
                 message.put("isReadMe","0");
 
 
@@ -146,8 +157,7 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     public void onCloseClick(View view){
-        startActivity(new Intent(MessagesActivity.this, MainActivity.class));
-        finish();
+
     }
 
 }

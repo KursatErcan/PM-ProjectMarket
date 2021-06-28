@@ -46,16 +46,10 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         db = FirebaseFirestore.getInstance();
+
         ppost = new ArrayList<>();
 
-        int filterNum = 0;
-        Bundle bundle = this.getArguments();
-        if(bundle != null){
-            filterNum = bundle.getInt("filterNum",0);
-            //System.out.println("gelen filterNum : "+filterNum);
-        }
-
-        getDataFromDB(filterNum);
+        getDataFromDB();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_feedFragment);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -64,27 +58,32 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
 
+
         return view;
     }
 
-    public void getDataFromDB(int filterNum){
-        db.collection("Posts").whereArrayContains("postCategory",filterNum).orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
-            if(value != null){
-                for(DocumentSnapshot doc : value.getDocuments()){
-                    Post post = doc.toObject(Post.class);
-                    assert post != null;
-                    DocumentReference docRef = db.collection("Users").document(post.getUserId());
-                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            User user = documentSnapshot.toObject(User.class);
-                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
-                            postRecyclerAdapter.notifyDataSetChanged();
-                        }
-                    });
+    public void getDataFromDB(){
+
+            db.collection("Posts").orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+                if(value != null){
+                    for(DocumentSnapshot doc : value.getDocuments()){
+                        Post post = doc.toObject(Post.class);
+                        assert post != null;
+                        System.out.println(post.getUserName());
+                        //String userId,String userName, String price, String title, String postImageUrl
+                        DocumentReference docRef = db.collection("Users").document(post.getUserId());
+                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                User user = documentSnapshot.toObject(User.class);
+                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
+                                postRecyclerAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    }
                 }
-            }
-        });
+            });
     }
 
     public void onMessageClick(int position) {
@@ -92,9 +91,11 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         Bundle args = new Bundle();
         args.putString("token", ppost.get(position).getToken());
         PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+        //DetailsFragment postDetailsFragment = new DetailsFragment();
         postDetailsFragment.setArguments(args);
 
         assert getFragmentManager() != null;
         postDetailsFragment.show(getFragmentManager(),"My Dialog");
+
     }
 }
