@@ -41,7 +41,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
     ImageView btn_filter;
     private int postScore = 0, minPrice = 0,maxPrice = 0, filter =0,userScore=0;
     SearchView searchView;
-
+    int filterNum;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         ppost = new ArrayList<>();
         searchView= view.findViewById(R.id.edt_search);
 
-        int filterNum = 0;
+        filterNum = 0;
         Bundle bundle = this.getArguments();
         if(bundle != null){
             filterNum = bundle.getInt("filterNum",0);
@@ -97,19 +97,49 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
             @Override
             public boolean onQueryTextChange(String newText) {
                 //database queries
-                postRecyclerAdapter.getFilter().filter(newText);
+                getFromFiltered(newText,filterNum);
+                //postRecyclerAdapter.getFilter().filter(newText);
                 return false;
             }
         });
         return view;
     }
 
-    public void getDataFromDB(int filterNum){
-        db.collection("Posts").whereArrayContains("postCategory",filterNum).orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+    public void getFromFiltered(String filter,int filterNum){
+        ppost.clear();
+        if(filter.equals("") || filter==null){
+            getDataFromDB(filterNum);
+        }else{
+        db.collection("Posts").whereEqualTo("title",filter)
+                .orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
 
             if(value != null){
                 for(DocumentSnapshot doc : value.getDocuments()){
+                    DocumentReference docRef = db.collection("Users").document(doc.get("userId").toString());
+                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
 
+                            //User user = documentSnapshot.toObject(User.class);
+                                ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
+                                System.out.println("--------------------------------------aaaa");
+                                postRecyclerAdapter.notifyDataSetChanged();
+
+                        }
+                    });
+                }
+            }
+        });
+        }
+    }
+
+    public void getDataFromDB(int filterNum){
+        db.collection("Posts")
+
+                .orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+
+            if(value != null){
+                for(DocumentSnapshot doc : value.getDocuments()){
                     //Post post = doc.toObject(Post.class);
                     //assert post != null;
                     DocumentReference docRef = db.collection("Users").document(doc.get("userId").toString());
@@ -120,10 +150,10 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                             //User user = documentSnapshot.toObject(User.class);
                             if(filter==1){
                                 if(Integer.parseInt(doc.get("price").toString()) < maxPrice
-                                        && Integer.parseInt(doc.get("price").toString()) >= minPrice && doc.getDouble("score")>=postScore && documentSnapshot.getDouble("score")>=userScore){
+                                        && Integer.parseInt(doc.get("price").toString()) >= minPrice &&
+                                        doc.getDouble("score")>=postScore && documentSnapshot.getDouble("score")>=userScore){
                                     //public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Long score,String profileImage,String token)
                                     ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
-                                    System.out.println(ppost+"------------------------<<<<<<<>");
                                     postRecyclerAdapter.notifyDataSetChanged();
                                 }
                             }
@@ -136,8 +166,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                         }
                     });
                 }
-            }
-        });
+            } });
     }
 
     public void onMessageClick(int position) {

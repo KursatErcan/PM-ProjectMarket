@@ -28,7 +28,7 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
 
     public PostRecyclerAdapter(ArrayList<Post> post, OnMessageListener msgListener) {
         this.post=post;
-        postF=(ArrayList<Post>) post.clone();
+        postF=new ArrayList<>(post);
         System.out.println(post+"-----------------------<");
         this.msgListener=msgListener;
 
@@ -107,11 +107,11 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             List<Post> filteredPost= new ArrayList<>();
 
             if(constraint==null || constraint.length()==0){
-                filteredPost.addAll(post);
+                filteredPost.addAll(postF);
 
             }else {
                 String filterPattern =constraint.toString().toLowerCase().trim();
-                for(Post item: post){
+                for(Post item: postF){
                     if(item.getTitle().toLowerCase().contains(filterPattern))
                         filteredPost.add(item);
                 }
