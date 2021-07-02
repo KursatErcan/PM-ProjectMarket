@@ -151,7 +151,7 @@ public class PostActivity extends AppCompatActivity {
                         postData.put("userId", user.getUid());
                         postData.put("userName",userName);
                         postData.put("postCategory",Arrays.asList(categoryArr));
-                        postData.put("score","0");
+                        postData.put("score",0.0);
                         System.out.println(postData+"--------------<");
                         if(postData.containsValue(null) || postData.containsValue("") ||
                                 priceText.getText().toString().isEmpty() ||

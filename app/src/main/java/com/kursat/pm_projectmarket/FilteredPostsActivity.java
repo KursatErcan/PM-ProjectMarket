@@ -13,8 +13,10 @@ public class FilteredPostsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_feed);
 
-        filtersBar = findViewById(R.id.filtersBar);
+        //filtersBar = findViewById(R.id.filtersBar);
         filtersBar.setVisibility(View.GONE);
+
+
 
     }
 }

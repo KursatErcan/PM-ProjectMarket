@@ -8,9 +8,9 @@ public class Post {
     private String postImageUrl;
     private String token;
     private String profileImage;
-    private String score;
+    private Number score;
 
-    public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,String score,String profileImage,String token) {
+    public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Number score,String profileImage,String token) {
         this.userName = userName;
         this.userId = userId;
         this.price = price;
@@ -26,7 +26,7 @@ public class Post {
 
     }
     public String getPostContent() { return postContent; }
-    public String getScore() { return score; }
+    public Number getScore() { return score; }
     public String getProfileImage() {
         return profileImage;
     }

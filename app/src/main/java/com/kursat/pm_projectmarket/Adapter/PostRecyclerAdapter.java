@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,15 +17,19 @@ import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapter.PostHolder>{
+public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapter.PostHolder> implements Filterable {
 
     public ArrayList<Post> post;
+    public ArrayList<Post> postF;
     private OnMessageListener msgListener;
     private String currency;
 
     public PostRecyclerAdapter(ArrayList<Post> post, OnMessageListener msgListener) {
         this.post=post;
+        postF=(ArrayList<Post>) post.clone();
+        System.out.println(post+"-----------------------<");
         this.msgListener=msgListener;
 
 
@@ -90,6 +96,36 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         void onMessageClick(int position);
     }
 
+    @Override
+    public Filter getFilter() {
+        return postFiltered;
+    }
 
+    private Filter postFiltered=new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Post> filteredPost= new ArrayList<>();
 
+            if(constraint==null || constraint.length()==0){
+                filteredPost.addAll(post);
+
+            }else {
+                String filterPattern =constraint.toString().toLowerCase().trim();
+                for(Post item: post){
+                    if(item.getTitle().toLowerCase().contains(filterPattern))
+                        filteredPost.add(item);
+                }
+            }
+            FilterResults filterResults=new FilterResults();
+            filterResults.values=filteredPost;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+                post.clear();
+                post.addAll((List)results.values);
+                notifyDataSetChanged();
+        }
+    };
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/edt_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="Search..."
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView" />
+    <item
+        android:id="@+id/filter_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/edt_search"
+        android:icon="@drawable/ic_filter"
+        android:paddingEnd="@dimen/normalPadding"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.ImageView"
+        tools:ignore="RtlSymmetry"
+        android:title="@string/filter" />
+</menu>

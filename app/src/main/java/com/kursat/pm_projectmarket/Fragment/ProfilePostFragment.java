@@ -86,11 +86,11 @@ public class ProfilePostFragment extends Fragment implements PostRecyclerAdapter
                         }
 
                         for (QueryDocumentSnapshot doc : value) {
-                            Post post = doc.toObject(Post.class);
-                            assert post != null;
-                            System.out.println(post.getUserName());
-                            //String userId,String userName, String price, String title, String postImageUrl
-                            ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),"nu",doc.getId()));
+                            //Post post = doc.toObject(Post.class);
+                            //assert post != null;
+                            //System.out.println(post.getUserName());
+                            //Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Long score,String profileImage,String token)
+                            ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),"nu",doc.getId()));
                             ProfilePostsAdapter.notifyDataSetChanged();
                         }
 

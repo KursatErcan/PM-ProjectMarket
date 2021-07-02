@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.kursat.pm_projectmarket.Model.Post;
 import com.kursat.pm_projectmarket.R;
 import com.squareup.picasso.Picasso;
@@ -42,6 +43,10 @@ public class DetailsFragment extends DialogFragment {
     float totalScore=0.0f;
     int counter=0;
     int score=0;
+    int counterComment=0;
+    Number currentScore=0;
+    String commentO;
+    String docNumComment;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -72,41 +77,96 @@ public class DetailsFragment extends DialogFragment {
 
                 assert document != null;
                 if (document.exists()) {
-                    Post post = document.toObject(Post.class);
-                    assert post != null;
-                    title.setText(post.getTitle());
-                    postContent.setText(post.getPostContent());
-                    userName.setText(post.getUserName());
-                    price.setText(post.getPrice()+" "+price.getText());
+                    //Post post = document.toObject(Post.class);
+                    //assert post != null;
+                    title.setText(document.get("title").toString());
+                    postContent.setText(document.get("postContent").toString());
+                    userName.setText(document.get("userName").toString());
+                    price.setText(document.get("price").toString()+" "+price.getText());
 
                     //getPostScrore
                     db.collection("Posts/"+document.getId()+"/Comments")
                             .addSnapshotListener((value, error) -> {
-                                if(value != null){
-                                    for(DocumentSnapshot doc : value.getDocuments()){
+                                if(value != null) {
+                                    for (DocumentSnapshot doc : value.getDocuments()) {
                                         //all comments is here doc.get("detail")
-                                        score+=doc.getLong("score");
+                                        score += doc.getDouble("score");
                                         counter++;
+                                        if (doc.get("userId").toString().equals(user.getUid())) {
+                                            counterComment++;
+                                            docNumComment = doc.getId();
+                                            commentO = doc.get("commentText").toString();
+                                            currentScore=doc.getDouble("score").floatValue();
+                                        }
                                     }
-                                    totalScore=0.0f;
+                                    totalScore = 0.0f;
 
-                                    if(counter==0){
+                                    if (counter == 0) {
                                         totalScore = 0;
-                                    }
-                                    else{
-                                        totalScore=score/counter;
+                                    } else {
+                                        totalScore = score / counter;
 
                                     }
                                     ratingBar_post.setRating(totalScore);
+                                    //post score
+                                    HashMap<String, Object> hp = new HashMap<>();
+                                    hp.clear();
+                                    hp.put("score", totalScore);
+                                    db.collection("Posts").document(document.getId())
+                                            .set(hp, SetOptions.merge());
+                                    if(counterComment>=1){
+                                        commentText.setText(commentO);
+                                        ratingBar_comment.setRating(currentScore.floatValue());
+                                    addCommentButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            HashMap<String, Object> commentData = new HashMap<>();
+                                            float score = ratingBar_comment.getRating();
+                                            //System.out.println("score : " +score);
+
+
+                                            commentData.put("commentText", commentText.getText().toString());
+                                            commentData.put("score", score);
+                                            db.collection("Posts/" + document.getId() + "/Comments").document(docNumComment)//from hereee.
+                                                    .set(commentData, SetOptions.merge());
+                                            Toast toast = Toast.makeText(getContext(), R.string.your_comment_has_been_sent, Toast.LENGTH_SHORT);
+                                            toast.show();
+                                            //docNumComment;
+
+                                        }
+                                    });
+                                }
+                                    else{
+                                        addCommentButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                HashMap<String, Object> commentData = new HashMap<>();
+                                                float score = ratingBar_comment.getRating();
+                                                //System.out.println("score : " +score);
+                                                if (score != 0 && commentText.getText() != null) {
+                                                    commentData.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                    commentData.put("date", new Timestamp(new Date()));
+                                                    commentData.put("commentText", commentText.getText().toString());
+                                                    commentData.put("score", score);
+                                                    db.collection("Posts/" + token + "/Comments")
+                                                            .add(commentData);
+                                                    Toast toast = Toast.makeText(getContext(), R.string.your_comment_has_been_sent, Toast.LENGTH_SHORT);
+                                                    toast.show();
+                                                }
+
+
+                                            }
+                                        });
+                                    }
                                 }
 
                             });
                     //end of getPostScore
-                    Picasso.get().load(post.getPostImageUrl())
+                    Picasso.get().load(document.get("postImageUrl").toString())
                             .resize(postImage.getWidth(),postImage.getHeight())
                             .into(postImage);
 
-                    if(post.getUserId().equals(user.getUid())){
+                    if(document.get("userId").toString().equals(user.getUid())){
                         commentText.setVisibility(View.GONE);
                         ratingBar_comment.setVisibility(View.GONE);
                         addCommentButton.setVisibility(View.GONE);
@@ -115,8 +175,8 @@ public class DetailsFragment extends DialogFragment {
                         dismiss();
                         PostDetailsFragment parentFrag = ((PostDetailsFragment) DetailsFragment.this.getParentFragment());
                         Bundle args1 = new Bundle();
-                        args1.putString("userId", post.getUserId());
-                        args1.putString("userName", post.getUserName());
+                        args1.putString("userId", document.get("userId").toString());
+                        args1.putString("userName", document.get("userName").toString());
                         ProfileFragment profileFragment = new ProfileFragment();
                         profileFragment.setArguments(args1);
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -127,25 +187,7 @@ public class DetailsFragment extends DialogFragment {
                         ft.addToBackStack(null).commit();
                     });
 
-                    addCommentButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
 
-                            float score = ratingBar_comment.getRating();
-                            //System.out.println("score : " +score);
-                            if(score!=0 && commentText.getText()!=null){
-                                HashMap<String, Object> commentData = new HashMap<>();
-                                commentData.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                commentData.put("date",new Timestamp(new Date()));
-                                commentData.put("commentText",commentText.getText().toString());
-                                commentData.put("score",score);
-                                db.collection("Posts/"+token+"/Comments")
-                                        .add(commentData);
-                                Toast toast = Toast.makeText(getContext(), R.string.your_comment_has_been_sent, Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                        }
-                    });
                 }
             }
         });

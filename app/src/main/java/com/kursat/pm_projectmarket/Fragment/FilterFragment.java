@@ -24,6 +24,7 @@ public class FilterFragment extends Fragment {
     Button btn_cancel,btn_filter;
     EditText editText_minPrice, editText_maxPrice;
     SeekBar seekBar_postScore;
+    SeekBar seekBar_userScore;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class FilterFragment extends Fragment {
         editText_minPrice = view.findViewById(R.id.minPrice);
         editText_maxPrice = view.findViewById(R.id.maxPrice);
         seekBar_postScore = view.findViewById(R.id.seekBar_postScore);
+        seekBar_userScore=view.findViewById(R.id.seekBar_userScore);
 
         /*int filterNum = 0;
         Bundle bundle = this.getArguments();
@@ -56,10 +58,12 @@ public class FilterFragment extends Fragment {
         btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int postScore = seekBar_postScore.getProgress();
-                int minPrice = Integer.parseInt(String.valueOf(editText_minPrice.getText()));
-                int maxPrice = Integer.parseInt(String.valueOf(editText_maxPrice.getText()));
-
+                int postScore = seekBar_postScore.getProgress(),minPrice=0,maxPrice=1000000000,
+                        userScore=seekBar_userScore.getProgress();
+                if(!editText_minPrice.getText().toString().equals("") && !editText_maxPrice.getText().toString().equals("")){
+                    minPrice = Integer.parseInt(String.valueOf(editText_minPrice.getText()));
+                    maxPrice = Integer.parseInt(String.valueOf(editText_maxPrice.getText()));
+                }
                 System.out.println("score : " + postScore);
                 System.out.println("minPrice : " + minPrice);
                 System.out.println("maxPrice : " + maxPrice);
@@ -67,6 +71,9 @@ public class FilterFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putInt("filter",1);
                 args.putInt("postScore", postScore);
+                args.putInt("userScore", userScore);
+                args.putInt("minPrice", minPrice);
+                args.putInt("maxPrice", maxPrice);
 
                 FeedFragment feedFragment = new FeedFragment();
                 feedFragment.setArguments(args);

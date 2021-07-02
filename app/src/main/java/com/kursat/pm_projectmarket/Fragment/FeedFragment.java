@@ -2,10 +2,19 @@ package com.kursat.pm_projectmarket.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
+import android.widget.SearchView;
+import android.app.SearchManager;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +39,8 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
     PostRecyclerAdapter postRecyclerAdapter;
     ArrayList<Post> ppost;
     ImageView btn_filter;
-    private int postScore = 0, minPrice = 0,maxPrice = 0, filter =0;
+    private int postScore = 0, minPrice = 0,maxPrice = 0, filter =0,userScore=0;
+    SearchView searchView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +50,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         btn_filter = view.findViewById(R.id.filter_btn);
         db = FirebaseFirestore.getInstance();
         ppost = new ArrayList<>();
+        searchView= view.findViewById(R.id.edt_search);
 
         int filterNum = 0;
         Bundle bundle = this.getArguments();
@@ -47,8 +58,14 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
             filterNum = bundle.getInt("filterNum",0);
             filter = bundle.getInt("filter",0);
             postScore = bundle.getInt("postScore",0);
+            userScore = bundle.getInt("userScore",0);
             minPrice = bundle.getInt("minPrice",0);
             maxPrice = bundle.getInt("maxPrice",100000000);
+        }else{
+            filter = 0;
+            postScore = 0;
+            minPrice = 0;
+            maxPrice = 100000000;
         }
 
         getDataFromDB(filterNum);
@@ -59,6 +76,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         recyclerView.setAdapter(postRecyclerAdapter);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.horizontal_card);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, spacingInPixels, true, 0));
+        //searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,30 +87,48 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                 ft.commit();
             }
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //database queries
+                postRecyclerAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return view;
     }
 
     public void getDataFromDB(int filterNum){
         db.collection("Posts").whereArrayContains("postCategory",filterNum).orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+
             if(value != null){
                 for(DocumentSnapshot doc : value.getDocuments()){
-                    Post post = doc.toObject(Post.class);
-                    assert post != null;
-                    DocumentReference docRef = db.collection("Users").document(post.getUserId());
+
+                    //Post post = doc.toObject(Post.class);
+                    //assert post != null;
+                    DocumentReference docRef = db.collection("Users").document(doc.get("userId").toString());
                     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            User user = documentSnapshot.toObject(User.class);
+
+                            //User user = documentSnapshot.toObject(User.class);
                             if(filter==1){
-                                if(Integer.parseInt(post.getScore())>= postScore
-                                        && Integer.parseInt(post.getPrice()) < maxPrice
-                                        && Integer.parseInt(post.getPrice()) >= minPrice){
-                                    ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
+                                if(Integer.parseInt(doc.get("price").toString()) < maxPrice
+                                        && Integer.parseInt(doc.get("price").toString()) >= minPrice && doc.getDouble("score")>=postScore && documentSnapshot.getDouble("score")>=userScore){
+                                    //public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Long score,String profileImage,String token)
+                                    ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
+                                    System.out.println(ppost+"------------------------<<<<<<<>");
                                     postRecyclerAdapter.notifyDataSetChanged();
                                 }
                             }
                             else{
-                                ppost.add(new Post(post.getUserId(),post.getUserName(),post.getPrice(),post.getTitle(),post.getPostContent(),post.getPostImageUrl(),post.getScore(),user.getProfileImageUrl(),doc.getId()));
+                                ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
                                 postRecyclerAdapter.notifyDataSetChanged();
                             }
 
@@ -114,4 +150,29 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
         assert getFragmentManager() != null;
         postDetailsFragment.show(getFragmentManager(),"My Dialog");
     }
+
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        MenuInflater inflater1= getActivity().getMenuInflater();
+        inflater1.inflate(R.menu.feed_filter_menu,menu);
+        MenuItem searchItem= menu.findItem(R.id.edt_search);
+        SearchView searchView=(SearchView)searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                postRecyclerAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
 }

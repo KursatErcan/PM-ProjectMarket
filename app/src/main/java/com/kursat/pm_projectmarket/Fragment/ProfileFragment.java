@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.kursat.pm_projectmarket.Adapter.FragmentPageAdapter;
 import com.kursat.pm_projectmarket.MessagesActivity;
 import com.kursat.pm_projectmarket.Model.User;
@@ -247,6 +248,13 @@ public class ProfileFragment extends Fragment {
 
                                         }
                                         ratingBar.setRating(totalScore);
+                                        //profile---> user score
+                                        HashMap<String,Object> hp=new HashMap<>();
+                                        hp.clear();
+                                        hp.put("score",totalScore);
+                                        db.collection("Users").document(profileId)
+                                                .set(hp, SetOptions.merge());
+
 
                                     }
                                 });
