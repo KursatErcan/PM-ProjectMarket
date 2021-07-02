@@ -5,33 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.FeedFragment">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/filtersBar"
-        android:paddingBottom="@dimen/vertical_search"
-        android:paddingTop="30dp"
-
-        >
+        android:layout_marginStart="@dimen/horizontal_dashboard"
+        android:layout_marginEnd="@dimen/horizontal_dashboard"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal" >
         <SearchView
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/edt_search"
-            >
-
+            android:background="#ffba60" >
         </SearchView>
 
         <ImageView
             android:id="@+id/filter_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/edt_search"
+            android:layout_gravity="center|right"
+            android:layout_marginStart="15dp"
             android:src="@drawable/ic_filter"
-            android:paddingEnd="@dimen/normalPadding"
-            tools:ignore="RtlSymmetry"
-            />
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_feedFragment"

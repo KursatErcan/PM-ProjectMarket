@@ -1,7 +1,6 @@
 package com.kursat.pm_projectmarket.Fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -14,9 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 
-import com.kursat.pm_projectmarket.FilteredPostsActivity;
 import com.kursat.pm_projectmarket.R;
-import com.kursat.pm_projectmarket.SettingsActivity;
 
 
 public class FilterFragment extends Fragment {
@@ -81,11 +78,6 @@ public class FilterFragment extends Fragment {
                 ft.replace(R.id.mainFragment, feedFragment);
                 ft.commit();
 
-
-                /*Intent intent = new Intent(getContext(), FilteredPostsActivity.class);
-                intent.putExtra("filterNum", finalFilterNum);
-                intent.putExtra("postScore",postScore);
-                startActivity(intent);*/
             }
         });
 
