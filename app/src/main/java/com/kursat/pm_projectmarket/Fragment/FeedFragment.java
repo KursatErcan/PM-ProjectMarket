@@ -97,45 +97,18 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
             @Override
             public boolean onQueryTextChange(String newText) {
                 //database queries
-                getFromFiltered(newText,filterNum);
-                //postRecyclerAdapter.getFilter().filter(newText);
+                //getFromFiltered(newText,filterNum);
+                postRecyclerAdapter.getFilter().filter(newText);
                 return false;
             }
         });
         return view;
     }
 
-    public void getFromFiltered(String filter,int filterNum){
-        ppost.clear();
-        if(filter.equals("") || filter==null){
-            getDataFromDB(filterNum);
-        }else{
-        db.collection("Posts").whereEqualTo("title",filter)
-                .orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
-
-            if(value != null){
-                for(DocumentSnapshot doc : value.getDocuments()){
-                    DocumentReference docRef = db.collection("Users").document(doc.get("userId").toString());
-                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                            //User user = documentSnapshot.toObject(User.class);
-                                ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
-                                System.out.println("--------------------------------------aaaa");
-                                postRecyclerAdapter.notifyDataSetChanged();
-
-                        }
-                    });
-                }
-            }
-        });
-        }
-    }
 
     public void getDataFromDB(int filterNum){
         db.collection("Posts")
-
+                //.whereArrayContains("postCategory",filterNum)
                 .orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
 
             if(value != null){

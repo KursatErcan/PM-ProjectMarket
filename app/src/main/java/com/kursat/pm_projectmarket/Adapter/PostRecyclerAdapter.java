@@ -107,11 +107,11 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             List<Post> filteredPost= new ArrayList<>();
 
             if(constraint==null || constraint.length()==0){
-                filteredPost.addAll(postF);
+                filteredPost.addAll(post);
 
             }else {
                 String filterPattern =constraint.toString().toLowerCase().trim();
-                for(Post item: postF){
+                for(Post item: post){
                     if(item.getTitle().toLowerCase().contains(filterPattern))
                         filteredPost.add(item);
                 }
