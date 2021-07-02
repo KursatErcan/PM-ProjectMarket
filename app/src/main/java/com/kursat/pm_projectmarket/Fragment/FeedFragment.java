@@ -126,12 +126,12 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
                                         && Integer.parseInt(doc.get("price").toString()) >= minPrice &&
                                         doc.getDouble("score")>=postScore && documentSnapshot.getDouble("score")>=userScore){
                                     //public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Long score,String profileImage,String token)
-                                    ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
+                                    ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),documentSnapshot.getDouble("score"),doc.getId()));
                                     postRecyclerAdapter.notifyDataSetChanged();
                                 }
                             }
                             else{
-                                ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),doc.getId()));
+                                ppost.add(new Post(doc.get("userId").toString(),doc.get("userName").toString(),doc.get("price").toString(),doc.get("title").toString(),doc.get("postContent").toString(),doc.get("postImageUrl").toString(),doc.getDouble("score"),documentSnapshot.get("profileImageUrl").toString(),documentSnapshot.getDouble("score"),doc.getId()));
                                 postRecyclerAdapter.notifyDataSetChanged();
                             }
 

@@ -52,6 +52,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         holder.text_title.setText(currentItem.getTitle());
         String priceText = currentItem.getPrice()+  R.string.tl;
         holder.text_price.setText(currentItem.getPrice()+currency);
+        holder.scorePost.setText("Rate:"+currentItem.getScore().toString());
+        holder.scoreUser.setText(currentItem.getScoreUser().toString());
         Picasso.get().load(currentItem.getProfileImage()).into(holder.imageView_profileImage);
         Picasso.get().load(currentItem.getPostImageUrl())
                 .resize(240,150)
@@ -69,6 +71,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
         ImageView imageView_postImage;
         TextView text_price;
         OnMessageListener msgListener;
+        TextView scorePost;
+        TextView scoreUser;
 
         public PostHolder(@NonNull View itemView , OnMessageListener msgListener) {
             super(itemView);
@@ -79,6 +83,8 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<PostRecyclerAdapte
             imageView_profileImage = itemView.findViewById(R.id.imageView_profileImage_postElement);
             imageView_postImage = itemView.findViewById(R.id.imageView_postImage_postElement);
             text_price = itemView.findViewById(R.id.text_price_postElement);
+            scorePost= itemView.findViewById(R.id.text_postTitle_scoreElement);
+            scoreUser=itemView.findViewById(R.id.text_userName_score);
             itemView.setOnClickListener(this);
 
 

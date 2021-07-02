@@ -9,8 +9,9 @@ public class Post {
     private String token;
     private String profileImage;
     private Number score;
+    private Number scoreUser;
 
-    public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Number score,String profileImage,String token) {
+    public Post(String userId,String userName, String price, String title, String postContent, String postImageUrl,Number score,String profileImage,Number scoreUser,String token) {
         this.userName = userName;
         this.userId = userId;
         this.price = price;
@@ -20,11 +21,17 @@ public class Post {
         this.score = score;
         this.token = token;
         this.profileImage = profileImage;
+        this.scoreUser=scoreUser;
     }
 
     Post(){
 
     }
+
+    public Number getScoreUser() {
+        return scoreUser;
+    }
+
     public String getPostContent() { return postContent; }
     public Number getScore() { return score; }
     public String getProfileImage() {
