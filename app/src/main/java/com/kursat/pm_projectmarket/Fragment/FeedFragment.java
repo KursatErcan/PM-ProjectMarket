@@ -154,27 +154,5 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
     }
 
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-
-        MenuInflater inflater1= getActivity().getMenuInflater();
-        inflater1.inflate(R.menu.feed_filter_menu,menu);
-        MenuItem searchItem= menu.findItem(R.id.edt_search);
-        SearchView searchView=(SearchView)searchItem.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                postRecyclerAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
 
 }
