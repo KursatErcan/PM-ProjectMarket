@@ -104,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("email", email);
         user.put("bio", "");
         user.put("profileImageUrl",placeHolder);
+        user.put("score",0.0);
         db.collection("Users").document(userId).set(user)
                 .addOnSuccessListener(aVoid -> {
                     /* Email Verification */

@@ -108,7 +108,7 @@ public class FeedFragment extends Fragment implements PostRecyclerAdapter.OnMess
 
     public void getDataFromDB(int filterNum){
         db.collection("Posts")
-                //.whereArrayContains("postCategory",filterNum)
+                .whereArrayContains("postCategory",filterNum)
                 .orderBy("date",Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
 
             if(value != null){
